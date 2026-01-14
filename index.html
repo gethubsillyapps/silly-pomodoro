@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silly Pomodoro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           CSS VARIABLES & THEME SYSTEM
+           ============================================ */
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --text-primary: #eee;
+            --text-secondary: #aaa;
+            --accent: #e94560;
+            --accent-hover: #ff6b6b;
+            --success: #4ecca3;
+            --warning: #ffc107;
+            --border-radius: 12px;
+            --font-main: 'Press Start 2P', cursive;
+            --font-size-base: 10px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ASCII Theme */
+        [data-theme="ascii"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111;
+            --bg-card: #1a1a1a;
+            --text-primary: #00ff00;
+            --text-secondary: #00aa00;
+            --accent: #00ff00;
+            --accent-hover: #00cc00;
+            --success: #00ff00;
+            --warning: #ffff00;
+            --border-radius: 0;
+            --font-main: 'IBM Plex Mono', monospace;
+            --font-size-base: 12px;
+            --shadow: none;
+        }
+
+        /* ============================================
+           BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            font-size: var(--font-size-base);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.4em;
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-family: var(--font-main);
+            font-size: 0.7em;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        [data-theme="ascii"] .card {
+            border: 1px solid var(--accent);
+        }
+
+        /* ============================================
+           TIMER DISPLAY
+           ============================================ */
+        .timer-section {
+            text-align: center;
+        }
+
+        .timer-mode {
+            font-size: 1em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .timer-mode.focus { color: var(--accent); }
+        .timer-mode.rest { color: var(--success); }
+
+        .timer-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-display.warning {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .cycle-progress {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        /* ============================================
+           CONTROLS
+           ============================================ */
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            font-family: var(--font-main);
+            font-size: 0.8em;
+            padding: 12px 20px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+
+        .btn-success {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: var(--success);
+            color: var(--bg-primary);
+        }
+
+        /* Rest choice buttons */
+        .rest-choice {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+        }
+
+        .rest-choice.visible {
+            display: flex;
+        }
+
+        .rest-choice p {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+
+        .rest-choice .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .banked-rest {
+            font-size: 0.7em;
+            color: var(--warning);
+            margin-top: 10px;
+        }
+
+        /* ============================================
+           COLLECTIBLES
+           ============================================ */
+        .collectibles-section h2 {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .collectibles {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .collectible {
+            text-align: center;
+            padding: 10px;
+            flex: 1;
+        }
+
+        .collectible-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .collectible-count {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .collectible-label {
+            font-size: 0.6em;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .collectible.earned {
+            animation: pop 0.5s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 10px gold); }
+        }
+
+        .golden-tomato {
+            animation: sparkle 2s infinite;
+        }
+
+        /* ============================================
+           CALENDAR
+           ============================================ */
+        .calendar-section h2 {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        [data-theme="ascii"] .calendar-day {
+            border: 1px solid var(--text-secondary);
+            border-radius: 0;
+        }
+
+        .calendar-day[data-sessions="1"] { background: #0e4429; }
+        .calendar-day[data-sessions="2"] { background: #006d32; }
+        .calendar-day[data-sessions="3"] { background: #26a641; }
+        .calendar-day[data-sessions="4"] { background: #39d353; }
+
+        [data-theme="ascii"] .calendar-day[data-sessions="1"] { background: #002200; }
+        [data-theme="ascii"] .calendar-day[data-sessions="2"] { background: #004400; }
+        [data-theme="ascii"] .calendar-day[data-sessions="3"] { background: #006600; }
+        [data-theme="ascii"] .calendar-day[data-sessions="4"] { background: #008800; }
+
+        .calendar-legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 0.6em;
+            color: var(--text-secondary);
+        }
+
+        .legend-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        /* ============================================
+           SETTINGS
+           ============================================ */
+        .settings-section h2 {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .settings-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .setting-item label {
+            font-size: 0.7em;
+            color: var(--text-secondary);
+        }
+
+        .setting-item input {
+            width: 80px;
+            padding: 8px;
+            font-family: var(--font-main);
+            font-size: 1em;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .setting-item input:focus {
+            outline: none;
+            border-color: var(--accent-hover);
+        }
+
+        /* ============================================
+           PLACEHOLDER BUTTONS
+           ============================================ */
+        .social-section {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-social {
+            flex: 1;
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .btn-social::after {
+            content: 'Soon';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 0.5em;
+            background: var(--warning);
+            color: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 3px solid var(--warning);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal h2 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .modal .btn {
+            min-width: 150px;
+        }
+
+        /* ============================================
+           FAILED STATE
+           ============================================ */
+        .timer-display.failed {
+            color: var(--accent);
+            text-decoration: line-through;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 500px) {
+            .timer-display {
+                font-size: 3em;
+            }
+
+            .collectibles {
+                flex-wrap: wrap;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>🍅 SILLY POMODORO</h1>
+        <button class="theme-toggle" id="themeToggle">ASCII</button>
+    </header>
+
+    <main class="container">
+        <!-- Timer Section -->
+        <section class="card timer-section">
+            <div class="timer-mode focus" id="timerMode">FOCUS</div>
+            <div class="timer-display" id="timerDisplay">31:00</div>
+            <div class="cycle-progress" id="cycleProgress">Cycle: 0/4 Focus | 0/4 Rest</div>
+
+            <div class="controls" id="mainControls">
+                <button class="btn btn-primary" id="startBtn">START</button>
+                <button class="btn" id="pauseBtn" disabled>PAUSE</button>
+                <button class="btn" id="resetBtn">RESET</button>
+            </div>
+
+            <div class="rest-choice" id="restChoice">
+                <p>Focus complete! What would you like to do?</p>
+                <div class="buttons">
+                    <button class="btn btn-success" id="takeRestBtn">TAKE REST</button>
+                    <button class="btn" id="skipRestBtn">SKIP →</button>
+                </div>
+                <div class="banked-rest" id="bankedRestDisplay"></div>
+            </div>
+        </section>
+
+        <!-- Collectibles Section -->
+        <section class="card collectibles-section">
+            <h2>COLLECTIBLES</h2>
+            <div class="collectibles">
+                <div class="collectible" id="sticksCollectible">
+                    <span class="collectible-icon">🪵</span>
+                    <span class="collectible-count" id="sticksCount">0</span>
+                    <span class="collectible-label">STICKS</span>
+                </div>
+                <div class="collectible" id="carrotsCollectible">
+                    <span class="collectible-icon">🥕</span>
+                    <span class="collectible-count" id="carrotsCount">0</span>
+                    <span class="collectible-label">CARROTS</span>
+                </div>
+                <div class="collectible" id="tomatoesCollectible">
+                    <span class="collectible-icon golden-tomato">🍅</span>
+                    <span class="collectible-count" id="tomatoesCount">0</span>
+                    <span class="collectible-label">GOLDEN</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section class="card calendar-section">
+            <h2>ACTIVITY (Last 30 Days)</h2>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="calendar-legend">
+                <span>Less</span>
+                <div class="legend-box" style="background: var(--bg-secondary)"></div>
+                <div class="legend-box" style="background: #0e4429"></div>
+                <div class="legend-box" style="background: #006d32"></div>
+                <div class="legend-box" style="background: #26a641"></div>
+                <div class="legend-box" style="background: #39d353"></div>
+                <span>More</span>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="card settings-section">
+            <h2>SETTINGS</h2>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="focusDuration">Focus (min)</label>
+                    <input type="number" id="focusDuration" min="1" max="120" value="31">
+                </div>
+                <div class="setting-item">
+                    <label for="restDuration">Rest (min)</label>
+                    <input type="number" id="restDuration" min="1" max="60" value="5">
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Section (Placeholders) -->
+        <section class="card social-section">
+            <button class="btn btn-social" disabled>SHARE</button>
+            <button class="btn btn-social" disabled>PAIR UP</button>
+        </section>
+    </main>
+
+    <!-- Warning Modal -->
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal">
+            <h2>⚠️ WARNING</h2>
+            <p>You've used your one pause!<br><br>If you pause again, this session will fail and you won't earn a reward.</p>
+            <button class="btn btn-primary" id="modalOkBtn">GOT IT</button>
+        </div>
+    </div>
+
+    <!-- Failed Modal -->
+    <div class="modal-overlay" id="failedModal">
+        <div class="modal">
+            <h2>❌ SESSION FAILED</h2>
+            <p>You paused twice.<br><br>No reward this time. Try again!</p>
+            <button class="btn btn-primary" id="failedOkBtn">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <h2 id="successTitle">🎉 NICE!</h2>
+            <p id="successMessage">You earned a reward!</p>
+            <button class="btn btn-primary" id="successOkBtn">AWESOME</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        const DEFAULT_STATE = {
+            collectibles: { sticks: 0, carrots: 0, goldenTomatoes: 0 },
+            currentCycle: { focusCount: 0, restCount: 0 },
+            bankedRest: 0,
+            history: {},
+            settings: { focusDuration: 31, restDuration: 5, theme: '8bit' }
+        };
+
+        let state = loadState();
+        let timerInterval = null;
+        let timeRemaining = state.settings.focusDuration * 60;
+        let isRunning = false;
+        let currentMode = 'focus'; // 'focus' or 'rest'
+        let pauseCount = 0;
+        let sessionFailed = false;
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const elements = {
+            themeToggle: document.getElementById('themeToggle'),
+            timerMode: document.getElementById('timerMode'),
+            timerDisplay: document.getElementById('timerDisplay'),
+            cycleProgress: document.getElementById('cycleProgress'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            restChoice: document.getElementById('restChoice'),
+            takeRestBtn: document.getElementById('takeRestBtn'),
+            skipRestBtn: document.getElementById('skipRestBtn'),
+            bankedRestDisplay: document.getElementById('bankedRestDisplay'),
+            mainControls: document.getElementById('mainControls'),
+            sticksCount: document.getElementById('sticksCount'),
+            carrotsCount: document.getElementById('carrotsCount'),
+            tomatoesCount: document.getElementById('tomatoesCount'),
+            sticksCollectible: document.getElementById('sticksCollectible'),
+            carrotsCollectible: document.getElementById('carrotsCollectible'),
+            tomatoesCollectible: document.getElementById('tomatoesCollectible'),
+            calendarGrid: document.getElementById('calendarGrid'),
+            focusDuration: document.getElementById('focusDuration'),
+            restDuration: document.getElementById('restDuration'),
+            warningModal: document.getElementById('warningModal'),
+            modalOkBtn: document.getElementById('modalOkBtn'),
+            failedModal: document.getElementById('failedModal'),
+            failedOkBtn: document.getElementById('failedOkBtn'),
+            successModal: document.getElementById('successModal'),
+            successOkBtn: document.getElementById('successOkBtn'),
+            successTitle: document.getElementById('successTitle'),
+            successMessage: document.getElementById('successMessage')
+        };
+
+        // ============================================
+        // LOCAL STORAGE
+        // ============================================
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('sillyPomodoro');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    return { ...DEFAULT_STATE, ...parsed };
+                }
+            } catch (e) {
+                console.error('Failed to load state:', e);
+            }
+            return { ...DEFAULT_STATE };
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('sillyPomodoro', JSON.stringify(state));
+            } catch (e) {
+                console.error('Failed to save state:', e);
+            }
+        }
+
+        // ============================================
+        // THEME
+        // ============================================
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            elements.themeToggle.textContent = theme === '8bit' ? 'ASCII' : '8-BIT';
+            state.settings.theme = theme;
+            saveState();
+        }
+
+        function toggleTheme() {
+            const newTheme = state.settings.theme === '8bit' ? 'ascii' : '8bit';
+            applyTheme(newTheme);
+        }
+
+        // ============================================
+        // TIMER LOGIC
+        // ============================================
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            elements.timerDisplay.textContent = formatTime(timeRemaining);
+            elements.timerDisplay.classList.toggle('warning', timeRemaining <= 60 && isRunning);
+            elements.timerDisplay.classList.toggle('failed', sessionFailed);
+
+            elements.timerMode.textContent = currentMode.toUpperCase();
+            elements.timerMode.className = `timer-mode ${currentMode}`;
+
+            elements.cycleProgress.textContent =
+                `Cycle: ${state.currentCycle.focusCount}/4 Focus | ${state.currentCycle.restCount}/4 Rest`;
+
+            elements.startBtn.disabled = isRunning;
+            elements.pauseBtn.disabled = !isRunning || sessionFailed;
+
+            // Update collectibles
+            elements.sticksCount.textContent = state.collectibles.sticks;
+            elements.carrotsCount.textContent = state.collectibles.carrots;
+            elements.tomatoesCount.textContent = state.collectibles.goldenTomatoes;
+
+            // Update settings inputs
+            elements.focusDuration.value = state.settings.focusDuration;
+            elements.restDuration.value = state.settings.restDuration;
+
+            // Update banked rest display
+            if (state.bankedRest > 0) {
+                elements.bankedRestDisplay.textContent = `Banked rest: +${state.bankedRest} min`;
+            } else {
+                elements.bankedRestDisplay.textContent = '';
+            }
+        }
+
+        function startTimer() {
+            if (isRunning || sessionFailed) return;
+
+            isRunning = true;
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateDisplay();
+
+                if (timeRemaining <= 0) {
+                    timerComplete();
+                }
+            }, 1000);
+
+            updateDisplay();
+        }
+
+        function pauseTimer() {
+            if (!isRunning || sessionFailed) return;
+
+            pauseCount++;
+
+            if (pauseCount === 1) {
+                // First pause - show warning
+                clearInterval(timerInterval);
+                isRunning = false;
+                elements.warningModal.classList.add('visible');
+            } else if (pauseCount >= 2) {
+                // Second pause - fail session
+                clearInterval(timerInterval);
+                isRunning = false;
+                sessionFailed = true;
+                elements.failedModal.classList.add('visible');
+            }
+
+            updateDisplay();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            sessionFailed = false;
+            pauseCount = 0;
+            currentMode = 'focus';
+            timeRemaining = state.settings.focusDuration * 60;
+            elements.restChoice.classList.remove('visible');
+            updateDisplay();
+        }
+
+        function timerComplete() {
+            clearInterval(timerInterval);
+            isRunning = false;
+
+            if (currentMode === 'focus') {
+                // Focus complete - award stick and show rest choice
+                if (!sessionFailed) {
+                    awardCollectible('sticks');
+                    state.currentCycle.focusCount++;
+                    checkCycleComplete();
+                    saveState();
+                    recordSession();
+                }
+                showRestChoice();
+            } else {
+                // Rest complete - award carrot
+                if (!sessionFailed) {
+                    awardCollectible('carrots');
+                    state.currentCycle.restCount++;
+                    checkCycleComplete();
+                    saveState();
+                }
+                // Auto-transition to focus
+                startFocusSession();
+            }
+        }
+
+        function showRestChoice() {
+            elements.restChoice.classList.add('visible');
+            updateDisplay();
+        }
+
+        function takeRest() {
+            elements.restChoice.classList.remove('visible');
+            currentMode = 'rest';
+            sessionFailed = false;
+            pauseCount = 0;
+
+            // Calculate rest time with banked minutes
+            const totalRest = state.settings.restDuration + state.bankedRest;
+            timeRemaining = totalRest * 60;
+            state.bankedRest = 0;
+            saveState();
+
+            updateDisplay();
+            startTimer();
+        }
+
+        function skipRest() {
+            elements.restChoice.classList.remove('visible');
+
+            // Bank the rest time
+            state.bankedRest += state.settings.restDuration;
+            saveState();
+
+            // Start next focus session
+            startFocusSession();
+        }
+
+        function startFocusSession() {
+            currentMode = 'focus';
+            sessionFailed = false;
+            pauseCount = 0;
+            timeRemaining = state.settings.focusDuration * 60;
+            updateDisplay();
+        }
+
+        // ============================================
+        // COLLECTIBLES
+        // ============================================
+        function awardCollectible(type) {
+            state.collectibles[type]++;
+
+            // Trigger animation
+            let element;
+            let title, message;
+
+            switch (type) {
+                case 'sticks':
+                    element = elements.sticksCollectible;
+                    title = '🪵 STICK EARNED!';
+                    message = 'Great focus session!';
+                    break;
+                case 'carrots':
+                    element = elements.carrotsCollectible;
+                    title = '🥕 CARROT EARNED!';
+                    message = 'Rest well deserved!';
+                    break;
+                case 'goldenTomatoes':
+                    element = elements.tomatoesCollectible;
+                    title = '🍅✨ GOLDEN TOMATO!';
+                    message = 'You completed a full cycle! Amazing!';
+                    break;
+            }
+
+            element.classList.add('earned');
+            setTimeout(() => element.classList.remove('earned'), 500);
+
+            // Show success modal
+            elements.successTitle.textContent = title;
+            elements.successMessage.textContent = message;
+            elements.successModal.classList.add('visible');
+        }
+
+        function checkCycleComplete() {
+            if (state.currentCycle.focusCount >= 4 && state.currentCycle.restCount >= 4) {
+                // Award golden tomato
+                setTimeout(() => awardCollectible('goldenTomatoes'), 600);
+                // Reset cycle
+                state.currentCycle.focusCount = 0;
+                state.currentCycle.restCount = 0;
+            }
+        }
+
+        // ============================================
+        // CALENDAR
+        // ============================================
+        function getTodayKey() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function recordSession() {
+            const today = getTodayKey();
+            if (!state.history[today]) {
+                state.history[today] = { sessions: 0 };
+            }
+            state.history[today].sessions++;
+            saveState();
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            elements.calendarGrid.innerHTML = '';
+
+            const today = new Date();
+            const days = 30;
+
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const key = date.toISOString().split('T')[0];
+
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+
+                const sessions = state.history[key]?.sessions || 0;
+                if (sessions > 0) {
+                    dayEl.setAttribute('data-sessions', Math.min(sessions, 4));
+                }
+
+                dayEl.title = `${key}: ${sessions} sessions`;
+                elements.calendarGrid.appendChild(dayEl);
+            }
+        }
+
+        // ============================================
+        // SETTINGS
+        // ============================================
+        function updateSettings() {
+            const focusVal = parseInt(elements.focusDuration.value) || 31;
+            const restVal = parseInt(elements.restDuration.value) || 5;
+
+            state.settings.focusDuration = Math.max(1, Math.min(120, focusVal));
+            state.settings.restDuration = Math.max(1, Math.min(60, restVal));
+
+            // If timer not running, update display
+            if (!isRunning && currentMode === 'focus') {
+                timeRemaining = state.settings.focusDuration * 60;
+            }
+
+            saveState();
+            updateDisplay();
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        elements.themeToggle.addEventListener('click', toggleTheme);
+        elements.startBtn.addEventListener('click', startTimer);
+        elements.pauseBtn.addEventListener('click', pauseTimer);
+        elements.resetBtn.addEventListener('click', resetTimer);
+        elements.takeRestBtn.addEventListener('click', takeRest);
+        elements.skipRestBtn.addEventListener('click', skipRest);
+
+        elements.modalOkBtn.addEventListener('click', () => {
+            elements.warningModal.classList.remove('visible');
+        });
+
+        elements.failedOkBtn.addEventListener('click', () => {
+            elements.failedModal.classList.remove('visible');
+            resetTimer();
+        });
+
+        elements.successOkBtn.addEventListener('click', () => {
+            elements.successModal.classList.remove('visible');
+        });
+
+        elements.focusDuration.addEventListener('change', updateSettings);
+        elements.restDuration.addEventListener('change', updateSettings);
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            applyTheme(state.settings.theme);
+            timeRemaining = state.settings.focusDuration * 60;
+            renderCalendar();
+            updateDisplay();
+        }
+
+        init();
+    </script>
+</body>
+</html>

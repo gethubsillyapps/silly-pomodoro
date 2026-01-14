@@ -1,0 +1,150 @@
+# Silly Pomodoro - Implementation Plan
+
+## Overview
+A gamified focus timer with 8-bit/pixel-art aesthetic, strict pause mechanics, and three collectible reward types. Built with vanilla HTML/CSS/JS in a single file.
+
+## Core Mechanics
+
+### Timer Flow
+- Focus Session: Default 31 minutes (user-configurable) -> earn Stick on completion
+- Rest Session: Default 5 minutes (user-configurable) -> earn Carrot on completion
+- Full Cycle: 4 focus + 4 rest sessions -> earn Golden Tomato
+- Auto-transition: Focus -> Rest -> Focus (seamless loop)
+
+### Customizable Timers
+- User can set their own focus duration (default: 31 min)
+- User can set their own rest duration (default: 5 min)
+- Settings saved to localStorage
+
+### Compounding Rest
+- After focus session, user can choose to Take Rest or Skip Rest
+- Skip Rest: Bank the rest time for later
+  - Next rest = base rest + all skipped rests
+  - Example: Skip 2 rests -> next rest = 5 + 5 + 5 = 15 minutes
+- Take Rest: Uses current compounded time, resets bank to 0
+- Rewards user with longer breaks for pushing through
+
+### Strict Pause Rules (Key Feature!)
+- First pause: Allowed - shows modal warning "One more pause = session failed!"
+- Second pause: Session fails immediately, no reward earned
+- Creates real stakes and encourages genuine focus
+
+### Collectibles System
++---------------+---------------------------+-----------------------------------+
+| Collectible   | Earned By                 | Visual                            |
++---------------+---------------------------+-----------------------------------+
+| Stick         | Completing focus session  | Pixel-art stick emoji             |
+| Carrot        | Completing rest session   | Pixel-art carrot emoji            |
+| Golden Tomato | Completing full cycle     | Glowing tomato with sparkle anim  |
++---------------+---------------------------+-----------------------------------+
+
+### GitHub-Style Calendar
+- Grid showing last 30-60 days
+- Color-coded squares based on activity:
+  - Gray: No sessions
+  - Light green -> Dark green: More sessions completed
+- Visual at-a-glance progress tracker
+
+## File Structure
+
+silly-pomodoro/
+├── index.html      # Single file with embedded CSS + JS
+├── README.md       # Project documentation & setup
+└── .gitignore      # Git ignore file
+
+## UI Layout
+
+┌─────────────────────────────────────────┐
+│  SILLY POMODORO                         │
+├─────────────────────────────────────────┤
+│                                         │
+│         ╭──────────────╮                │
+│         │    31:00     │  <- Big timer  │
+│         │   [FOCUS]    │                │
+│         ╰──────────────╯                │
+│                                         │
+│      [ START ]  [ PAUSE ]  [ RESET ]    │
+│                                         │
+│  After Focus: [ Take Rest ] [ Skip -> ] │
+│               Rest banked: +5 min       │
+│                                         │
+├─────────────────────────────────────────┤
+│  COLLECTIBLES                           │
+│  Sticks: 12   Carrots: 10   Tomatoes: 2 │
+├─────────────────────────────────────────┤
+│  ACTIVITY (Last 30 Days)                │
+│  [GitHub-style calendar grid]           │
+├─────────────────────────────────────────┤
+│  SETTINGS                               │
+│  Focus: [31] min   Rest: [5] min        │
+├─────────────────────────────────────────┤
+│  [ Share ]  [ Pair with Friend ]        │
+│        (Coming Soon)                    │
+└─────────────────────────────────────────┘
+
+## Design Direction: Dual Theme System
+
+### Theme Toggle
+- Switch button to toggle between two visual modes
+- Theme preference saved to localStorage
+- Smooth transition between themes
+
+### Theme 1: 8-bit/Retro (Default)
+- Colors: Bright primary colors, pixel-art palette
+- Typography: Chunky pixel-style font (e.g., "Press Start 2P" from Google Fonts)
+- Graphics: CSS-based pixel art with emoji collectibles
+- Animations:
+  - Collectibles pop/bounce when earned
+  - Timer pulses on low time
+  - Golden Tomato sparkles continuously
+
+### Theme 2: ASCII Art
+- Colors: Monochrome (green-on-black terminal style or white-on-black)
+- Typography: Monospace font (e.g., "Courier New", "IBM Plex Mono")
+- Graphics: ASCII characters for UI, but KEEP EMOJIS for collectibles
+- Box-drawing characters for borders: +---+ | +---+
+- ASCII-style timer and buttons
+- Collectibles still use emojis: Stick, Carrot, Golden Tomato
+
+## Implementation Steps
+
+1. Create file structure - index.html, README.md, .gitignore
+2. Build HTML structure - Timer display, controls, collectibles, calendar
+3. Add CSS styling - 8-bit theme, pixel fonts, color palette
+4. Implement timer logic - Countdown, focus/rest states, auto-transition
+5. Add pause mechanics - First pause warning modal, second pause = fail
+6. Build collectibles system - Tracking, localStorage, display with animations
+7. Create calendar grid - Generate 30-60 day grid, color coding
+8. Add placeholder features - "Share" and "Pair with Friend" buttons
+9. Write README - Setup instructions, GitHub deployment guide
+10. Test & polish - All flows, edge cases, responsive design
+
+## Data Model (localStorage)
+
+{
+  collectibles: { sticks: 12, carrots: 10, goldenTomatoes: 2 },
+  currentCycle: { focusCount: 2, restCount: 2 },
+  bankedRest: 10,  // Minutes of skipped rest (compounds)
+  history: {
+    "2026-01-13": { sessions: 4 },
+    "2026-01-12": { sessions: 6 },
+    // ... last 60 days
+  },
+  settings: { focusDuration: 31, restDuration: 5, theme: '8bit' }  // '8bit' or 'ascii'
+}
+
+## Verification Checklist
+
+[ ] 1. Open index.html in browser
+[ ] 2. Change focus/rest durations in settings -> verify they persist
+[ ] 3. Start focus session -> pause once -> see warning modal
+[ ] 4. Pause again -> verify session fails (no reward)
+[ ] 5. Complete full focus session -> verify Stick earned
+[ ] 6. Skip rest -> verify banked rest increases
+[ ] 7. Complete next focus -> take rest -> verify compounded rest time
+[ ] 8. Complete rest session -> verify Carrot earned
+[ ] 9. Complete 4 focus + 4 rest -> verify Golden Tomato earned
+[ ] 10. Refresh page -> verify all data persists
+[ ] 11. Check calendar reflects today's activity
+[ ] 12. Toggle theme switch -> verify UI changes between 8-bit and ASCII
+[ ] 13. Refresh page -> verify theme preference persists

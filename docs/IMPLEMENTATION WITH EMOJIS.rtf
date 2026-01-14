@@ -1,0 +1,225 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-BoldItalic;\f1\fnil\fcharset0 Menlo-Regular;\f2\fnil\fcharset0 Menlo-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red240\green240\blue236;}
+{\*\expandedcolortbl;;\cssrgb\c95213\c95209\c94144;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww17340\viewh13120\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\i\b\fs34 \cf0 \ul \ulc2 \CocoaLigature0 Silly Pomodoro - Implementation Plan
+\f1\i0\b0 \ulnone \
+\
+ 
+\f2\b Overview
+\f1\b0 \
+\
+ A gamified focus timer with 8-bit/pixel-art aesthetic, strict pause mechanics, and three collectible reward types. Built with vanilla HTML/CSS/JS in a single\
+ file.\
+\
+ 
+\f2\b Core Mechanics
+\f1\b0 \
+\
+ 
+\f2\b Timer Flow
+\f1\b0 \
+\
+ - 
+\f2\b Focus Session:
+\f1\b0  Default 31 minutes (user-configurable) \uc0\u8594  earn \u55358 \u57013  Stick on completion\
+ - 
+\f2\b Rest Session:
+\f1\b0  Default 5 minutes (user-configurable) \uc0\u8594  earn \u55358 \u56661  Carrot on completion\
+ - 
+\f2\b Full Cycle:
+\f1\b0  4 focus + 4 rest sessions \uc0\u8594  earn \u55356 \u57157 \u10024  Golden Tomato\
+ - Auto-transition: Focus \uc0\u8594  Rest \u8594  Focus (seamless loop)\
+\
+ 
+\f2\b Customizable Timers
+\f1\b0 \
+\
+ - User can set their own focus duration (default: 31 min)\
+ - User can set their own rest duration (default: 5 min)\
+ - Settings saved to localStorage\
+\
+ 
+\f2\b Compounding Rest
+\f1\b0 \
+\
+ - After focus session, user can choose to 
+\f2\b Take Rest
+\f1\b0  or 
+\f2\b Skip Rest
+\f1\b0 \
+ - 
+\f2\b Skip Rest:
+\f1\b0  Bank the rest time for later\
+   - Next rest = base rest + all skipped rests\
+   - Example: Skip 2 rests \uc0\u8594  next rest = 5 + 5 + 5 = 15 minutes\
+ - 
+\f2\b Take Rest:
+\f1\b0  Uses current compounded time, resets bank to 0\
+ - Rewards user with longer breaks for pushing through\
+\
+ 
+\f2\b Strict Pause Rules (Key Feature!)
+\f1\b0 \
+\
+ - 
+\f2\b First pause:
+\f1\b0  Allowed - shows modal warning "One more pause = session failed!"\
+ - 
+\f2\b Second pause:
+\f1\b0  Session fails immediately, no reward earned\
+ - Creates real stakes and encourages genuine focus\
+\
+ 
+\f2\b Collectibles System
+\f1\b0 \
+ \uc0\u9484 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9516 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9516 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9488 \
+ \uc0\u9474     Collectible     \u9474           Earned By          \u9474                 Visual                 \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474  \u55358 \u57013  Stick           \u9474  Completing focus session    \u9474  Pixel-art stick emoji                 \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474  \u55358 \u56661  Carrot          \u9474  Completing rest session     \u9474  Pixel-art carrot emoji                \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9532 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474  \u55356 \u57157 \u10024  Golden Tomato \u9474  Completing full cycle (4+4) \u9474  Glowing tomato with sparkle animation \u9474 \
+ \uc0\u9492 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9524 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9524 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9496 \
+ 
+\f2\b GitHub-Style Calendar
+\f1\b0 \
+\
+ - Grid showing last 30-60 days\
+ - Color-coded squares based on activity:\
+   - Gray: No sessions\
+   - Light green \uc0\u8594  Dark green: More sessions completed\
+ - Visual at-a-glance progress tracker\
+\
+ 
+\f2\b File Structure
+\f1\b0 \
+\
+ silly-pomodoro/\
+ \uc0\u9500 \u9472 \u9472  index.html      # Single file with embedded CSS + JS\
+ \uc0\u9500 \u9472 \u9472  README.md       # Project documentation & setup\
+ \uc0\u9492 \u9472 \u9472  .gitignore      # Git ignore file\
+\
+ 
+\f2\b UI Layout
+\f1\b0 \
+\
+ \uc0\u9484 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9488 \
+ \uc0\u9474   \u55356 \u57157  SILLY POMODORO                      \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474                                          \u9474 \
+ \uc0\u9474          \u9581 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9582                 \u9474 \
+ \uc0\u9474          \u9474     25:00     \u9474   \u8592  Big timer   \u9474 \
+ \uc0\u9474          \u9474    [FOCUS]    \u9474                 \u9474 \
+ \uc0\u9474          \u9584 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9583                 \u9474 \
+ \uc0\u9474                                          \u9474 \
+ \uc0\u9474       [ START ]  [ PAUSE ]  [ RESET ]    \u9474 \
+ \uc0\u9474                                          \u9474 \
+ \uc0\u9474   After Focus: [ Take Rest ] [ Skip \u8594  ]  \u9474 \
+ \uc0\u9474                Rest banked: +5 min       \u9474 \
+ \uc0\u9474                                          \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474   COLLECTIBLES                           \u9474 \
+ \uc0\u9474   \u55358 \u57013  12   \u55358 \u56661  10   \u55356 \u57157 \u10024  2                  \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474   ACTIVITY (Last 30 Days)                \u9474 \
+ \uc0\u9474   \u9617 \u9617 \u9619 \u9619 \u9608 \u9617 \u9617 \u9619 \u9617 \u9619 \u9619 \u9619 \u9617 \u9617 \u9617 \u9619 \u9619 \u9619 \u9608 \u9619 \u9617 \u9617 \u9619 \u9619 \u9617 \u9608 \u9619 \u9619 \u9617          \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474   SETTINGS                               \u9474 \
+ \uc0\u9474   Focus: [31] min   Rest: [5] min        \u9474 \
+ \uc0\u9500 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9508 \
+ \uc0\u9474   [ Share ]  [ Pair with Friend ]        \u9474 \
+ \uc0\u9474         (Coming Soon)                    \u9474 \
+ \uc0\u9492 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9496 \
+\
+ 
+\f2\b Design Direction: 8-bit/Retro
+\f1\b0 \
+\
+ - 
+\f2\b Colors:
+\f1\b0  Bright primary colors, pixel-art palette\
+ - 
+\f2\b Typography:
+\f1\b0  Chunky pixel-style font (e.g., "Press Start 2P" from Google Fonts)\
+ - 
+\f2\b Graphics:
+\f1\b0  CSS-based pixel art or styled emojis\
+ - 
+\f2\b Animations:
+\f1\b0 \
+   - Collectibles pop/bounce when earned\
+   - Timer pulses on low time\
+   - Golden Tomato sparkles continuously\
+\
+ 
+\f2\b Implementation Steps
+\f1\b0 \
+\
+ 1. 
+\f2\b Create file structure
+\f1\b0  - index.html, README.md, .gitignore\
+ 2. 
+\f2\b Build HTML structure
+\f1\b0  - Timer display, controls, collectibles, calendar\
+ 3. 
+\f2\b Add CSS styling
+\f1\b0  - 8-bit theme, pixel fonts, color palette\
+ 4. 
+\f2\b Implement timer logic
+\f1\b0  - Countdown, focus/rest states, auto-transition\
+ 5. 
+\f2\b Add pause mechanics
+\f1\b0  - First pause warning modal, second pause = fail\
+ 6. 
+\f2\b Build collectibles system
+\f1\b0  - Tracking, localStorage, display with animations\
+ 7. 
+\f2\b Create calendar grid
+\f1\b0  - Generate 30-60 day grid, color coding\
+ 8. 
+\f2\b Add placeholder features
+\f1\b0  - "Share" and "Pair with Friend" buttons\
+ 9. 
+\f2\b Write README
+\f1\b0  - Setup instructions, GitHub deployment guide\
+ 10. 
+\f2\b Test & polish
+\f1\b0  - All flows, edge cases, responsive design\
+\
+ 
+\f2\b Data Model (localStorage)
+\f1\b0 \
+\
+ \{\
+   collectibles: \{ sticks: 12, carrots: 10, goldenTomatoes: 2 \},\
+   currentCycle: \{ focusCount: 2, restCount: 2 \},\
+   bankedRest: 10, // Minutes of skipped rest (compounds)\
+   history: \{\
+     "2026-01-13": \{ sessions: 4 \},\
+     "2026-01-12": \{ sessions: 6 \},\
+     // ... last 60 days\
+   \},\
+   settings: \{ focusDuration: 31, restDuration: 5 \} // User-configurable\
+ \}\
+\
+ 
+\f2\b Verification
+\f1\b0 \
+\
+ 1. Open index.html in browser\
+ 2. Change focus/rest durations in settings \uc0\u8594  verify they persist\
+ 3. Start focus session \uc0\u8594  pause once \u8594  see warning modal\
+ 4. Pause again \uc0\u8594  verify session fails (no reward)\
+ 5. Complete full focus session \uc0\u8594  verify Stick earned\
+ 6. Skip rest \uc0\u8594  verify banked rest increases\
+ 7. Complete next focus \uc0\u8594  take rest \u8594  verify compounded rest time\
+ 8. Complete rest session \uc0\u8594  verify Carrot earned\
+ 9. Complete 4 focus + 4 rest \uc0\u8594  verify Golden Tomato earned\
+ 10. Refresh page \uc0\u8594  verify all data persists\
+ 11. Check calendar reflects today's activity}
