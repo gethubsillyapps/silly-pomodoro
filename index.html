@@ -626,6 +626,7 @@
         let state = loadState();
         let timerInterval = null;
         let timeRemaining = state.settings.focusDuration * 60;
+        let endTime = null; // Timestamp when timer should complete
         let isRunning = false;
         let currentMode = 'focus'; // 'focus' or 'rest'
         let pauseCount = 0;
@@ -749,16 +750,25 @@
             if (isRunning || sessionFailed) return;
 
             isRunning = true;
+            // Set end time based on current remaining time
+            endTime = Date.now() + (timeRemaining * 1000);
+
             timerInterval = setInterval(() => {
-                timeRemaining--;
+                updateTimeRemaining();
                 updateDisplay();
 
                 if (timeRemaining <= 0) {
                     timerComplete();
                 }
-            }, 1000);
+            }, 250); // Check more frequently for accuracy
 
             updateDisplay();
+        }
+
+        function updateTimeRemaining() {
+            if (!endTime) return;
+            const remaining = Math.round((endTime - Date.now()) / 1000);
+            timeRemaining = Math.max(0, remaining);
         }
 
         function pauseTimer() {
@@ -769,11 +779,14 @@
             if (pauseCount === 1) {
                 // First pause - show warning
                 clearInterval(timerInterval);
+                updateTimeRemaining(); // Capture accurate time remaining
+                endTime = null;
                 isRunning = false;
                 elements.warningModal.classList.add('visible');
             } else if (pauseCount >= 2) {
                 // Second pause - fail session
                 clearInterval(timerInterval);
+                endTime = null;
                 isRunning = false;
                 sessionFailed = true;
                 elements.failedModal.classList.add('visible');
@@ -784,6 +797,7 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
+            endTime = null;
             isRunning = false;
             sessionFailed = false;
             pauseCount = 0;
@@ -795,6 +809,7 @@
 
         function timerComplete() {
             clearInterval(timerInterval);
+            endTime = null;
             isRunning = false;
 
             if (currentMode === 'focus') {
@@ -992,6 +1007,19 @@
 
         elements.focusDuration.addEventListener('change', updateSettings);
         elements.restDuration.addEventListener('change', updateSettings);
+
+        // Handle tab visibility changes - recalculate time when tab becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && isRunning && endTime) {
+                updateTimeRemaining();
+                // Check if timer completed while tab was hidden
+                if (timeRemaining <= 0) {
+                    timerComplete();
+                } else {
+                    updateDisplay();
+                }
+            }
+        });
 
         // ============================================
         // INITIALIZATION
