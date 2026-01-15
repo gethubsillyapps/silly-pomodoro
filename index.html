@@ -630,6 +630,15 @@
         </div>
     </div>
 
+    <!-- Banked Rest Modal -->
+    <div class="modal-overlay" id="bankedModal">
+        <div class="modal">
+            <h2 id="bankedTitle">⏸️ REST BANKED!</h2>
+            <p id="bankedMessage">You now have 1 rest banked.</p>
+            <button class="btn btn-primary" id="bankedOkBtn">KEEP GOING</button>
+        </div>
+    </div>
+
     <script>
         // ============================================
         // STATE MANAGEMENT
@@ -690,7 +699,11 @@
             shortcutModal: document.getElementById('shortcutModal'),
             shortcutOkBtn: document.getElementById('shortcutOkBtn'),
             shortcutTitle: document.getElementById('shortcutTitle'),
-            shortcutMessage: document.getElementById('shortcutMessage')
+            shortcutMessage: document.getElementById('shortcutMessage'),
+            bankedModal: document.getElementById('bankedModal'),
+            bankedOkBtn: document.getElementById('bankedOkBtn'),
+            bankedTitle: document.getElementById('bankedTitle'),
+            bankedMessage: document.getElementById('bankedMessage')
         };
 
         // ============================================
@@ -749,8 +762,11 @@
             elements.timerMode.textContent = currentMode.toUpperCase();
             elements.timerMode.className = `timer-mode ${currentMode}`;
 
-            elements.cycleProgress.textContent =
-                `Cycle: ${state.currentCycle.focusCount}/4 Focus | ${state.currentCycle.restCount}/4 Rest`;
+            let cycleText = `Cycle: ${state.currentCycle.focusCount}/4 Focus | ${state.currentCycle.restCount}/4 Rest`;
+            if (state.bankedRestCount > 0) {
+                cycleText += ` | ${state.bankedRestCount} Banked`;
+            }
+            elements.cycleProgress.textContent = cycleText;
 
             elements.startBtn.disabled = isRunning;
             elements.pauseBtn.disabled = !isRunning || sessionFailed;
@@ -912,8 +928,16 @@
             state.bankedRestCount++;
             saveState();
 
+            // Show banked rest confirmation
+            const msgs = MESSAGES.bankedRest;
+            elements.bankedTitle.textContent = randomFrom(msgs.titles);
+            elements.bankedMessage.textContent = randomFrom(msgs.messages);
+            elements.bankedOkBtn.textContent = randomFrom(msgs.buttons);
+            elements.bankedModal.classList.add('visible');
+
             // Start next focus session
             startFocusSession();
+            updateDisplay();
         }
 
         function startFocusSession() {
@@ -957,6 +981,19 @@
                     'The golden tomato is mostly symbolic. The achievement is entirely real.'
                 ],
                 buttons: ['ONWARDS', 'GLORIOUS', 'I KNOW', '*BOWS*', 'NATURALLY']
+            },
+            bankedRest: {
+                titles: ['⏸️ REST BANKED!', '⏸️ SAVED FOR LATER', '⏸️ BOLD MOVE', '⏸️ REST? NOT YET.', '⏸️ PUSHING THROUGH'],
+                messages: [
+                    'Your future self better appreciate this.',
+                    'Rest delayed, not denied. We see you.',
+                    'Banking rest like it\'s a savings account.',
+                    'The grind respects no break time.',
+                    'One does not simply take a break. Apparently.',
+                    'Rest is a concept. You are a force.',
+                    'Noted. Your break is earning interest.'
+                ],
+                buttons: ['KEEP GOING', 'ONWARDS', 'NO REST', 'LATER']
             }
         };
 
@@ -1095,6 +1132,10 @@
 
         elements.shortcutOkBtn.addEventListener('click', () => {
             elements.shortcutModal.classList.remove('visible');
+        });
+
+        elements.bankedOkBtn.addEventListener('click', () => {
+            elements.bankedModal.classList.remove('visible');
         });
 
         elements.focusDuration.addEventListener('change', updateSettings);
