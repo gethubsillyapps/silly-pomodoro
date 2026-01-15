@@ -949,6 +949,10 @@
             elements.successTitle.textContent = title;
             elements.successMessage.textContent = message;
             elements.successModal.classList.add('visible');
+
+            // Save and update display (important for golden tomato awarded via setTimeout)
+            saveState();
+            updateDisplay();
         }
 
         function checkCycleComplete() {
