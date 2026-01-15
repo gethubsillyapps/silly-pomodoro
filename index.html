@@ -611,6 +611,15 @@
         </div>
     </div>
 
+    <!-- Shortcut Warning Modal -->
+    <div class="modal-overlay" id="shortcutModal">
+        <div class="modal">
+            <h2 id="shortcutTitle">🤔 NICE TRY!</h2>
+            <p id="shortcutMessage">But real focus earns real rewards.</p>
+            <button class="btn btn-primary" id="shortcutOkBtn">OKAY</button>
+        </div>
+    </div>
+
     <script>
         // ============================================
         // STATE MANAGEMENT
@@ -633,6 +642,7 @@
         let pauseCount = 0;
         let sessionFailed = false;
         let restsToCredit = 1; // How many rests to credit when rest completes
+        let shortcutAttempts = 0; // Track exploit attempts
 
         // ============================================
         // DOM ELEMENTS
@@ -666,7 +676,11 @@
             successModal: document.getElementById('successModal'),
             successOkBtn: document.getElementById('successOkBtn'),
             successTitle: document.getElementById('successTitle'),
-            successMessage: document.getElementById('successMessage')
+            successMessage: document.getElementById('successMessage'),
+            shortcutModal: document.getElementById('shortcutModal'),
+            shortcutOkBtn: document.getElementById('shortcutOkBtn'),
+            shortcutTitle: document.getElementById('shortcutTitle'),
+            shortcutMessage: document.getElementById('shortcutMessage')
         };
 
         // ============================================
@@ -750,6 +764,20 @@
 
         function startTimer() {
             if (isRunning || sessionFailed) return;
+
+            // Check if trying to exploit during rest choice
+            if (elements.restChoice.classList.contains('visible')) {
+                shortcutAttempts++;
+                if (shortcutAttempts === 1) {
+                    elements.shortcutTitle.textContent = '🤔 NICE TRY!';
+                    elements.shortcutMessage.textContent = 'Shortcuts won\'t grow your tomato garden!';
+                } else {
+                    elements.shortcutTitle.textContent = '👆 REST CHOICE';
+                    elements.shortcutMessage.textContent = 'Please select a rest choice before continuing to focus.';
+                }
+                elements.shortcutModal.classList.add('visible');
+                return;
+            }
 
             isRunning = true;
             // Set end time based on current remaining time
@@ -1014,6 +1042,10 @@
 
         elements.successOkBtn.addEventListener('click', () => {
             elements.successModal.classList.remove('visible');
+        });
+
+        elements.shortcutOkBtn.addEventListener('click', () => {
+            elements.shortcutModal.classList.remove('visible');
         });
 
         elements.focusDuration.addEventListener('change', updateSettings);
