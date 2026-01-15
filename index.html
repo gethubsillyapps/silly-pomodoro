@@ -917,28 +917,62 @@
         // ============================================
         // COLLECTIBLES
         // ============================================
+        const MESSAGES = {
+            sticks: {
+                titles: ['🪵 STICK GET!', '🪵 FOCUS ACHIEVED!', '🪵 MAGNIFICENT!', '🪵 WELL WELL WELL', '🪵 LOOK AT YOU GO'],
+                messages: [
+                    'Your future self just sent a thank you note.',
+                    'Somewhere, a distraction weeps.',
+                    'You just out-focused 99% of goldfish.',
+                    'The stick is a metaphor. The focus was real.',
+                    'Technically, you\'re now a professional focuser.',
+                    'Your attention span called. It\'s proud.',
+                    'That\'s one small stick, one giant leap for productivity.'
+                ],
+                buttons: ['ONWARDS', 'GLORIOUS', 'NICE', 'NATURALLY']
+            },
+            carrots: {
+                titles: ['🥕 CARROT EARNED!', '🥕 REST COMPLETE!', '🥕 RECHARGED!'],
+                messages: ['Rest well deserved!', 'Batteries recharged.', 'Break time: nailed it.'],
+                buttons: ['NICE', 'ONWARDS', 'REFRESHED']
+            },
+            goldenTomatoes: {
+                titles: ['🍅✨ GOLDEN TOMATO!', '🍅✨ BEHOLD!', '🍅✨ THE PROPHECY!', '🍅✨ CHEF\'S KISS', '🍅✨ HISTORIC!'],
+                messages: [
+                    'A full cycle. The tomato gods are pleased.',
+                    'This tomato has seen things. Mainly you being excellent.',
+                    'Legends speak of ones who finish full cycles. They spoke of you.',
+                    'Fun fact: this tomato is worth exactly one bragging right.',
+                    'You did 4 focus AND 4 rest? That\'s not ambition, that\'s art.',
+                    'The golden tomato is mostly symbolic. The achievement is entirely real.'
+                ],
+                buttons: ['ONWARDS', 'GLORIOUS', 'I KNOW', '*BOWS*', 'NATURALLY']
+            }
+        };
+
+        function randomFrom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
         function awardCollectible(type) {
             state.collectibles[type]++;
 
             // Trigger animation
             let element;
-            let title, message;
+            const msgs = MESSAGES[type];
+            const title = randomFrom(msgs.titles);
+            const message = randomFrom(msgs.messages);
+            const button = randomFrom(msgs.buttons);
 
             switch (type) {
                 case 'sticks':
                     element = elements.sticksCollectible;
-                    title = '🪵 STICK EARNED!';
-                    message = 'Great focus session!';
                     break;
                 case 'carrots':
                     element = elements.carrotsCollectible;
-                    title = '🥕 CARROT EARNED!';
-                    message = 'Rest well deserved!';
                     break;
                 case 'goldenTomatoes':
                     element = elements.tomatoesCollectible;
-                    title = '🍅✨ GOLDEN TOMATO!';
-                    message = 'You completed a full cycle! Amazing!';
                     break;
             }
 
@@ -948,6 +982,7 @@
             // Show success modal
             elements.successTitle.textContent = title;
             elements.successMessage.textContent = message;
+            elements.successOkBtn.textContent = button;
             elements.successModal.classList.add('visible');
 
             // Save and update display (important for golden tomato awarded via setTimeout)
