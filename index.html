@@ -619,6 +619,7 @@
             collectibles: { sticks: 0, carrots: 0, goldenTomatoes: 0 },
             currentCycle: { focusCount: 0, restCount: 0 },
             bankedRest: 0,
+            bankedRestCount: 0,
             history: {},
             settings: { focusDuration: 31, restDuration: 5, theme: '8bit' }
         };
@@ -631,6 +632,7 @@
         let currentMode = 'focus'; // 'focus' or 'rest'
         let pauseCount = 0;
         let sessionFailed = false;
+        let restsToCredit = 1; // How many rests to credit when rest completes
 
         // ============================================
         // DOM ELEMENTS
@@ -823,10 +825,12 @@
                 }
                 showRestChoice();
             } else {
-                // Rest complete - award carrot
+                // Rest complete - award carrot and credit all rests taken
                 if (!sessionFailed) {
                     awardCollectible('carrots');
-                    state.currentCycle.restCount++;
+                    // Credit all rests (1 + any that were banked)
+                    state.currentCycle.restCount += restsToCredit;
+                    restsToCredit = 1; // Reset for next time
                     checkCycleComplete();
                     saveState();
                 }
@@ -849,7 +853,13 @@
             // Calculate rest time with banked minutes
             const totalRest = state.settings.restDuration + state.bankedRest;
             timeRemaining = totalRest * 60;
+
+            // Store how many rests to credit (1 + any banked)
+            restsToCredit = 1 + state.bankedRestCount;
+
+            // Reset banked counters
             state.bankedRest = 0;
+            state.bankedRestCount = 0;
             saveState();
 
             updateDisplay();
@@ -859,8 +869,9 @@
         function skipRest() {
             elements.restChoice.classList.remove('visible');
 
-            // Bank the rest time
+            // Bank the rest time and count
             state.bankedRest += state.settings.restDuration;
+            state.bankedRestCount++;
             saveState();
 
             // Start next focus session
