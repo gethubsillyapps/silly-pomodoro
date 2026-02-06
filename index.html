@@ -488,6 +488,119 @@
         }
 
         /* ============================================
+           SIDE TIMER
+           ============================================ */
+        .side-timer {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+
+        .side-timer-toggle {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-right: none;
+            color: var(--accent);
+            padding: 12px 6px;
+            font-family: var(--font-main);
+            font-size: 0.7em;
+            cursor: pointer;
+            border-radius: 8px 0 0 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .side-timer-toggle:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .side-timer-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+            padding: 24px;
+            width: 250px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .side-timer-panel.open {
+            display: flex;
+        }
+
+        .side-timer-panel h3 {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .side-timer-mode-switch {
+            display: flex;
+            gap: 5px;
+        }
+
+        .side-timer-mode-switch .btn {
+            flex: 1;
+            padding: 8px 6px;
+            font-size: 0.7em;
+            min-width: auto;
+        }
+
+        .side-timer-mode-switch .btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .side-timer-display {
+            font-size: 2.4em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .side-timer-input {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .side-timer-input input {
+            width: 50px;
+            padding: 6px;
+            font-family: var(--font-main);
+            font-size: 0.8em;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .side-timer-input label {
+            font-size: 0.5em;
+            color: var(--text-secondary);
+        }
+
+        .side-timer-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .side-timer-controls .btn {
+            flex: 1;
+            padding: 10px 6px;
+            font-size: 0.75em;
+            min-width: auto;
+        }
+
+        /* ============================================
            RESPONSIVE
            ============================================ */
         @media (max-width: 500px) {
@@ -501,6 +614,11 @@
 
             .calendar-grid {
                 grid-template-columns: repeat(7, 1fr);
+            }
+
+            .side-timer-panel {
+                width: 160px;
+                padding: 12px;
             }
         }
     </style>
@@ -592,6 +710,33 @@
             <button class="btn btn-social" disabled>PAIR UP</button>
         </section>
     </main>
+
+    <!-- Side Timer Widget -->
+    <div class="side-timer">
+        <button class="side-timer-toggle" id="sideTimerToggle">TIMER</button>
+        <div class="side-timer-panel" id="sideTimerPanel">
+            <h3>QUICK TIMER</h3>
+            <div class="side-timer-mode-switch">
+                <button class="btn active" id="stopwatchModeBtn">STOPWATCH</button>
+                <button class="btn" id="countdownModeBtn">COUNTDOWN</button>
+            </div>
+            <div class="side-timer-display" id="sideTimerDisplay">00:00</div>
+            <div class="side-timer-input" id="countdownInput" style="display:none;">
+                <div>
+                    <input type="number" id="countdownMin" min="0" max="99" value="5">
+                    <label>MIN</label>
+                </div>
+                <div>
+                    <input type="number" id="countdownSec" min="0" max="59" value="0">
+                    <label>SEC</label>
+                </div>
+            </div>
+            <div class="side-timer-controls">
+                <button class="btn btn-primary" id="sideStartBtn">START</button>
+                <button class="btn" id="sideResetBtn">RESET</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Warning Modal -->
     <div class="modal-overlay" id="warningModal">
@@ -1150,6 +1295,114 @@
                 }
             }
         });
+
+        // ============================================
+        // SIDE TIMER
+        // ============================================
+        const sideElements = {
+            toggle: document.getElementById('sideTimerToggle'),
+            panel: document.getElementById('sideTimerPanel'),
+            display: document.getElementById('sideTimerDisplay'),
+            startBtn: document.getElementById('sideStartBtn'),
+            resetBtn: document.getElementById('sideResetBtn'),
+            stopwatchModeBtn: document.getElementById('stopwatchModeBtn'),
+            countdownModeBtn: document.getElementById('countdownModeBtn'),
+            countdownInput: document.getElementById('countdownInput'),
+            countdownMin: document.getElementById('countdownMin'),
+            countdownSec: document.getElementById('countdownSec')
+        };
+
+        let sideTimerMode = 'stopwatch'; // 'stopwatch' or 'countdown'
+        let sideTimerRunning = false;
+        let sideTimerInterval = null;
+        let sideTimerElapsed = 0; // seconds elapsed (stopwatch)
+        let sideTimerEnd = null; // end timestamp (countdown)
+        let sideTimerRemaining = 0; // seconds remaining (countdown)
+
+        function formatSideTime(totalSeconds) {
+            const mins = Math.floor(Math.abs(totalSeconds) / 60);
+            const secs = Math.abs(totalSeconds) % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateSideDisplay() {
+            if (sideTimerMode === 'stopwatch') {
+                sideElements.display.textContent = formatSideTime(sideTimerElapsed);
+            } else {
+                sideElements.display.textContent = formatSideTime(sideTimerRemaining);
+            }
+        }
+
+        sideElements.toggle.addEventListener('click', () => {
+            sideElements.panel.classList.toggle('open');
+        });
+
+        sideElements.stopwatchModeBtn.addEventListener('click', () => {
+            sideTimerMode = 'stopwatch';
+            sideElements.stopwatchModeBtn.classList.add('active');
+            sideElements.countdownModeBtn.classList.remove('active');
+            sideElements.countdownInput.style.display = 'none';
+            resetSideTimer();
+        });
+
+        sideElements.countdownModeBtn.addEventListener('click', () => {
+            sideTimerMode = 'countdown';
+            sideElements.countdownModeBtn.classList.add('active');
+            sideElements.stopwatchModeBtn.classList.remove('active');
+            sideElements.countdownInput.style.display = 'flex';
+            resetSideTimer();
+        });
+
+        sideElements.startBtn.addEventListener('click', () => {
+            if (sideTimerRunning) {
+                // Pause
+                clearInterval(sideTimerInterval);
+                sideTimerRunning = false;
+                sideElements.startBtn.textContent = 'START';
+            } else {
+                // Start
+                sideTimerRunning = true;
+                sideElements.startBtn.textContent = 'PAUSE';
+
+                if (sideTimerMode === 'stopwatch') {
+                    const startTime = Date.now() - (sideTimerElapsed * 1000);
+                    sideTimerInterval = setInterval(() => {
+                        sideTimerElapsed = Math.floor((Date.now() - startTime) / 1000);
+                        updateSideDisplay();
+                    }, 250);
+                } else {
+                    // Countdown
+                    if (sideTimerRemaining <= 0) {
+                        const mins = parseInt(sideElements.countdownMin.value) || 0;
+                        const secs = parseInt(sideElements.countdownSec.value) || 0;
+                        sideTimerRemaining = (mins * 60) + secs;
+                    }
+                    sideTimerEnd = Date.now() + (sideTimerRemaining * 1000);
+                    sideTimerInterval = setInterval(() => {
+                        sideTimerRemaining = Math.max(0, Math.round((sideTimerEnd - Date.now()) / 1000));
+                        updateSideDisplay();
+                        if (sideTimerRemaining <= 0) {
+                            clearInterval(sideTimerInterval);
+                            sideTimerRunning = false;
+                            sideElements.startBtn.textContent = 'START';
+                            sideElements.display.textContent = 'DONE!';
+                        }
+                    }, 250);
+                }
+            }
+        });
+
+        sideElements.resetBtn.addEventListener('click', resetSideTimer);
+
+        function resetSideTimer() {
+            clearInterval(sideTimerInterval);
+            sideTimerRunning = false;
+            sideTimerElapsed = 0;
+            sideTimerRemaining = 0;
+            sideTimerEnd = null;
+            sideElements.startBtn.textContent = 'START';
+            updateSideDisplay();
+        }
 
         // ============================================
         // INITIALIZATION
