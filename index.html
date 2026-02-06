@@ -4,25 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silly Pomodoro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* ============================================
            CSS VARIABLES & THEME SYSTEM
            ============================================ */
         :root {
-            --bg-primary: #09090b;
-            --bg-secondary: #18181b;
-            --bg-card: #27272a;
-            --text-primary: #fafafa;
-            --text-secondary: #a1a1aa;
-            --accent: #eab308;
-            --accent-hover: #facc15;
-            --success: #eab308;
-            --warning: #eab308;
-            --border-radius: 12px;
-            --font-main: 'Press Start 2P', cursive;
-            --font-size-base: 10px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            --bg-primary: #8B8FA0;
+            --bg-secondary: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --accent: #a0a5b8;
+            --accent-hover: #b8bcc8;
+            --success: #a0a5b8;
+            --warning: #a0a5b8;
+            --border-radius: 16px;
+            --font-main: 'Playfair Display', serif;
+            --font-ui: 'DM Sans', sans-serif;
+            --font-size-base: 14px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --gradient-focus: linear-gradient(135deg, #5b9ec4 0%, #c8a86e 25%, #e8a060 45%, #e87860 65%, #d06070 85%, #b85878 100%);
+            --gradient-rest: linear-gradient(135deg, #6ea0d4 0%, #a8b0e0 20%, #d0a0d0 40%, #e0a0d0 60%, #d8a0e8 80%, #b890e8 100%);
+            --gradient-idle: linear-gradient(135deg, #585a6e 0%, #70728a 20%, #9095a8 40%, #a0a4b8 60%, #8a8ea0 80%, #686a80 100%);
         }
 
         /* ASCII Theme */
@@ -38,6 +42,7 @@
             --warning: #ffff00;
             --border-radius: 0;
             --font-main: 'IBM Plex Mono', monospace;
+            --font-ui: 'IBM Plex Mono', monospace;
             --font-size-base: 12px;
             --shadow: none;
         }
@@ -54,7 +59,7 @@
         body {
             font-family: var(--font-main);
             font-size: var(--font-size-base);
-            background: var(--bg-primary);
+            background: var(--gradient-idle);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -62,6 +67,29 @@
             align-items: center;
             padding: 20px;
             line-height: 1.6;
+            transition: background 1.5s ease;
+        }
+
+        body.mode-focus {
+            background: var(--gradient-focus);
+            --accent: #e87860;
+            --accent-hover: #f09878;
+            --success: #e8a060;
+            --warning: #e8c060;
+        }
+
+        body.mode-rest {
+            background: var(--gradient-rest);
+            --accent: #b890e8;
+            --accent-hover: #c8a8f0;
+            --success: #a0b8e8;
+            --warning: #c8a0d8;
+        }
+
+        [data-theme="ascii"] body,
+        [data-theme="ascii"] body.mode-focus,
+        [data-theme="ascii"] body.mode-rest {
+            background: var(--bg-primary);
         }
 
         /* ============================================
@@ -79,6 +107,11 @@
 
         .header h1 {
             font-size: 1.4em;
+            color: var(--text-primary);
+            transition: color 1.5s ease;
+        }
+
+        [data-theme="ascii"] .header h1 {
             color: var(--accent);
         }
 
@@ -87,8 +120,9 @@
             border: 2px solid var(--accent);
             color: var(--text-primary);
             padding: 8px 12px;
-            font-family: var(--font-main);
-            font-size: 0.7em;
+            font-family: var(--font-ui);
+            font-size: 0.75em;
+            letter-spacing: 0.05em;
             cursor: pointer;
             border-radius: var(--border-radius);
             transition: all 0.2s;
@@ -112,12 +146,16 @@
 
         .card {
             background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius);
             padding: 20px;
             box-shadow: var(--shadow);
+            transition: border-color 1.5s ease;
         }
 
         [data-theme="ascii"] .card {
+            backdrop-filter: none;
             border: 1px solid var(--accent);
         }
 
@@ -129,7 +167,9 @@
         }
 
         .timer-mode {
-            font-size: 1em;
+            font-family: var(--font-ui);
+            font-size: 0.85em;
+            letter-spacing: 0.15em;
             margin-bottom: 15px;
             color: var(--text-secondary);
             text-transform: uppercase;
@@ -172,15 +212,17 @@
         }
 
         .btn {
-            font-family: var(--font-main);
-            font-size: 0.8em;
+            font-family: var(--font-ui);
+            font-size: 0.85em;
+            font-weight: 500;
+            letter-spacing: 0.05em;
             padding: 12px 20px;
             border: 2px solid var(--accent);
             background: transparent;
             color: var(--accent);
             cursor: pointer;
             border-radius: var(--border-radius);
-            transition: all 0.2s;
+            transition: all 0.3s ease, border-color 1.5s ease, color 1.5s ease;
             min-width: 100px;
         }
 
@@ -249,6 +291,8 @@
            COLLECTIBLES
            ============================================ */
         .collectibles-section h2 {
+            font-family: var(--font-ui);
+            letter-spacing: 0.1em;
             font-size: 0.9em;
             margin-bottom: 15px;
             color: var(--text-secondary);
@@ -278,7 +322,9 @@
         }
 
         .collectible-label {
-            font-size: 0.6em;
+            font-family: var(--font-ui);
+            font-size: 0.65em;
+            letter-spacing: 0.1em;
             color: var(--text-secondary);
             margin-top: 5px;
         }
@@ -306,6 +352,8 @@
            CALENDAR
            ============================================ */
         .calendar-section h2 {
+            font-family: var(--font-ui);
+            letter-spacing: 0.1em;
             font-size: 0.9em;
             margin-bottom: 15px;
             color: var(--text-secondary);
@@ -329,10 +377,10 @@
             border-radius: 0;
         }
 
-        .calendar-day[data-sessions="1"] { background: #422006; }
-        .calendar-day[data-sessions="2"] { background: #713f12; }
-        .calendar-day[data-sessions="3"] { background: #a16207; }
-        .calendar-day[data-sessions="4"] { background: #eab308; }
+        .calendar-day[data-sessions="1"] { background: rgba(232, 146, 124, 0.2); }
+        .calendar-day[data-sessions="2"] { background: rgba(232, 146, 124, 0.4); }
+        .calendar-day[data-sessions="3"] { background: rgba(232, 146, 124, 0.65); }
+        .calendar-day[data-sessions="4"] { background: rgba(232, 146, 124, 0.9); }
 
         [data-theme="ascii"] .calendar-day[data-sessions="1"] { background: #002200; }
         [data-theme="ascii"] .calendar-day[data-sessions="2"] { background: #004400; }
@@ -355,10 +403,10 @@
             border-radius: 2px;
         }
 
-        .legend-box.level-1 { background: #422006; }
-        .legend-box.level-2 { background: #713f12; }
-        .legend-box.level-3 { background: #a16207; }
-        .legend-box.level-4 { background: #eab308; }
+        .legend-box.level-1 { background: rgba(232, 146, 124, 0.2); }
+        .legend-box.level-2 { background: rgba(232, 146, 124, 0.4); }
+        .legend-box.level-3 { background: rgba(232, 146, 124, 0.65); }
+        .legend-box.level-4 { background: rgba(232, 146, 124, 0.9); }
 
         [data-theme="ascii"] .legend-box.level-1 { background: #002200; }
         [data-theme="ascii"] .legend-box.level-2 { background: #004400; }
@@ -369,6 +417,8 @@
            SETTINGS
            ============================================ */
         .settings-section h2 {
+            font-family: var(--font-ui);
+            letter-spacing: 0.1em;
             font-size: 0.9em;
             margin-bottom: 15px;
             color: var(--text-secondary);
@@ -394,7 +444,7 @@
         .setting-item input {
             width: 80px;
             padding: 8px;
-            font-family: var(--font-main);
+            font-family: var(--font-ui);
             font-size: 1em;
             background: var(--bg-secondary);
             border: 2px solid var(--accent);
@@ -793,7 +843,7 @@
             bankedRest: 0,
             bankedRestCount: 0,
             history: {},
-            settings: { focusDuration: 31, restDuration: 5, theme: '8bit' }
+            settings: { focusDuration: 31, restDuration: 5, theme: 'zen' }
         };
 
         let state = loadState();
@@ -857,6 +907,10 @@
                 const saved = localStorage.getItem('sillyPomodoro');
                 if (saved) {
                     const parsed = JSON.parse(saved);
+                    // Migrate old 8bit theme to zen
+                    if (parsed.settings && parsed.settings.theme === '8bit') {
+                        parsed.settings.theme = 'zen';
+                    }
                     return { ...DEFAULT_STATE, ...parsed };
                 }
             } catch (e) {
@@ -878,13 +932,13 @@
         // ============================================
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            elements.themeToggle.textContent = theme === '8bit' ? 'ASCII' : '8-BIT';
+            elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
             saveState();
         }
 
         function toggleTheme() {
-            const newTheme = state.settings.theme === '8bit' ? 'ascii' : '8bit';
+            const newTheme = state.settings.theme === 'zen' ? 'ascii' : 'zen';
             applyTheme(newTheme);
         }
 
@@ -897,7 +951,15 @@
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        function updateGradient() {
+            document.body.classList.remove('mode-focus', 'mode-rest');
+            if (isRunning || elements.restChoice.classList.contains('visible')) {
+                document.body.classList.add(currentMode === 'focus' ? 'mode-focus' : 'mode-rest');
+            }
+        }
+
         function updateDisplay() {
+            updateGradient();
             elements.timerDisplay.textContent = formatTime(timeRemaining);
             elements.timerDisplay.classList.toggle('warning', timeRemaining <= 60 && isRunning);
             elements.timerDisplay.classList.toggle('failed', sessionFailed);
