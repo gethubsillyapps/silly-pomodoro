@@ -522,7 +522,6 @@
             <div class="controls" id="mainControls">
                 <button class="btn btn-primary" id="startBtn">START</button>
                 <button class="btn" id="pauseBtn" disabled>PAUSE</button>
-                <button class="btn" id="resetBtn">RESET</button>
             </div>
 
             <div class="rest-choice" id="restChoice">
@@ -673,7 +672,6 @@
             cycleProgress: document.getElementById('cycleProgress'),
             startBtn: document.getElementById('startBtn'),
             pauseBtn: document.getElementById('pauseBtn'),
-            resetBtn: document.getElementById('resetBtn'),
             restChoice: document.getElementById('restChoice'),
             takeRestBtn: document.getElementById('takeRestBtn'),
             skipRestBtn: document.getElementById('skipRestBtn'),
@@ -1113,7 +1111,6 @@
         elements.themeToggle.addEventListener('click', toggleTheme);
         elements.startBtn.addEventListener('click', startTimer);
         elements.pauseBtn.addEventListener('click', pauseTimer);
-        elements.resetBtn.addEventListener('click', resetTimer);
         elements.takeRestBtn.addEventListener('click', takeRest);
         elements.skipRestBtn.addEventListener('click', skipRest);
 
