@@ -1977,20 +1977,19 @@
             });
         }
 
-        // Calculate plant stage from session progress
+        // Calculate plant stage from focus session progress
         function getPlantStage() {
             const focus = state.currentCycle.focusCount;
             const rest = state.currentCycle.restCount;
-            const total = focus + rest; // 0-8 progress
 
-            if (total === 0) return 0; // empty pot
-            if (total === 1) return 1; // sprout
-            if (total === 2) return 2; // seedling
-            if (total <= 3) return 3; // growing
-            if (total <= 4) return 4; // flowering
-            if (total <= 5) return 5; // green tomatoes
-            if (total <= 6) return 6; // ripening
-            return 7; // harvest ready
+            if (focus === 0 && !isRunning) return 0;  // empty pot
+            if (focus === 0 && isRunning) return 1;    // sprout (focus 1 in progress)
+            if (focus === 1 && rest === 0) return 2;   // seedling (focus 1 done)
+            if (focus === 2 && rest < 2) return 3;     // growing (focus 2 done)
+            if (focus === 2) return 4;                 // flowering
+            if (focus === 3 && rest < 3) return 5;     // green tomatoes (focus 3 done)
+            if (focus === 3) return 6;                 // ripening
+            return 7;                                  // harvest ready (focus 4 done)
         }
 
         function updatePlant() {
@@ -2025,8 +2024,24 @@
         // ============================================
         // INITIALIZATION
         // ============================================
+        function checkDailyReset() {
+            const today = getTodayKey();
+            if (state.lastActiveDate && state.lastActiveDate !== today) {
+                // New day — reset cycle and plant
+                state.currentCycle.focusCount = 0;
+                state.currentCycle.restCount = 0;
+                state.bankedRest = 0;
+                state.bankedRestCount = 0;
+                // Clear dropped tomatoes
+                plantElements.dropZone.innerHTML = '';
+            }
+            state.lastActiveDate = today;
+            saveState();
+        }
+
         function init() {
             applyTheme(state.settings.theme);
+            checkDailyReset();
             timeRemaining = state.settings.focusDuration * 60;
             renderCalendar();
             updatePlant();
