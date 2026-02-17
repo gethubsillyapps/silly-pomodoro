@@ -15,18 +15,16 @@
             --bg-card: rgba(255, 255, 255, 0.12);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.75);
-            --accent: #a0a5b8;
-            --accent-hover: #b8bcc8;
-            --success: #a0a5b8;
-            --warning: #a0a5b8;
+            --accent: #daa520;
+            --accent-hover: #e8b830;
+            --success: #daa520;
+            --warning: #e8a020;
             --border-radius: 16px;
             --font-main: 'Playfair Display', serif;
             --font-ui: 'DM Sans', sans-serif;
             --font-size-base: 14px;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            --gradient-focus: linear-gradient(135deg, #5b9ec4 0%, #c8a86e 25%, #e8a060 45%, #e87860 65%, #d06070 85%, #b85878 100%);
-            --gradient-rest: linear-gradient(135deg, #6ea0d4 0%, #a8b0e0 20%, #d0a0d0 40%, #e0a0d0 60%, #d8a0e8 80%, #b890e8 100%);
-            --gradient-idle: linear-gradient(135deg, #585a6e 0%, #70728a 20%, #9095a8 40%, #a0a4b8 60%, #8a8ea0 80%, #686a80 100%);
+            --gradient-main: linear-gradient(135deg, #b8860b 0%, #daa520 20%, #e8a020 40%, #e87830 60%, #d4543a 80%, #c0392b 100%);
         }
 
         /* ASCII Theme */
@@ -59,7 +57,7 @@
         body {
             font-family: var(--font-main);
             font-size: var(--font-size-base);
-            background: var(--gradient-idle);
+            background: var(--gradient-main);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -70,25 +68,36 @@
             transition: background 1.5s ease;
         }
 
-        body.mode-focus {
-            background: var(--gradient-focus);
-            --accent: #e87860;
-            --accent-hover: #f09878;
-            --success: #e8a060;
-            --warning: #e8c060;
+        /* Zen mode: all text white */
+        [data-theme="zen"] .text-secondary,
+        [data-theme="zen"] .collectibles-section h2,
+        [data-theme="zen"] .calendar-section h2,
+        [data-theme="zen"] .settings-section h2,
+        [data-theme="zen"] .cycle-progress,
+        [data-theme="zen"] .collectible-label,
+        [data-theme="zen"] .setting-item label,
+        [data-theme="zen"] .side-timer-panel h3,
+        [data-theme="zen"] .rest-choice p,
+        [data-theme="zen"] .calendar-legend,
+        [data-theme="zen"] .banked-rest {
+            color: rgba(255, 255, 255, 0.85);
         }
 
-        body.mode-rest {
-            background: var(--gradient-rest);
-            --accent: #b890e8;
-            --accent-hover: #c8a8f0;
-            --success: #a0b8e8;
-            --warning: #c8a0d8;
+        [data-theme="zen"] .side-timer-toggle {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
         }
 
-        [data-theme="ascii"] body,
-        [data-theme="ascii"] body.mode-focus,
-        [data-theme="ascii"] body.mode-rest {
+        [data-theme="zen"] .side-timer-panel {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        [data-theme="zen"] .side-timer-mode-switch .btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        [data-theme="ascii"] body {
             background: var(--bg-primary);
         }
 
@@ -178,6 +187,11 @@
         .timer-mode.focus { color: var(--accent); }
         .timer-mode.rest { color: var(--success); }
 
+        [data-theme="zen"] .timer-mode.focus,
+        [data-theme="zen"] .timer-mode.rest {
+            color: #ffffff;
+        }
+
         .timer-display {
             font-size: 4em;
             font-weight: bold;
@@ -253,6 +267,37 @@
         .btn-success:hover:not(:disabled) {
             background: var(--success);
             color: var(--bg-primary);
+        }
+
+        /* Zen mode: all buttons white text and borders */
+        [data-theme="zen"] .btn {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+        }
+
+        [data-theme="zen"] .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+        }
+
+        [data-theme="zen"] .btn-primary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        [data-theme="zen"] .btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        [data-theme="zen"] .btn-success {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+        }
+
+        [data-theme="zen"] .btn-success:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
         }
 
         /* Rest choice buttons */
