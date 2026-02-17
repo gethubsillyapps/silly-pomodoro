@@ -1193,10 +1193,18 @@
         // THEME
         // ============================================
         function applyTheme(theme) {
+            // Disable transitions to prevent white flash
+            document.body.style.transition = 'none';
             document.documentElement.setAttribute('data-theme', theme);
             elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
             saveState();
+            // Re-enable transitions after the new theme has painted
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    document.body.style.transition = '';
+                });
+            });
         }
 
         function toggleTheme() {
