@@ -374,6 +374,62 @@
             margin-top: 5px;
         }
 
+        /* Pixel art collectible icons (zen mode only) */
+        .collectible-pixel-wrap {
+            display: none;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            margin: 0 auto 8px;
+        }
+
+        [data-theme="zen"] .collectible-pixel-wrap {
+            display: block;
+        }
+
+        [data-theme="zen"] .collectible-emoji {
+            display: none;
+        }
+
+        .pixel-icon {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            transform: scale(4);
+            transform-origin: top left;
+        }
+
+        .pixel-stick {
+            box-shadow:
+                3px 1px 0 #A0522D, 4px 1px 0 #A0522D,
+                2px 2px 0 #C4823A, 3px 2px 0 #8B4513, 4px 2px 0 #8B4513, 5px 2px 0 #6B3410,
+                1px 3px 0 #C4823A, 2px 3px 0 #A0522D, 3px 3px 0 #8B4513, 4px 3px 0 #6B3410, 5px 3px 0 #8B4513, 6px 3px 0 #6B3410,
+                1px 4px 0 #A0522D, 2px 4px 0 #8B4513, 3px 4px 0 #6B3410, 4px 4px 0 #8B4513, 5px 4px 0 #8B4513, 6px 4px 0 #5C3317,
+                2px 5px 0 #8B4513, 3px 5px 0 #8B4513, 4px 5px 0 #6B3410, 5px 5px 0 #5C3317,
+                3px 6px 0 #6B3410, 4px 6px 0 #5C3317;
+        }
+
+        .pixel-carrot {
+            box-shadow:
+                4px 0px 0 #2E7D32, 5px 0px 0 #43A047,
+                3px 1px 0 #2E7D32, 4px 1px 0 #388E3C, 5px 1px 0 #43A047, 6px 1px 0 #2E7D32,
+                4px 2px 0 #FF8F00, 5px 2px 0 #FF6F00,
+                3px 3px 0 #FFA726, 4px 3px 0 #FF8F00, 5px 3px 0 #FF6F00,
+                3px 4px 0 #FF8F00, 4px 4px 0 #F57C00,
+                2px 5px 0 #F57C00, 3px 5px 0 #EF6C00,
+                2px 6px 0 #E65100;
+        }
+
+        .pixel-tomato {
+            box-shadow:
+                4px 0px 0 #2E7D32, 5px 0px 0 #388E3C,
+                3px 1px 0 #E53935, 4px 1px 0 #388E3C, 5px 1px 0 #E53935,
+                2px 2px 0 #EF5350, 3px 2px 0 #E53935, 4px 2px 0 #E53935, 5px 2px 0 #C62828, 6px 2px 0 #C62828,
+                1px 3px 0 #EF5350, 2px 3px 0 #FF8A65, 3px 3px 0 #EF5350, 4px 3px 0 #E53935, 5px 3px 0 #C62828, 6px 3px 0 #B71C1C,
+                1px 4px 0 #E53935, 2px 4px 0 #EF5350, 3px 4px 0 #E53935, 4px 4px 0 #D32F2F, 5px 4px 0 #C62828, 6px 4px 0 #B71C1C,
+                2px 5px 0 #D32F2F, 3px 5px 0 #C62828, 4px 5px 0 #C62828, 5px 5px 0 #B71C1C;
+        }
+
         .collectible.earned {
             animation: pop 0.5s ease;
         }
@@ -696,6 +752,138 @@
         }
 
         /* ============================================
+           PLANT ANIMATION PANEL
+           ============================================ */
+        .plant-panel {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .plant-toggle {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-left: none;
+            color: var(--accent);
+            padding: 12px 6px;
+            font-family: var(--font-main);
+            font-size: 0.7em;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .plant-toggle:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        [data-theme="zen"] .plant-toggle {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+        }
+
+        .plant-container {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+            padding: 20px;
+            width: 280px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .plant-container.open {
+            display: flex;
+        }
+
+        [data-theme="zen"] .plant-container {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .plant-container h3 {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-family: var(--font-ui);
+        }
+
+        [data-theme="zen"] .plant-container h3 {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .plant-stage-label {
+            font-size: 0.65em;
+            color: var(--text-secondary);
+            font-family: var(--font-ui);
+        }
+
+        [data-theme="zen"] .plant-stage-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Pixel art canvas */
+        .pixel-canvas {
+            width: 200px;
+            height: 280px;
+            margin: 0 auto;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        .pixel-art {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: 0;
+            left: 0;
+        }
+
+        /* Tomato drop zone */
+        .tomato-drop-zone {
+            height: 40px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .dropped-tomato {
+            position: absolute;
+            bottom: 0;
+            font-size: 1.4em;
+            animation: tomatoDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .dropped-tomato.grey {
+            filter: grayscale(1) brightness(0.6);
+        }
+
+        @keyframes tomatoDrop {
+            0% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+            40% { opacity: 1; }
+            70% { transform: translateY(5px) scale(1.1); }
+            85% { transform: translateY(-8px) scale(0.95); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @keyframes tomatoBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .dropped-tomato.settled {
+            animation: tomatoBounce 2s ease-in-out infinite;
+        }
+
+        /* ============================================
            RESPONSIVE
            ============================================ */
         @media (max-width: 500px) {
@@ -714,6 +902,21 @@
             .side-timer-panel {
                 width: 160px;
                 padding: 12px;
+            }
+
+            .plant-container {
+                width: 200px;
+                padding: 12px;
+            }
+
+            .pixel-canvas {
+                width: 140px;
+                height: 196px;
+            }
+
+            .pixel-art {
+                width: 7px;
+                height: 7px;
             }
         }
     </style>
@@ -752,17 +955,20 @@
             <h2>COLLECTIBLES</h2>
             <div class="collectibles">
                 <div class="collectible" id="sticksCollectible">
-                    <span class="collectible-icon">🪵</span>
+                    <span class="collectible-icon collectible-emoji">🪵</span>
+                    <div class="collectible-pixel-wrap"><div class="pixel-icon pixel-stick"></div></div>
                     <span class="collectible-count" id="sticksCount">0</span>
                     <span class="collectible-label">STICKS</span>
                 </div>
                 <div class="collectible" id="carrotsCollectible">
-                    <span class="collectible-icon">🥕</span>
+                    <span class="collectible-icon collectible-emoji">🥕</span>
+                    <div class="collectible-pixel-wrap"><div class="pixel-icon pixel-carrot"></div></div>
                     <span class="collectible-count" id="carrotsCount">0</span>
                     <span class="collectible-label">CARROTS</span>
                 </div>
                 <div class="collectible" id="tomatoesCollectible">
-                    <span class="collectible-icon golden-tomato">🍅</span>
+                    <span class="collectible-icon golden-tomato collectible-emoji">🍅</span>
+                    <div class="collectible-pixel-wrap golden-tomato"><div class="pixel-icon pixel-tomato"></div></div>
                     <span class="collectible-count" id="tomatoesCount">0</span>
                     <span class="collectible-label">GOLDEN</span>
                 </div>
@@ -805,6 +1011,17 @@
             <button class="btn btn-social" disabled>PAIR UP</button>
         </section>
     </main>
+
+    <!-- Plant Animation Panel -->
+    <div class="plant-panel">
+        <button class="plant-toggle" id="plantToggle">PLANT</button>
+        <div class="plant-container" id="plantContainer">
+            <h3>🌱 GARDEN</h3>
+            <div class="pixel-canvas" id="pixelCanvas"></div>
+            <div class="plant-stage-label" id="plantStageLabel">Seed</div>
+            <div class="tomato-drop-zone" id="tomatoDropZone"></div>
+        </div>
+    </div>
 
     <!-- Side Timer Widget -->
     <div class="side-timer">
@@ -1096,6 +1313,8 @@
                 isRunning = false;
                 sessionFailed = true;
                 elements.failedModal.classList.add('visible');
+                // Drop grey tomato in plant panel
+                setTimeout(() => dropTomato(false), 300);
             }
 
             updateDisplay();
@@ -1166,6 +1385,7 @@
             state.bankedRestCount = 0;
             saveState();
 
+            updatePlant();
             updateDisplay();
             startTimer();
         }
@@ -1284,7 +1504,13 @@
 
             // Save and update display (important for golden tomato awarded via setTimeout)
             saveState();
+            updatePlant();
             updateDisplay();
+
+            // Drop golden tomato in plant panel
+            if (type === 'goldenTomatoes') {
+                setTimeout(() => dropTomato(true), 300);
+            }
         }
 
         function checkCycleComplete() {
@@ -1512,12 +1738,286 @@
         }
 
         // ============================================
+        // PLANT ANIMATION
+        // ============================================
+        const plantElements = {
+            toggle: document.getElementById('plantToggle'),
+            container: document.getElementById('plantContainer'),
+            canvas: document.getElementById('pixelCanvas'),
+            stageLabel: document.getElementById('plantStageLabel'),
+            dropZone: document.getElementById('tomatoDropZone')
+        };
+
+        // Color palette (retro pixel-art style)
+        const P = {
+            dirt:     '#5C3A1E',
+            dirtDk:   '#3D2510',
+            stem:     '#2D8B2D',
+            stemDk:   '#1A6B1A',
+            leaf:     '#3DBF3D',
+            leafDk:   '#2D9F2D',
+            leafLt:   '#5FD35F',
+            flower:   '#FFD700',
+            flowerDk: '#DAA520',
+            tomGreen: '#4CAF50',
+            tomRed:   '#E53935',
+            tomRedDk: '#B71C1C',
+            tomShine: '#FF7043',
+            pot:      '#8D6E4C',
+            potDk:    '#6B4F34',
+            potLt:    '#A8875C',
+            sky:      'transparent'
+        };
+
+        // 20x28 pixel art stages - each is an array of [x, y, color]
+        // Grid: x=0-19, y=0-27 (top-left origin)
+        const PLANT_STAGES = [
+            // Stage 0: Empty pot
+            { name: 'Empty Pot', pixels: [
+                // Pot rim
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                // Pot body
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[7,8,9,10,11,12].map(x => [x, 21, P.dirt]),
+                [7, 21, P.potLt], [12, 21, P.potLt],
+            ]},
+            // Stage 1: Seed sprouting
+            { name: 'Sprout', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Tiny sprout
+                [9, 20, P.stem],
+                [10, 20, P.stem],
+                [9, 19, P.leaf],
+                [10, 19, P.leafLt],
+            ]},
+            // Stage 2: Small seedling
+            { name: 'Seedling', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                [9, 20, P.stem], [10, 20, P.stem],
+                [9, 19, P.stem], [10, 19, P.stem],
+                [9, 18, P.stem], [10, 18, P.stem],
+                // Leaves
+                [7, 18, P.leaf], [8, 18, P.leafLt],
+                [11, 19, P.leaf], [12, 19, P.leafLt],
+                [9, 17, P.leaf], [10, 17, P.leafLt],
+            ]},
+            // Stage 3: Growing plant
+            { name: 'Growing', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                ...[17,18,19,20].map(y => [[9, y, P.stem], [10, y, P.stem]]).flat(),
+                [9, 16, P.stem], [10, 16, P.stem],
+                // Leaves - left
+                [7, 17, P.leaf], [8, 17, P.leafLt], [6, 17, P.leafDk],
+                // Leaves - right
+                [11, 18, P.leaf], [12, 18, P.leafLt], [13, 18, P.leafDk],
+                // Top leaves
+                [8, 15, P.leaf], [9, 15, P.leafLt], [10, 15, P.leaf], [11, 15, P.leafLt],
+                [9, 14, P.leaf], [10, 14, P.leafLt],
+            ]},
+            // Stage 4: Flowering
+            { name: 'Flowering', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                ...[15,16,17,18,19,20].map(y => [[9, y, P.stem], [10, y, P.stem]]).flat(),
+                // Branches
+                [8, 17, P.stem], [7, 16, P.stem],
+                [11, 18, P.stem], [12, 17, P.stem],
+                // Leaves
+                [6, 16, P.leaf], [6, 15, P.leafLt], [7, 15, P.leaf],
+                [13, 17, P.leaf], [13, 16, P.leafLt], [12, 16, P.leaf],
+                [8, 14, P.leaf], [9, 14, P.leafLt], [10, 14, P.leaf], [11, 14, P.leafLt],
+                // Flowers
+                [9, 13, P.flower], [10, 13, P.flowerDk],
+                [6, 14, P.flower], [5, 15, P.flowerDk],
+                [13, 15, P.flower], [14, 16, P.flowerDk],
+            ]},
+            // Stage 5: Green tomatoes
+            { name: 'Green Tomatoes', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                ...[15,16,17,18,19,20].map(y => [[9, y, P.stem], [10, y, P.stem]]).flat(),
+                // Branches
+                [8, 17, P.stem], [7, 16, P.stem],
+                [11, 18, P.stem], [12, 17, P.stem],
+                // Leaves
+                [6, 16, P.leaf], [7, 15, P.leaf],
+                [13, 17, P.leaf], [12, 16, P.leaf],
+                [8, 14, P.leaf], [11, 14, P.leaf],
+                // Green tomatoes
+                [5, 15, P.tomGreen], [5, 16, P.tomGreen], [6, 15, P.tomGreen],
+                [13, 16, P.tomGreen], [14, 16, P.tomGreen], [14, 17, P.tomGreen],
+                [9, 13, P.tomGreen], [10, 13, P.tomGreen], [9, 12, P.tomGreen], [10, 12, P.tomGreen],
+            ]},
+            // Stage 6: Ripening
+            { name: 'Ripening', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                ...[15,16,17,18,19,20].map(y => [[9, y, P.stem], [10, y, P.stem]]).flat(),
+                // Branches
+                [8, 17, P.stem], [7, 16, P.stem],
+                [11, 18, P.stem], [12, 17, P.stem],
+                // Leaves
+                [6, 16, P.leaf], [7, 15, P.leaf],
+                [13, 17, P.leaf], [12, 16, P.leaf],
+                [8, 14, P.leaf], [11, 14, P.leaf],
+                // Mixed tomatoes (some red, some green)
+                [5, 15, P.tomRed], [5, 16, P.tomRedDk], [6, 15, P.tomShine],
+                [13, 16, P.tomGreen], [14, 16, P.tomGreen], [14, 17, P.tomGreen],
+                [9, 13, P.tomRed], [10, 13, P.tomRedDk], [9, 12, P.tomShine], [10, 12, P.tomRed],
+            ]},
+            // Stage 7: Fully ripe
+            { name: 'Harvest Ready', pixels: [
+                // Pot
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                // Dirt
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Stem
+                ...[15,16,17,18,19,20].map(y => [[9, y, P.stem], [10, y, P.stem]]).flat(),
+                // Branches
+                [8, 17, P.stem], [7, 16, P.stem],
+                [11, 18, P.stem], [12, 17, P.stem],
+                // Leaves
+                [6, 16, P.leaf], [7, 15, P.leaf],
+                [13, 17, P.leaf], [12, 16, P.leaf],
+                [8, 14, P.leaf], [11, 14, P.leaf],
+                // All red tomatoes
+                [5, 15, P.tomRed], [5, 16, P.tomRedDk], [6, 15, P.tomShine],
+                [13, 16, P.tomRed], [14, 16, P.tomRedDk], [14, 17, P.tomShine],
+                [9, 13, P.tomRed], [10, 13, P.tomRedDk], [9, 12, P.tomShine], [10, 12, P.tomRed],
+            ]}
+        ];
+
+        function renderPlant(stageIndex) {
+            const canvas = plantElements.canvas;
+            canvas.innerHTML = '';
+            const stage = PLANT_STAGES[stageIndex];
+            if (!stage) return;
+
+            plantElements.stageLabel.textContent = stage.name;
+
+            stage.pixels.forEach(([x, y, color]) => {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel-art';
+                pixel.style.left = (x * 10) + 'px';
+                pixel.style.top = (y * 10) + 'px';
+                pixel.style.backgroundColor = color;
+                canvas.appendChild(pixel);
+            });
+        }
+
+        // Calculate plant stage from session progress
+        function getPlantStage() {
+            const focus = state.currentCycle.focusCount;
+            const rest = state.currentCycle.restCount;
+            const total = focus + rest; // 0-8 progress
+
+            if (total === 0) return 0; // empty pot
+            if (total === 1) return 1; // sprout
+            if (total === 2) return 2; // seedling
+            if (total <= 3) return 3; // growing
+            if (total <= 4) return 4; // flowering
+            if (total <= 5) return 5; // green tomatoes
+            if (total <= 6) return 6; // ripening
+            return 7; // harvest ready
+        }
+
+        function updatePlant() {
+            const stage = getPlantStage();
+            renderPlant(stage);
+        }
+
+        // Drop a tomato into the zone (golden or grey)
+        function dropTomato(isGolden) {
+            const zone = plantElements.dropZone;
+            const tomato = document.createElement('span');
+            tomato.className = 'dropped-tomato' + (isGolden ? '' : ' grey');
+            tomato.textContent = '🍅';
+
+            // Position based on existing tomatoes
+            const existing = zone.querySelectorAll('.dropped-tomato');
+            const offset = existing.length * 24;
+            tomato.style.left = offset + 'px';
+
+            zone.appendChild(tomato);
+
+            // After animation, add gentle bounce
+            setTimeout(() => {
+                tomato.classList.add('settled');
+            }, 900);
+        }
+
+        plantElements.toggle.addEventListener('click', () => {
+            plantElements.container.classList.toggle('open');
+        });
+
+        // ============================================
         // INITIALIZATION
         // ============================================
         function init() {
             applyTheme(state.settings.theme);
             timeRemaining = state.settings.focusDuration * 60;
             renderCalendar();
+            updatePlant();
             updateDisplay();
         }
 
