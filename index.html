@@ -480,10 +480,10 @@
             border-radius: 0;
         }
 
-        .calendar-day[data-sessions="1"] { background: rgba(232, 146, 124, 0.2); }
-        .calendar-day[data-sessions="2"] { background: rgba(232, 146, 124, 0.4); }
-        .calendar-day[data-sessions="3"] { background: rgba(232, 146, 124, 0.65); }
-        .calendar-day[data-sessions="4"] { background: rgba(232, 146, 124, 0.9); }
+        .calendar-day[data-sessions="1"] { background: rgba(255, 255, 255, 0.2); }
+        .calendar-day[data-sessions="2"] { background: rgba(255, 255, 255, 0.45); }
+        .calendar-day[data-sessions="3"] { background: rgba(255, 255, 255, 0.7); }
+        .calendar-day[data-sessions="4"] { background: rgba(255, 255, 255, 0.95); }
 
         [data-theme="ascii"] .calendar-day[data-sessions="1"] { background: #002200; }
         [data-theme="ascii"] .calendar-day[data-sessions="2"] { background: #004400; }
@@ -506,10 +506,10 @@
             border-radius: 2px;
         }
 
-        .legend-box.level-1 { background: rgba(232, 146, 124, 0.2); }
-        .legend-box.level-2 { background: rgba(232, 146, 124, 0.4); }
-        .legend-box.level-3 { background: rgba(232, 146, 124, 0.65); }
-        .legend-box.level-4 { background: rgba(232, 146, 124, 0.9); }
+        .legend-box.level-1 { background: rgba(255, 255, 255, 0.2); }
+        .legend-box.level-2 { background: rgba(255, 255, 255, 0.45); }
+        .legend-box.level-3 { background: rgba(255, 255, 255, 0.7); }
+        .legend-box.level-4 { background: rgba(255, 255, 255, 0.95); }
 
         [data-theme="ascii"] .legend-box.level-1 { background: #002200; }
         [data-theme="ascii"] .legend-box.level-2 { background: #004400; }
@@ -754,6 +754,17 @@
         }
 
         /* ============================================
+           THEME TRANSITION OVERLAY
+           ============================================ */
+        #theme-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* ============================================
            PLANT ANIMATION PANEL
            ============================================ */
         .plant-panel {
@@ -837,8 +848,8 @@
 
         /* Pixel art canvas */
         .pixel-canvas {
-            width: 200px;
-            height: 280px;
+            width: 100%;
+            max-width: 200px;
             margin: 0 auto;
             position: relative;
             image-rendering: pixelated;
@@ -846,8 +857,6 @@
 
         .pixel-art {
             position: absolute;
-            width: 10px;
-            height: 10px;
             top: 0;
             left: 0;
         }
@@ -890,6 +899,78 @@
         /* ============================================
            RESPONSIVE
            ============================================ */
+        @media (max-width: 600px) {
+            /* Plant panel: slide up from bottom-left */
+            .plant-panel {
+                top: auto;
+                bottom: 0;
+                transform: none;
+                flex-direction: column-reverse;
+                align-items: flex-start;
+            }
+
+            .plant-toggle {
+                writing-mode: horizontal-tb;
+                border: 2px solid var(--accent);
+                border-top: none;
+                border-left: none;
+                border-radius: 0 8px 0 0;
+                padding: 6px 14px;
+            }
+
+            [data-theme="zen"] .plant-toggle {
+                border-color: rgba(255, 255, 255, 0.6);
+            }
+
+            .plant-container {
+                border: 2px solid var(--accent);
+                border-bottom: none;
+                border-left: none;
+                border-radius: 0 12px 0 0;
+                width: min(280px, 85vw);
+                padding: 14px;
+            }
+
+            [data-theme="zen"] .plant-container {
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+
+            /* Side timer panel: slide up from bottom-right */
+            .side-timer {
+                top: auto;
+                bottom: 0;
+                transform: none;
+                flex-direction: column-reverse;
+                align-items: flex-end;
+            }
+
+            .side-timer-toggle {
+                writing-mode: horizontal-tb;
+                border: 2px solid var(--accent);
+                border-top: none;
+                border-right: none;
+                border-radius: 8px 0 0 0;
+                padding: 6px 14px;
+            }
+
+            [data-theme="zen"] .side-timer-toggle {
+                border-color: rgba(255, 255, 255, 0.6);
+            }
+
+            .side-timer-panel {
+                border: 2px solid var(--accent);
+                border-bottom: none;
+                border-right: none;
+                border-radius: 12px 0 0 0;
+                width: min(240px, 85vw);
+                padding: 14px;
+            }
+
+            [data-theme="zen"] .side-timer-panel {
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
         @media (max-width: 500px) {
             .timer-display {
                 font-size: 3em;
@@ -901,26 +982,6 @@
 
             .calendar-grid {
                 grid-template-columns: repeat(7, 1fr);
-            }
-
-            .side-timer-panel {
-                width: 160px;
-                padding: 12px;
-            }
-
-            .plant-container {
-                width: 200px;
-                padding: 12px;
-            }
-
-            .pixel-canvas {
-                width: 140px;
-                height: 196px;
-            }
-
-            .pixel-art {
-                width: 7px;
-                height: 7px;
             }
         }
     </style>
@@ -1015,6 +1076,9 @@
             <button class="btn btn-social" disabled>PAIR UP</button>
         </section>
     </main>
+
+    <!-- Theme Transition Overlay -->
+    <div id="theme-overlay"></div>
 
     <!-- Plant Animation Panel -->
     <div class="plant-panel">
@@ -1196,17 +1260,31 @@
         // ============================================
         // THEME
         // ============================================
+        const THEME_BACKGROUNDS = {
+            zen: 'linear-gradient(135deg, #b8860b 0%, #daa520 20%, #e8a020 40%, #e87830 60%, #d4543a 80%, #c0392b 100%)',
+            ascii: '#0a0a0a'
+        };
+
         function applyTheme(theme) {
-            // Disable transitions to prevent white flash
+            const overlay = document.getElementById('theme-overlay');
+            // Snapshot current background in overlay
+            overlay.style.transition = 'none';
+            overlay.style.background = THEME_BACKGROUNDS[state.settings.theme] || THEME_BACKGROUNDS.zen;
+            overlay.style.opacity = '1';
+
+            // Switch theme instantly underneath
             document.body.style.transition = 'none';
             document.documentElement.setAttribute('data-theme', theme);
             elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
             saveState();
-            // Re-enable transitions after the new theme has painted
+
+            // Fade overlay out to reveal new theme
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     document.body.style.transition = '';
+                    overlay.style.transition = 'opacity 1.2s ease';
+                    overlay.style.opacity = '0';
                 });
             });
         }
@@ -1967,11 +2045,17 @@
 
             plantElements.stageLabel.textContent = stage.name;
 
+            // Compute pixel size from canvas width (20 columns)
+            const pixelSize = Math.max(5, Math.floor(canvas.offsetWidth / 20));
+            canvas.style.height = (pixelSize * 28) + 'px';
+
             stage.pixels.forEach(([x, y, color]) => {
                 const pixel = document.createElement('div');
                 pixel.className = 'pixel-art';
-                pixel.style.left = (x * 10) + 'px';
-                pixel.style.top = (y * 10) + 'px';
+                pixel.style.left = (x * pixelSize) + 'px';
+                pixel.style.top = (y * pixelSize) + 'px';
+                pixel.style.width = pixelSize + 'px';
+                pixel.style.height = pixelSize + 'px';
                 pixel.style.backgroundColor = color;
                 canvas.appendChild(pixel);
             });
@@ -2019,7 +2103,11 @@
 
         plantElements.toggle.addEventListener('click', () => {
             plantElements.container.classList.toggle('open');
+            // Re-render after panel opens so pixel size is calculated correctly
+            setTimeout(updatePlant, 50);
         });
+
+        window.addEventListener('resize', updatePlant);
 
         // ============================================
         // INITIALIZATION
