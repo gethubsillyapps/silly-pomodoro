@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" id="themeColorMeta" content="#b8860b">
     <title>Silly Pomodoro</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -1276,6 +1277,11 @@
             ascii: '#0a0a0a'
         };
 
+        const THEME_COLORS = {
+            zen: '#b8860b',
+            ascii: '#0a0a0a'
+        };
+
         function applyTheme(theme) {
             const overlay = document.getElementById('theme-overlay');
             // Snapshot current background in overlay
@@ -1289,6 +1295,9 @@
             elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
             saveState();
+
+            // Update browser chrome colour (status bar / nav bar on mobile)
+            document.getElementById('themeColorMeta').content = THEME_COLORS[theme] || THEME_COLORS.zen;
 
             // Fade overlay out to reveal new theme
             requestAnimationFrame(() => {
