@@ -848,6 +848,48 @@
             color: rgba(255, 255, 255, 0.85);
         }
 
+        .plant-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .plant-help-btn {
+            background: none;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 0.55em;
+            font-family: var(--font-ui);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .plant-help-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        [data-theme="zen"] .plant-help-btn {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="zen"] .plant-help-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
         .plant-stage-label {
             font-size: 0.65em;
             color: var(--text-secondary);
@@ -1096,7 +1138,10 @@
     <div class="plant-panel">
         <button class="plant-toggle" id="plantToggle">PLANT</button>
         <div class="plant-container" id="plantContainer">
-            <h3>🌱 GARDEN</h3>
+            <div class="plant-header">
+                <h3>🌱 GARDEN</h3>
+                <button class="plant-help-btn" id="plantHelpBtn">?</button>
+            </div>
             <div class="pixel-canvas" id="pixelCanvas"></div>
             <div class="plant-stage-label" id="plantStageLabel">Seed</div>
             <div class="tomato-drop-zone" id="tomatoDropZone"></div>
@@ -1163,6 +1208,20 @@
             <h2 id="shortcutTitle">🤔 NICE TRY!</h2>
             <p id="shortcutMessage">But real focus earns real rewards.</p>
             <button class="btn btn-primary" id="shortcutOkBtn">OKAY</button>
+        </div>
+    </div>
+
+    <!-- Garden Help Modal -->
+    <div class="modal-overlay" id="gardenHelpModal">
+        <div class="modal">
+            <h2>🌱 HOW YOUR GARDEN GROWS</h2>
+            <p style="text-align:left; font-size: 0.85em; line-height: 2;">
+                <strong>Focus sessions</strong> grow your plant through 8 stages — from an empty pot all the way to a harvest-ready tomato plant.<br><br>
+                <strong>Complete a full cycle</strong> (4 focus + 4 rest) to earn a golden tomato 🍅 — watch it drop into your garden.<br><br>
+                <strong>Fail a session</strong> (pause twice) and a grey tomato drops instead.<br><br>
+                <strong>Each new day</strong> the plant resets. A fresh pot, a fresh start.
+            </p>
+            <button class="btn btn-primary" id="gardenHelpOkBtn">GOT IT</button>
         </div>
     </div>
 
@@ -2120,6 +2179,14 @@
                 tomato.classList.add('settled');
             }, 900);
         }
+
+        document.getElementById('plantHelpBtn').addEventListener('click', () => {
+            document.getElementById('gardenHelpModal').classList.add('visible');
+        });
+
+        document.getElementById('gardenHelpOkBtn').addEventListener('click', () => {
+            document.getElementById('gardenHelpModal').classList.remove('visible');
+        });
 
         plantElements.toggle.addEventListener('click', () => {
             plantElements.container.classList.toggle('open');
