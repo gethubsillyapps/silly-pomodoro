@@ -1275,8 +1275,8 @@
 
             <!-- Harvest stats -->
             <div class="harvest-display">
-                <span>Today: <strong id="harvestTodayCount">0</strong> 🌱</span>
-                <span>Total: <strong id="totalPlantsCount">0</strong></span>
+                <span>Today: <strong id="todayCarrotsCount">0</strong>🥕 <strong id="todayTomatoesCount">0</strong>🍅</span>
+                <span>All: <strong id="totalCarrotsCount">0</strong>🥕 <strong id="totalTomatoesCount">0</strong>🍅</span>
             </div>
 
             <!-- Crafting -->
@@ -1414,8 +1414,10 @@
                 plotType: 'pot',          // 'pot' | 'raisedBed' (permanent upgrade)
                 potGifted: false,         // shown once on first launch
                 carrotIntroSeen: false,   // shown after first carrot earned
-                totalPlantsGrown: 0,      // all-time counter
-                todaysHarvest: 0          // resets daily
+                totalCarrotsGrown: 0,     // all-time carrot harvest counter
+                totalTomatoesGrown: 0,    // all-time tomato harvest counter
+                todaysCarrots: 0,         // resets daily
+                todaysTomatoes: 0         // resets daily
             }
         };
 
@@ -1866,9 +1868,14 @@
             if (state.currentCycle.focusCount >= 4 && state.currentCycle.restCount >= 4) {
                 // Award golden tomato
                 setTimeout(() => awardCollectible('goldenTomatoes'), 600);
-                // Track harvest
-                state.garden.todaysHarvest++;
-                state.garden.totalPlantsGrown++;
+                // Track harvest by plant type
+                if (state.garden.plantType === 'carrot') {
+                    state.garden.todaysCarrots++;
+                    state.garden.totalCarrotsGrown++;
+                } else {
+                    state.garden.todaysTomatoes++;
+                    state.garden.totalTomatoesGrown++;
+                }
                 // Reset plant type for next cycle
                 state.garden.plantType = null;
                 // Reset cycle
@@ -2547,8 +2554,10 @@
             }
 
             // Update harvest counters
-            document.getElementById('harvestTodayCount').textContent = garden.todaysHarvest;
-            document.getElementById('totalPlantsCount').textContent = garden.totalPlantsGrown;
+            document.getElementById('todayCarrotsCount').textContent = garden.todaysCarrots;
+            document.getElementById('todayTomatoesCount').textContent = garden.todaysTomatoes;
+            document.getElementById('totalCarrotsCount').textContent = garden.totalCarrotsGrown;
+            document.getElementById('totalTomatoesCount').textContent = garden.totalTomatoesGrown;
 
             // Show/hide raised bed craft option
             const craftSection = document.getElementById('craftSection');
@@ -2658,7 +2667,8 @@
                 state.bankedRest = 0;
                 state.bankedRestCount = 0;
                 state.garden.plantType = null;
-                state.garden.todaysHarvest = 0;
+                state.garden.todaysCarrots = 0;
+                state.garden.todaysTomatoes = 0;
                 // Clear dropped tomatoes
                 plantElements.dropZone.innerHTML = '';
             }
