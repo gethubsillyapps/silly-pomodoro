@@ -974,6 +974,47 @@
             color: rgba(255, 255, 255, 0.75);
         }
 
+        /* Crafting section */
+        .craft-section {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+
+        [data-theme="ascii"] .craft-section {
+            border-color: var(--accent);
+        }
+
+        .craft-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font-ui);
+            font-size: 0.65em;
+        }
+
+        .craft-label {
+            flex: 1;
+            color: var(--text-secondary);
+        }
+
+        .craft-cost {
+            color: var(--text-secondary);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .craft-item .btn {
+            padding: 4px 8px;
+            font-size: 1em;
+            min-width: auto;
+        }
+
+        [data-theme="zen"] .craft-label,
+        [data-theme="zen"] .craft-cost {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
         /* Pixel art canvas */
         .pixel-canvas {
             width: 100%;
@@ -1237,6 +1278,15 @@
                 <span>Today: <strong id="harvestTodayCount">0</strong> 🌱</span>
                 <span>Total: <strong id="totalPlantsCount">0</strong></span>
             </div>
+
+            <!-- Crafting -->
+            <div class="craft-section" id="craftSection">
+                <div class="craft-item">
+                    <span class="craft-label">🪵 Raised Garden Bed</span>
+                    <span class="craft-cost">8 sticks</span>
+                    <button class="btn" id="craftBedBtn">CRAFT</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1361,6 +1411,7 @@
             settings: { focusDuration: 31, restDuration: 5, theme: 'zen' },
             garden: {
                 plantType: null,          // null | 'carrot' | 'tomato'
+                plotType: 'pot',          // 'pot' | 'raisedBed' (permanent upgrade)
                 potGifted: false,         // shown once on first launch
                 carrotIntroSeen: false,   // shown after first carrot earned
                 totalPlantsGrown: 0,      // all-time counter
@@ -2390,6 +2441,24 @@
             ]}
         ];
 
+        // Raised garden bed overlay pixels — replaces the pot with a wider wooden planter (x=3–16)
+        // Rendered on top of stage pixels; y=21 center (x=8–11) left open for stage dirt
+        const RAISED_BED_PIXELS = [
+            // Top rim (y=21) — left and right of soil area
+            ...[3,4,5,6,7].map(x => [x, 21, x === 3 ? P.potDk : P.potLt]),
+            ...[12,13,14,15,16].map(x => [x, 21, x === 16 ? P.potDk : P.potLt]),
+            // Plank rows (y=22, 23, 25) — corners dark, face medium
+            ...[22,23,25].flatMap(y =>
+                [3,4,5,6,7,8,9,10,11,12,13,14,15,16].map(x =>
+                    [x, y, (x === 3 || x === 16) ? P.potDk : (x === 4 && y === 22) || (x === 15 && y === 22) ? P.potLt : P.pot]
+                )
+            ),
+            // Plank divider (y=24) and base (y=26) — full dark row
+            ...[24,26].flatMap(y =>
+                [3,4,5,6,7,8,9,10,11,12,13,14,15,16].map(x => [x, y, P.potDk])
+            ),
+        ];
+
         function renderPlant(stageIndex) {
             const canvas = plantElements.canvas;
             canvas.innerHTML = '';
@@ -2415,6 +2484,20 @@
                 pixel.style.backgroundColor = color;
                 canvas.appendChild(pixel);
             });
+
+            // Overlay raised bed on top of pot pixels when upgraded
+            if (state.garden.plotType === 'raisedBed') {
+                RAISED_BED_PIXELS.forEach(([x, y, color]) => {
+                    const pixel = document.createElement('div');
+                    pixel.className = 'pixel-art';
+                    pixel.style.left = (x * pixelSize) + 'px';
+                    pixel.style.top = (y * pixelSize) + 'px';
+                    pixel.style.width = pixelSize + 'px';
+                    pixel.style.height = pixelSize + 'px';
+                    pixel.style.backgroundColor = color;
+                    canvas.appendChild(pixel);
+                });
+            }
         }
 
         // Calculate plant stage from focus session progress
@@ -2466,6 +2549,15 @@
             // Update harvest counters
             document.getElementById('harvestTodayCount').textContent = garden.todaysHarvest;
             document.getElementById('totalPlantsCount').textContent = garden.totalPlantsGrown;
+
+            // Show/hide raised bed craft option
+            const craftSection = document.getElementById('craftSection');
+            if (garden.plotType === 'raisedBed') {
+                craftSection.style.display = 'none';
+            } else {
+                craftSection.style.display = 'block';
+                document.getElementById('craftBedBtn').disabled = state.collectibles.sticks < 8;
+            }
         }
 
         // Drop a tomato into the zone (golden or grey)
@@ -2521,6 +2613,20 @@
             document.getElementById('carrotIntroModal').classList.remove('visible');
         });
 
+        function craftRaisedBed() {
+            if (state.collectibles.sticks < 8) return;
+            state.collectibles.sticks -= 8;
+            state.garden.plotType = 'raisedBed';
+            saveState();
+            updatePlant();
+            updateDisplay();
+            elements.successTitle.textContent = '🪵 RAISED GARDEN BED!';
+            elements.successMessage.textContent = 'Your garden has been upgraded. Eight sticks well spent.';
+            elements.successOkBtn.textContent = 'NICE';
+            elements.successModal.classList.add('visible');
+        }
+
+        document.getElementById('craftBedBtn').addEventListener('click', craftRaisedBed);
         document.getElementById('plantCarrotBtn').addEventListener('click', () => plantSeed('carrot'));
         document.getElementById('plantTomatoBtn').addEventListener('click', () => plantSeed('tomato'));
 
