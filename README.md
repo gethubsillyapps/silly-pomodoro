@@ -63,9 +63,9 @@ Example: Skip 2 rests with a 5-minute rest duration → your next rest is 15 min
 
 The garden crafting system is being built in phases:
 
-- **Phase 1** *(in progress)*: Planting choice (carrot or tomato), gifted pot onboarding, today's harvest basket, total plants counter
-- **Phase 2**: Raised garden bed upgrade (craft with Sticks), carrot vs tomato plant pixel art
-- **Phase 3**: Grey tomato removal mechanic
+- **Phase 1** ✓: Planting choice (carrot or tomato), gifted pot onboarding, today's harvest basket, total plants counter
+- **Phase 2** ✓: Raised garden bed upgrade (craft with Sticks), carrot vs tomato plant pixel art
+- **Phase 3** ✓: Grey tomato removal — spend a Golden Tomato to clear failed sessions
 - **Phase 4**: Greenhouse upgrade — plants survive the daily reset
 - **Future**: Inventory persistence with accounts, multiplayer garden visits
 
