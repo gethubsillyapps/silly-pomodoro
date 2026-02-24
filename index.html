@@ -974,6 +974,22 @@
             color: rgba(255, 255, 255, 0.75);
         }
 
+        /* Clear grey tomatoes button */
+        .clear-grey-btn {
+            font-size: 0.6em;
+            padding: 4px 8px;
+            min-width: auto;
+            width: 100%;
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        [data-theme="zen"] .clear-grey-btn {
+            color: rgba(255,255,255,0.7);
+            border-color: rgba(255,255,255,0.25);
+        }
+
         /* Crafting section */
         .craft-section {
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -1272,6 +1288,7 @@
             </div>
 
             <div class="tomato-drop-zone" id="tomatoDropZone"></div>
+            <button class="btn clear-grey-btn" id="clearGreyBtn" style="display:none;">🍅 Clear failures — 1 golden tomato</button>
 
             <!-- Harvest stats -->
             <div class="harvest-display">
@@ -1417,7 +1434,8 @@
                 totalCarrotsGrown: 0,     // all-time carrot harvest counter
                 totalTomatoesGrown: 0,    // all-time tomato harvest counter
                 todaysCarrots: 0,         // resets daily
-                todaysTomatoes: 0         // resets daily
+                todaysTomatoes: 0,        // resets daily
+                greyTomatoes: 0           // failed sessions today; clearable with 1 golden tomato
             }
         };
 
@@ -2559,6 +2577,15 @@
             document.getElementById('totalCarrotsCount').textContent = garden.totalCarrotsGrown;
             document.getElementById('totalTomatoesCount').textContent = garden.totalTomatoesGrown;
 
+            // Show/hide grey tomato clear button
+            const clearGreyBtn = document.getElementById('clearGreyBtn');
+            if (garden.greyTomatoes > 0) {
+                clearGreyBtn.style.display = 'block';
+                clearGreyBtn.disabled = state.collectibles.goldenTomatoes < 1;
+            } else {
+                clearGreyBtn.style.display = 'none';
+            }
+
             // Show/hide raised bed craft option
             const craftSection = document.getElementById('craftSection');
             if (garden.plotType === 'raisedBed') {
@@ -2587,6 +2614,28 @@
             setTimeout(() => {
                 tomato.classList.add('settled');
             }, 900);
+
+            // Track grey tomatoes in state so they persist on reload
+            if (!isGolden) {
+                state.garden.greyTomatoes++;
+                saveState();
+                updatePlant();
+            }
+        }
+
+        function clearGreyTomatoes() {
+            if (state.collectibles.goldenTomatoes < 1) return;
+            state.collectibles.goldenTomatoes--;
+            state.garden.greyTomatoes = 0;
+            // Remove only grey tomatoes from the drop zone
+            plantElements.dropZone.querySelectorAll('.dropped-tomato.grey').forEach(el => el.remove());
+            // Reposition any remaining golden tomatoes
+            plantElements.dropZone.querySelectorAll('.dropped-tomato').forEach((el, i) => {
+                el.style.left = (i * 24) + 'px';
+            });
+            saveState();
+            updatePlant();
+            updateDisplay();
         }
 
         // ============================================
@@ -2636,6 +2685,7 @@
         }
 
         document.getElementById('craftBedBtn').addEventListener('click', craftRaisedBed);
+        document.getElementById('clearGreyBtn').addEventListener('click', clearGreyTomatoes);
         document.getElementById('plantCarrotBtn').addEventListener('click', () => plantSeed('carrot'));
         document.getElementById('plantTomatoBtn').addEventListener('click', () => plantSeed('tomato'));
 
@@ -2669,6 +2719,7 @@
                 state.garden.plantType = null;
                 state.garden.todaysCarrots = 0;
                 state.garden.todaysTomatoes = 0;
+                state.garden.greyTomatoes = 0;
                 // Clear dropped tomatoes
                 plantElements.dropZone.innerHTML = '';
             }
@@ -2681,6 +2732,15 @@
             checkDailyReset();
             timeRemaining = state.settings.focusDuration * 60;
             renderCalendar();
+            // Re-render any grey tomatoes that persisted from today
+            for (let i = 0; i < state.garden.greyTomatoes; i++) {
+                const zone = plantElements.dropZone;
+                const tomato = document.createElement('span');
+                tomato.className = 'dropped-tomato grey settled';
+                tomato.textContent = '🍅';
+                tomato.style.left = (i * 24) + 'px';
+                zone.appendChild(tomato);
+            }
             updatePlant();
             updateDisplay();
             // Show gifted pot on first ever launch
