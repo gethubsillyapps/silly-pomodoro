@@ -55,20 +55,17 @@
             box-sizing: border-box;
         }
 
-        /* Extend background into safe areas (iOS status bar / nav bar) */
-        html {
-            background: var(--gradient-main);
-            min-height: 100%;
-        }
-
-        html[data-theme="ascii"] {
-            background: #0a0a0a;
+        /* Full-screen background div — position:fixed ensures it bleeds into iOS safe areas */
+        #app-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
         }
 
         body {
             font-family: var(--font-main);
             font-size: var(--font-size-base);
-            background: var(--gradient-main);
+            background: transparent;
             color: var(--text-primary);
             min-height: 100vh;
             min-height: 100dvh;
@@ -77,7 +74,6 @@
             align-items: center;
             padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
             line-height: 1.6;
-            transition: background 1.5s ease;
         }
 
         /* Zen mode: all text white */
@@ -112,7 +108,7 @@
         }
 
         [data-theme="ascii"] body {
-            background: var(--bg-primary);
+            background: transparent;
         }
 
         /* ============================================
@@ -1172,6 +1168,9 @@
     </style>
 </head>
 <body>
+    <!-- Full-screen background (bleeds into iOS safe areas via position:fixed) -->
+    <div id="app-bg"></div>
+
     <!-- Header -->
     <header class="header">
         <h1>🍅 SILLY POMODORO</h1>
@@ -1538,13 +1537,14 @@
 
         function applyTheme(theme) {
             const overlay = document.getElementById('theme-overlay');
+            const appBg = document.getElementById('app-bg');
             // Snapshot current background in overlay
             overlay.style.transition = 'none';
             overlay.style.background = THEME_BACKGROUNDS[state.settings.theme] || THEME_BACKGROUNDS.zen;
             overlay.style.opacity = '1';
 
-            // Switch theme instantly underneath
-            document.body.style.transition = 'none';
+            // Switch app-bg and theme instantly underneath
+            appBg.style.background = THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.zen;
             document.documentElement.setAttribute('data-theme', theme);
             elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
@@ -1556,7 +1556,6 @@
             // Fade overlay out to reveal new theme
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    document.body.style.transition = '';
                     overlay.style.transition = 'opacity 1.2s ease';
                     overlay.style.opacity = '0';
                 });
