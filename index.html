@@ -56,6 +56,10 @@
             box-sizing: border-box;
         }
 
+        /* html background as fallback for safe area zones iOS can't reach via #app-bg */
+        html { background: #b8860b; }
+        html[data-theme="ascii"] { background: #0a0a0a; }
+
         /* Full-screen background div — position:fixed ensures it bleeds into iOS safe areas */
         #app-bg {
             position: fixed;
@@ -1544,8 +1548,9 @@
             overlay.style.background = THEME_BACKGROUNDS[state.settings.theme] || THEME_BACKGROUNDS.zen;
             overlay.style.opacity = '1';
 
-            // Switch app-bg and theme instantly underneath
+            // Switch app-bg, html fallback, and theme instantly underneath
             appBg.style.background = THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.zen;
+            document.documentElement.style.background = theme === 'ascii' ? '#0a0a0a' : '#b8860b';
             document.documentElement.setAttribute('data-theme', theme);
             elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
             state.settings.theme = theme;
