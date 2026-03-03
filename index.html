@@ -575,30 +575,16 @@
         }
 
         /* ============================================
-           PLACEHOLDER BUTTONS
+           PANEL BUTTONS
            ============================================ */
-        .social-section {
+        .panels-section {
             display: flex;
             gap: 10px;
             justify-content: center;
         }
 
-        .btn-social {
+        .panels-section .btn {
             flex: 1;
-            opacity: 0.5;
-            position: relative;
-        }
-
-        .btn-social::after {
-            content: 'Soon';
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            font-size: 0.5em;
-            background: var(--warning);
-            color: var(--bg-primary);
-            padding: 2px 6px;
-            border-radius: 4px;
         }
 
         /* ============================================
@@ -1259,10 +1245,10 @@
             </div>
         </section>
 
-        <!-- Social Section (Placeholders) -->
-        <section class="card social-section">
-            <button class="btn btn-social" disabled>SHARE</button>
-            <button class="btn btn-social" disabled>PAIR UP</button>
+        <!-- Panel buttons -->
+        <section class="card panels-section">
+            <button class="btn" id="gardenPanelBtn">🌱 GARDEN</button>
+            <button class="btn" id="timerPanelBtn">⏱ TIMER</button>
         </section>
     </main>
 
@@ -1271,7 +1257,6 @@
 
     <!-- Plant Animation Panel -->
     <div class="plant-panel">
-        <button class="plant-toggle" id="plantToggle">PLANT</button>
         <div class="plant-container" id="plantContainer">
             <div class="plant-header">
                 <h3>🌱 GARDEN</h3>
@@ -1313,7 +1298,6 @@
 
     <!-- Side Timer Widget -->
     <div class="side-timer">
-        <button class="side-timer-toggle" id="sideTimerToggle">TIMER</button>
         <div class="side-timer-panel" id="sideTimerPanel">
             <h3>QUICK TIMER</h3>
             <div class="side-timer-mode-switch">
@@ -2022,7 +2006,6 @@
         // SIDE TIMER
         // ============================================
         const sideElements = {
-            toggle: document.getElementById('sideTimerToggle'),
             panel: document.getElementById('sideTimerPanel'),
             display: document.getElementById('sideTimerDisplay'),
             startBtn: document.getElementById('sideStartBtn'),
@@ -2055,7 +2038,7 @@
             }
         }
 
-        sideElements.toggle.addEventListener('click', () => {
+        document.getElementById('timerPanelBtn').addEventListener('click', () => {
             sideElements.panel.classList.toggle('open');
         });
 
@@ -2130,7 +2113,6 @@
         // PLANT ANIMATION
         // ============================================
         const plantElements = {
-            toggle: document.getElementById('plantToggle'),
             container: document.getElementById('plantContainer'),
             canvas: document.getElementById('pixelCanvas'),
             stageLabel: document.getElementById('plantStageLabel'),
@@ -2702,7 +2684,7 @@
             document.getElementById('gardenHelpModal').classList.remove('visible');
         });
 
-        plantElements.toggle.addEventListener('click', () => {
+        document.getElementById('gardenPanelBtn').addEventListener('click', () => {
             plantElements.container.classList.toggle('open');
             // Re-render after panel opens so pixel size is calculated correctly
             setTimeout(updatePlant, 50);
