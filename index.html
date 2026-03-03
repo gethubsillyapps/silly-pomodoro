@@ -1033,6 +1033,283 @@
             left: 0;
         }
 
+        /* ============================================
+           GARDEN PANEL TOGGLE (Today | Greenhouse)
+           ============================================ */
+        .garden-view-toggle {
+            display: flex;
+            gap: 0;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .garden-view-btn {
+            flex: 1;
+            padding: 6px 10px;
+            font-family: var(--font-ui);
+            font-size: 0.65em;
+            letter-spacing: 0.08em;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .garden-view-btn.active {
+            background: rgba(255,255,255,0.15);
+            color: var(--text-primary);
+        }
+
+        [data-theme="zen"] .garden-view-btn { color: rgba(255,255,255,0.6); }
+        [data-theme="zen"] .garden-view-btn.active {
+            background: rgba(255,255,255,0.2);
+            color: #ffffff;
+        }
+        [data-theme="ascii"] .garden-view-toggle { border-color: var(--accent); }
+        [data-theme="ascii"] .garden-view-btn { color: var(--text-secondary); }
+        [data-theme="ascii"] .garden-view-btn.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Timer mirror — subtle, inside plant panel */
+        .plant-timer-mirror {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 5px 8px;
+            background: rgba(0,0,0,0.12);
+            border-radius: 6px;
+            font-family: var(--font-ui);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .plant-timer-mirror .mirror-time {
+            font-size: 1.05em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .plant-timer-mirror .mirror-label {
+            font-size: 0.55em;
+            letter-spacing: 0.12em;
+            opacity: 0.65;
+            text-transform: uppercase;
+        }
+
+        .plant-timer-mirror.idle { opacity: 0.4; }
+
+        [data-theme="zen"] .plant-timer-mirror { background: rgba(255,255,255,0.1); }
+        [data-theme="ascii"] .plant-timer-mirror { background: #111; border: 1px solid var(--accent); }
+
+        /* ============================================
+           GREENHOUSE VIEW
+           ============================================ */
+        .greenhouse-view { display: none; flex-direction: column; gap: 10px; }
+        .greenhouse-view.active { display: flex; }
+        .today-view { display: flex; flex-direction: column; gap: 10px; }
+        .today-view.hidden { display: none; }
+
+        /* Locked state */
+        .greenhouse-locked {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .greenhouse-lock-icon {
+            font-size: 1.8em;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .greenhouse-lock-text {
+            font-family: var(--font-ui);
+            font-size: 0.7em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        [data-theme="zen"] .greenhouse-lock-text { color: rgba(255,255,255,0.7); }
+
+        .greenhouse-lock-progress {
+            font-size: 0.65em;
+            font-family: var(--font-ui);
+            color: var(--accent);
+            margin-top: 4px;
+        }
+
+        [data-theme="zen"] .greenhouse-lock-progress { color: rgba(255,255,255,0.85); }
+
+        /* Unlocked greenhouse */
+        .greenhouse-unlocked { display: flex; flex-direction: column; gap: 10px; }
+
+        /* Flower shelf */
+        .flower-shelf {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .flower-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 6px 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .flower-slot:hover { background: rgba(255,255,255,0.1); }
+        .flower-slot.empty { cursor: default; opacity: 0.5; }
+        .flower-slot.empty:hover { background: rgba(255,255,255,0.05); }
+        .flower-slot.complete { border-color: rgba(255,215,0,0.4); }
+
+        [data-theme="ascii"] .flower-slot { border-color: var(--accent); }
+        [data-theme="ascii"] .flower-slot.empty { border-color: rgba(0,255,0,0.2); }
+
+        .flower-slot-canvas {
+            width: 48px;
+            height: 60px;
+            position: relative;
+            image-rendering: pixelated;
+            flex-shrink: 0;
+        }
+
+        .flower-slot-name {
+            font-family: var(--font-ui);
+            font-size: 0.55em;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        [data-theme="zen"] .flower-slot-name { color: rgba(255,255,255,0.7); }
+
+        .flower-slot-progress {
+            font-family: var(--font-ui);
+            font-size: 0.5em;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        [data-theme="zen"] .flower-slot-progress { color: rgba(255,255,255,0.85); }
+
+        /* Bonsai display — full width centrepiece */
+        .bonsai-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255,215,0,0.25);
+        }
+
+        [data-theme="zen"] .bonsai-display { background: rgba(255,255,255,0.07); }
+        [data-theme="ascii"] .bonsai-display { border-color: var(--accent); background: #111; }
+
+        .bonsai-canvas {
+            width: 120px;
+            height: 100px;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        .bonsai-label {
+            font-family: var(--font-ui);
+            font-size: 0.6em;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        [data-theme="zen"] .bonsai-label { color: rgba(255,255,255,0.7); }
+
+        /* Seed shop inside greenhouse */
+        .seed-shop {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 8px;
+        }
+
+        [data-theme="ascii"] .seed-shop { border-color: var(--accent); }
+
+        .seed-shop-title {
+            font-family: var(--font-ui);
+            font-size: 0.6em;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        [data-theme="zen"] .seed-shop-title { color: rgba(255,255,255,0.65); }
+
+        .seed-shop-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .seed-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font-ui);
+            font-size: 0.62em;
+        }
+
+        .seed-item-name {
+            flex: 1;
+            color: var(--text-secondary);
+        }
+
+        [data-theme="zen"] .seed-item-name { color: rgba(255,255,255,0.75); }
+
+        .seed-item-cost {
+            color: var(--text-secondary);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .seed-item .btn {
+            padding: 3px 7px;
+            font-size: 1em;
+            min-width: auto;
+        }
+
+        /* Bonsai craft teaser */
+        .bonsai-craft {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 8px;
+            background: rgba(255,215,0,0.06);
+            border-radius: 6px;
+            border: 1px solid rgba(255,215,0,0.2);
+            font-family: var(--font-ui);
+            font-size: 0.62em;
+        }
+
+        [data-theme="ascii"] .bonsai-craft { border-color: var(--accent); background: #111; }
+
+        .bonsai-craft-label { flex: 1; color: var(--text-secondary); }
+        [data-theme="zen"] .bonsai-craft-label { color: rgba(255,255,255,0.75); }
+
+        .bonsai-craft .btn {
+            padding: 3px 7px;
+            font-size: 1em;
+            min-width: auto;
+        }
+
         /* Tomato drop zone */
         .tomato-drop-zone {
             height: 40px;
@@ -1262,37 +1539,95 @@
                 <h3>🌱 GARDEN</h3>
                 <button class="plant-help-btn" id="plantHelpBtn">?</button>
             </div>
-            <div class="pixel-canvas" id="pixelCanvas"></div>
-            <div class="plant-stage-label" id="plantStageLabel"></div>
-            <div class="plant-type-label" id="plantTypeLabel"></div>
 
-            <!-- Planting prompt (shown when no plant chosen) -->
-            <div class="planting-prompt" id="plantingPrompt" style="display:none;">
-                <p class="plant-prompt-text">What will you grow today?</p>
-                <div class="plant-options">
-                    <button class="btn" id="plantCarrotBtn">🥕 Carrot<br><small>1 carrot</small></button>
-                    <button class="btn" id="plantTomatoBtn">🍅 Tomato<br><small>1 golden tomato</small></button>
+            <!-- Timer mirror -->
+            <div class="plant-timer-mirror idle" id="plantTimerMirror">
+                <span class="mirror-label" id="mirrorLabel">FOCUS</span>
+                <span class="mirror-time" id="mirrorTime">--:--</span>
+            </div>
+
+            <!-- Today / Greenhouse toggle -->
+            <div class="garden-view-toggle">
+                <button class="garden-view-btn active" id="todayViewBtn">TODAY</button>
+                <button class="garden-view-btn" id="greenhouseViewBtn">🏡 GREENHOUSE</button>
+            </div>
+
+            <!-- TODAY VIEW -->
+            <div class="today-view" id="todayView">
+                <div class="pixel-canvas" id="pixelCanvas"></div>
+                <div class="plant-stage-label" id="plantStageLabel"></div>
+                <div class="plant-type-label" id="plantTypeLabel"></div>
+
+                <!-- Planting prompt (shown when no plant chosen) -->
+                <div class="planting-prompt" id="plantingPrompt" style="display:none;">
+                    <p class="plant-prompt-text">What will you grow today?</p>
+                    <div class="plant-options">
+                        <button class="btn" id="plantCarrotBtn">🥕 Carrot<br><small>1 carrot</small></button>
+                        <button class="btn" id="plantTomatoBtn">🍅 Tomato<br><small>1 golden tomato</small></button>
+                    </div>
+                    <p class="plant-prompt-hint" id="plantPromptHint"></p>
                 </div>
-                <p class="plant-prompt-hint" id="plantPromptHint"></p>
-            </div>
 
-            <div class="tomato-drop-zone" id="tomatoDropZone"></div>
-            <button class="btn clear-grey-btn" id="clearGreyBtn" style="display:none;">🍅 Clear failures — 1 golden tomato</button>
+                <div class="tomato-drop-zone" id="tomatoDropZone"></div>
+                <button class="btn clear-grey-btn" id="clearGreyBtn" style="display:none;">🍅 Clear failures — 1 golden tomato</button>
 
-            <!-- Harvest stats -->
-            <div class="harvest-display">
-                <span>Today: <strong id="todayCarrotsCount">0</strong>🥕 <strong id="todayTomatoesCount">0</strong>🍅</span>
-                <span>All: <strong id="totalCarrotsCount">0</strong>🥕 <strong id="totalTomatoesCount">0</strong>🍅</span>
-            </div>
+                <!-- Harvest stats -->
+                <div class="harvest-display">
+                    <span>Today: <strong id="todayCarrotsCount">0</strong>🥕 <strong id="todayTomatoesCount">0</strong>🍅</span>
+                    <span>All: <strong id="totalCarrotsCount">0</strong>🥕 <strong id="totalTomatoesCount">0</strong>🍅</span>
+                </div>
 
-            <!-- Crafting -->
-            <div class="craft-section" id="craftSection">
-                <div class="craft-item">
-                    <span class="craft-label">🪵 Raised Garden Bed</span>
-                    <span class="craft-cost">8 sticks</span>
-                    <button class="btn" id="craftBedBtn">CRAFT</button>
+                <!-- Crafting -->
+                <div class="craft-section" id="craftSection">
+                    <div class="craft-item">
+                        <span class="craft-label">🪵 Raised Garden Bed</span>
+                        <span class="craft-cost">8 sticks</span>
+                        <button class="btn" id="craftBedBtn">CRAFT</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- GREENHOUSE VIEW -->
+            <div class="greenhouse-view" id="greenhouseView">
+
+                <!-- Locked state -->
+                <div class="greenhouse-locked" id="greenhouseLocked">
+                    <span class="greenhouse-lock-icon">🏡</span>
+                    <div class="greenhouse-lock-text">Build a greenhouse to grow<br>persistent flowers that never reset.</div>
+                    <div class="greenhouse-lock-progress" id="greenhouseLockProgress">20 sticks to unlock</div>
+                    <button class="btn" id="buildGreenhouseBtn" style="margin-top:8px; font-size:0.7em; padding:6px 12px;">BUILD — 20 sticks</button>
+                </div>
+
+                <!-- Unlocked state -->
+                <div class="greenhouse-unlocked" id="greenhouseUnlocked" style="display:none;">
+
+                    <!-- Bonsai (shown only when crafted) -->
+                    <div class="bonsai-display" id="bonsaiDisplay" style="display:none;">
+                        <div class="bonsai-canvas" id="bonsaiCanvas"></div>
+                        <div class="bonsai-label">✨ BONSAI — THE ULTIMATE GARDEN</div>
+                    </div>
+
+                    <!-- Flower shelf -->
+                    <div class="flower-shelf" id="flowerShelf">
+                        <!-- 5 slots rendered by JS -->
+                    </div>
+
+                    <!-- Bonsai craft (shown when all flowers complete) -->
+                    <div class="bonsai-craft" id="bonsaiCraft" style="display:none;">
+                        <span class="bonsai-craft-label">🌿 Craft the Bonsai</span>
+                        <button class="btn" id="craftBonsaiBtn">CRAFT</button>
+                    </div>
+
+                    <!-- Seed shop -->
+                    <div class="seed-shop" id="seedShop">
+                        <div class="seed-shop-title">SEED SHOP</div>
+                        <div class="seed-shop-grid" id="seedShopGrid">
+                            <!-- rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -1424,6 +1759,18 @@
                 todaysCarrots: 0,         // resets daily
                 todaysTomatoes: 0,        // resets daily
                 greyTomatoes: 0           // failed sessions today; clearable with 1 golden tomato
+            },
+            greenhouse: {
+                unlocked: false,          // true once 20 sticks spent
+                bonsaiCrafted: false,     // true once all flowers fully grown
+                // Each flower: { planted: bool, sessionsInvested: number }
+                flowers: {
+                    sunflower:  { planted: false, sessionsInvested: 0 },
+                    roseRed:    { planted: false, sessionsInvested: 0 },
+                    rosePink:   { planted: false, sessionsInvested: 0 },
+                    roseWhite:  { planted: false, sessionsInvested: 0 },
+                    orchid:     { planted: false, sessionsInvested: 0 }
+                }
             }
         };
 
@@ -1492,9 +1839,15 @@
                     if (parsed.settings && parsed.settings.theme === '8bit') {
                         parsed.settings.theme = 'zen';
                     }
-                    // Deep merge garden object so new keys aren't lost
+                    // Deep merge garden + greenhouse objects so new keys aren't lost
                     const merged = { ...DEFAULT_STATE, ...parsed };
                     merged.garden = { ...DEFAULT_STATE.garden, ...(parsed.garden || {}) };
+                    const gh = parsed.greenhouse || {};
+                    merged.greenhouse = { ...DEFAULT_STATE.greenhouse, ...gh };
+                    merged.greenhouse.flowers = {
+                        ...DEFAULT_STATE.greenhouse.flowers,
+                        ...(gh.flowers || {})
+                    };
                     return merged;
                 }
             } catch (e) {
@@ -1590,6 +1943,8 @@
 
             elements.startBtn.disabled = isRunning;
             elements.pauseBtn.disabled = !isRunning || sessionFailed;
+
+            updateTimerMirror();
 
             // Update collectibles
             elements.sticksCount.textContent = state.collectibles.sticks;
@@ -1695,6 +2050,7 @@
                 if (!sessionFailed) {
                     awardCollectible('sticks');
                     state.currentCycle.focusCount++;
+                    advanceGreenhouseFlowers();
                     checkCycleComplete();
                     saveState();
                     recordSession();
@@ -2471,6 +2827,357 @@
             ),
         ];
 
+        // ============================================
+        // FLOWER PIXEL ART — GREENHOUSE
+        // ============================================
+
+        const F = {
+            pot: P.pot, potDk: P.potDk, potLt: P.potLt, dirt: P.dirt,
+            stem: P.stem, stemDk: P.stemDk,
+            leaf: P.leaf, leafLt: P.leafLt, leafDk: P.leafDk,
+            sfPetal: '#FFD700', sfPetalDk: '#E6B800', sfPetalLt: '#FFE44D',
+            sfCenter: '#5D3A1A', sfCenterLt: '#7A4E2D',
+            roseLeaf: '#2E7D32', roseLeafLt: '#43A047', roseStem: '#388E3C', roseThorn: '#1B5E20',
+            rrPetal: '#C62828', rrPetalLt: '#EF5350', rrPetalDk: '#B71C1C',
+            rpPetal: '#C2185B', rpPetalLt: '#F06292', rpPetalDk: '#880E4F',
+            rwPetal: '#ECEFF1', rwPetalLt: '#FFFFFF', rwPetalDk: '#B0BEC5', rwPetalMid: '#CFD8DC',
+            orStem: '#388E3C', orLeaf: '#2E7D32', orLeafLt: '#66BB6A',
+            orPetal: '#7B1FA2', orPetalLt: '#CE93D8', orPetalDk: '#4A148C',
+            orLip: '#F8BBD9', orLipDk: '#F48FB1', orCenter: '#FFD700',
+            bkTrunk: '#5D3A1A', bkBranch: '#7A4E2D', bkBranchLt: '#A0522D',
+            bkFoliage: '#2D8B2D', bkFoliageDk: '#1A6B1A', bkFoliageLt: '#4CAF50',
+            bkSand: '#E8D5A3', bkSandDk: '#C9B880', bkSandLt: '#F5EDD3',
+            bkRock: '#9E9E9E', bkRockDk: '#757575', bkRockLt: '#BDBDBD',
+            bkStand: '#5D3A1A', bkStandDk: '#3E2010', bkTray: '#8D6E4C', bkTrayLt: '#A8875C',
+            bkMoss: '#558B2F'
+        };
+
+        function potPixels() {
+            return [
+                ...[6,7,8,9,10,11,12,13].map(x => [x,21,F.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x,22,F.pot]),
+                ...[7,8,9,10,11,12].map(x => [x,23,F.pot]),
+                ...[7,8,9,10,11,12].map(x => [x,24,F.pot]),
+                ...[7,8,9,10,11,12].map(x => [x,25,F.potDk]),
+                ...[8,9,10,11].map(x => [x,26,F.potDk]),
+                ...[8,9,10,11].map(x => [x,21,F.dirt]),
+            ];
+        }
+
+        const SUNFLOWER_STAGES = [
+            { name: 'Empty Pot', pixels: potPixels() },
+            { name: 'Sprout', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.leaf],[10,19,F.leafLt]] },
+            { name: 'Seedling', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.stem],[10,19,F.stem],[9,18,F.stem],[10,18,F.stem],[7,19,F.leaf],[8,19,F.leafLt],[11,18,F.leaf],[12,18,F.leafLt]] },
+            { name: 'Growing', pixels: [...potPixels(),...[17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[9,16,F.stem],[10,16,F.stem],[7,18,F.leaf],[8,18,F.leafLt],[6,18,F.leafDk],[11,17,F.leaf],[12,17,F.leafLt],[13,17,F.leafDk],[8,15,F.leaf],[9,15,F.leafLt],[10,15,F.leaf],[11,15,F.leafLt]] },
+            { name: 'Bud Forming', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[8,17,F.leafLt],[6,17,F.leafDk],[11,16,F.leaf],[12,16,F.leafLt],[9,13,F.leafDk],[10,13,F.leafDk],[11,13,F.leafDk],[8,12,F.sfPetalDk],[9,12,F.sfCenter],[10,12,F.sfCenter],[11,12,F.sfPetalDk],[9,11,F.sfPetalDk],[10,11,F.sfPetalDk]] },
+            { name: 'Opening', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[8,17,F.leafLt],[11,16,F.leaf],[12,16,F.leafLt],[9,13,F.sfPetal],[10,13,F.sfPetalLt],[11,13,F.sfPetal],[8,12,F.sfPetal],[9,12,F.sfCenter],[10,12,F.sfCenter],[11,12,F.sfPetal],[12,12,F.sfPetalDk],[7,11,F.sfPetalDk],[8,11,F.sfPetal],[9,11,F.sfCenterLt],[10,11,F.sfCenter],[11,11,F.sfPetal],[12,11,F.sfPetalDk],[8,10,F.sfPetalDk],[9,10,F.sfPetal],[10,10,F.sfPetalLt],[11,10,F.sfPetalDk],[9,9,F.sfPetalDk],[10,9,F.sfPetalDk]] },
+            { name: 'Blooming', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[8,17,F.leafLt],[13,16,F.leaf],[12,16,F.leafLt],[9,13,F.sfPetal],[10,13,F.sfPetalLt],[11,13,F.sfPetal],[8,13,F.sfPetalDk],[7,12,F.sfPetalDk],[8,12,F.sfPetal],[9,12,F.sfCenter],[10,12,F.sfCenter],[11,12,F.sfPetal],[12,12,F.sfPetalDk],[13,12,F.sfPetalDk],[7,11,F.sfPetalDk],[8,11,F.sfPetal],[9,11,F.sfCenterLt],[10,11,F.sfCenterLt],[11,11,F.sfPetal],[12,11,F.sfPetalLt],[13,11,F.sfPetalDk],[7,10,F.sfPetalDk],[8,10,F.sfPetal],[9,10,F.sfCenter],[10,10,F.sfCenter],[11,10,F.sfPetalDk],[12,10,F.sfPetalDk],[8,9,F.sfPetalDk],[9,9,F.sfPetal],[10,9,F.sfPetalLt],[11,9,F.sfPetalDk],[9,8,F.sfPetalDk],[10,8,F.sfPetalDk]] },
+            { name: 'Full Bloom', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[6,17,F.leafDk],[7,17,F.leaf],[8,17,F.leafLt],[11,16,F.leaf],[12,16,F.leafLt],[13,16,F.leafDk],[8,14,F.leaf],[9,14,F.leafLt],[10,14,F.leaf],[9,13,F.sfPetalLt],[10,13,F.sfPetalLt],[11,13,F.sfPetal],[8,13,F.sfPetal],[7,12,F.sfPetal],[8,12,F.sfPetalLt],[9,12,F.sfCenter],[10,12,F.sfCenter],[11,12,F.sfPetalLt],[12,12,F.sfPetal],[13,12,F.sfPetalDk],[6,11,F.sfPetalDk],[7,11,F.sfPetal],[8,11,F.sfPetalLt],[9,11,F.sfCenterLt],[10,11,F.sfCenterLt],[11,11,F.sfPetalLt],[12,11,F.sfPetal],[13,11,F.sfPetalDk],[14,11,F.sfPetalDk],[6,10,F.sfPetalDk],[7,10,F.sfPetal],[8,10,F.sfPetalLt],[9,10,F.sfCenter],[10,10,F.sfCenter],[11,10,F.sfPetalLt],[12,10,F.sfPetal],[13,10,F.sfPetalDk],[7,9,F.sfPetalDk],[8,9,F.sfPetal],[9,9,F.sfPetalLt],[10,9,F.sfPetalLt],[11,9,F.sfPetal],[12,9,F.sfPetalDk],[8,8,F.sfPetalDk],[9,8,F.sfPetal],[10,8,F.sfPetalLt],[11,8,F.sfPetalDk],[9,7,F.sfPetalDk],[10,7,F.sfPetalDk]] },
+        ];
+
+        function roseStages(pc) {
+            return [
+                { name: 'Empty Pot', pixels: potPixels() },
+                { name: 'Cane', pixels: [...potPixels(),[9,20,F.roseStem],[10,20,F.roseStem],[9,19,F.roseLeaf],[10,19,F.roseLeafLt],[8,19,F.roseThorn]] },
+                { name: 'Leaves', pixels: [...potPixels(),[9,20,F.roseStem],[10,20,F.roseStem],[9,19,F.roseStem],[10,19,F.roseStem],[9,18,F.roseStem],[10,18,F.roseStem],[7,19,F.roseLeaf],[8,19,F.roseLeafLt],[8,18,F.roseThorn],[11,18,F.roseLeaf],[12,18,F.roseLeafLt],[9,17,F.roseLeaf],[10,17,F.roseLeafLt]] },
+                { name: 'Growing', pixels: [...potPixels(),...[16,17,18,19,20].map(y=>[[9,y,F.roseStem],[10,y,F.roseStem]]).flat(),[8,18,F.roseThorn],[11,17,F.roseThorn],[7,18,F.roseLeaf],[8,17,F.roseLeafLt],[11,16,F.roseLeaf],[12,16,F.roseLeafLt],[8,15,F.roseLeaf],[9,15,F.roseLeafLt],[10,15,F.roseLeaf]] },
+                { name: 'Tight Bud', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.roseStem],[10,y,F.roseStem]]).flat(),[8,17,F.roseThorn],[11,16,F.roseThorn],[7,17,F.roseLeaf],[12,16,F.roseLeaf],[8,15,F.roseLeaf],[11,15,F.roseLeaf],[9,13,F.roseLeafLt],[10,13,F.roseLeafLt],[11,13,F.roseLeaf],[9,12,pc.dk],[10,12,pc.mid],[11,12,pc.lt],[9,11,pc.dk],[10,11,pc.mid]] },
+                { name: 'Opening', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.roseStem],[10,y,F.roseStem]]).flat(),[7,17,F.roseLeaf],[12,16,F.roseLeaf],[9,13,F.roseLeafLt],[10,13,F.roseLeafLt],[8,13,F.roseLeaf],[8,12,pc.dk],[9,12,pc.mid],[10,12,pc.lt],[11,12,pc.mid],[12,12,pc.dk],[8,11,pc.dk],[9,11,pc.lt],[10,11,pc.lt],[11,11,pc.mid],[9,10,pc.dk],[10,10,pc.mid]] },
+                { name: 'Full Bloom', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.roseStem],[10,y,F.roseStem]]).flat(),[6,17,F.roseLeafLt],[7,17,F.roseLeaf],[12,16,F.roseLeaf],[13,16,F.roseLeafLt],[8,15,F.roseLeaf],[11,15,F.roseLeaf],[9,13,F.roseLeafLt],[10,13,F.roseLeafLt],[11,13,F.roseLeaf],[8,13,F.roseLeaf],[7,12,pc.dk],[8,12,pc.mid],[9,12,pc.lt],[10,12,pc.lt],[11,12,pc.mid],[12,12,pc.dk],[13,12,pc.dk],[7,11,pc.dk],[8,11,pc.lt],[9,11,pc.lt],[10,11,pc.lt],[11,11,pc.lt],[12,11,pc.mid],[13,11,pc.dk],[8,10,pc.dk],[9,10,pc.mid],[10,10,pc.lt],[11,10,pc.mid],[12,10,pc.dk],[9,9,pc.dk],[10,9,pc.mid],[11,9,pc.dk]] },
+                { name: 'Radiant', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.roseStem],[10,y,F.roseStem]]).flat(),[6,17,F.roseLeafLt],[7,17,F.roseLeaf],[12,16,F.roseLeaf],[13,16,F.roseLeafLt],[8,15,F.roseLeaf],[9,15,F.roseLeafLt],[11,15,F.roseLeaf],[8,14,F.roseLeaf],[11,14,F.roseLeaf],[9,13,F.roseLeafLt],[10,13,F.roseLeafLt],[8,13,F.roseLeaf],[11,13,F.roseLeaf],[6,12,pc.dk],[7,12,pc.mid],[8,12,pc.lt],[9,12,pc.lt],[10,12,pc.lt],[11,12,pc.lt],[12,12,pc.mid],[13,12,pc.dk],[14,12,pc.dk],[6,11,pc.dk],[7,11,pc.lt],[8,11,pc.lt],[9,11,pc.lt],[10,11,pc.lt],[11,11,pc.lt],[12,11,pc.lt],[13,11,pc.mid],[14,11,pc.dk],[7,10,pc.dk],[8,10,pc.lt],[9,10,pc.mid],[10,10,pc.lt],[11,10,pc.lt],[12,10,pc.mid],[13,10,pc.dk],[8,9,pc.dk],[9,9,pc.mid],[10,9,pc.lt],[11,9,pc.mid],[12,9,pc.dk],[9,8,pc.dk],[10,8,pc.dk]] },
+            ];
+        }
+
+        const ROSE_RED_STAGES   = roseStages({ lt: F.rrPetalLt, mid: F.rrPetal, dk: F.rrPetalDk });
+        const ROSE_PINK_STAGES  = roseStages({ lt: F.rpPetalLt, mid: F.rpPetal, dk: F.rpPetalDk });
+        const ROSE_WHITE_STAGES = roseStages({ lt: F.rwPetalLt, mid: F.rwPetalMid, dk: F.rwPetalDk });
+
+        const ORCHID_STAGES = [
+            { name: 'Empty Pot', pixels: potPixels() },
+            { name: 'Sprout', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orLeaf],[10,19,F.orLeafLt],[11,19,F.orLeaf]] },
+            { name: 'Strap Leaf', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[8,19,F.orLeaf],[9,19,F.orLeafLt],[10,19,F.orLeafLt],[11,19,F.orLeaf],[7,18,F.orLeaf],[8,18,F.orLeafLt],[11,18,F.orLeafLt],[12,18,F.orLeaf],[9,18,F.orStem],[10,18,F.orStem]] },
+            { name: 'Arching', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orStem],[10,19,F.orStem],[6,18,F.orLeaf],[7,18,F.orLeafLt],[8,18,F.orLeafLt],[9,18,F.orStem],[10,18,F.orStem],[11,18,F.orLeafLt],[12,18,F.orLeafLt],[13,18,F.orLeaf],[6,17,F.orLeafLt],[7,17,F.orLeaf],[12,17,F.orLeaf],[13,17,F.orLeafLt],[11,16,F.orStem],[11,15,F.orStem],[12,15,F.orStem]] },
+            { name: 'Spike', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orStem],[10,19,F.orStem],[6,18,F.orLeaf],[7,18,F.orLeafLt],[9,18,F.orStem],[10,18,F.orStem],[12,18,F.orLeafLt],[13,18,F.orLeaf],[6,17,F.orLeafLt],[13,17,F.orLeafLt],[11,16,F.orStem],[12,15,F.orStem],[13,14,F.orStem],[13,13,F.orStem],[12,12,F.orStem],[12,11,F.orStem],[11,10,F.orStem],[10,10,F.orPetalDk],[11,9,F.orPetalDk]] },
+            { name: 'First Bloom', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orStem],[10,19,F.orStem],[6,18,F.orLeaf],[7,18,F.orLeafLt],[9,18,F.orStem],[10,18,F.orStem],[12,18,F.orLeafLt],[13,18,F.orLeaf],[11,16,F.orStem],[12,15,F.orStem],[13,14,F.orStem],[13,13,F.orStem],[12,12,F.orStem],[12,11,F.orStem],[11,10,F.orStem],[8,11,F.orPetal],[9,11,F.orPetalLt],[10,11,F.orPetalDk],[7,10,F.orPetalDk],[8,10,F.orPetalLt],[9,10,F.orPetal],[10,10,F.orPetalDk],[11,10,F.orPetalDk],[8,9,F.orLip],[9,9,F.orLipDk],[10,9,F.orLip],[9,8,F.orCenter]] },
+            { name: 'Two Blooms', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orStem],[10,19,F.orStem],[6,18,F.orLeaf],[7,18,F.orLeafLt],[9,18,F.orStem],[10,18,F.orStem],[12,18,F.orLeafLt],[13,18,F.orLeaf],[11,16,F.orStem],[12,15,F.orStem],[13,14,F.orStem],[13,13,F.orStem],[12,12,F.orStem],[12,11,F.orStem],[11,10,F.orStem],[8,11,F.orPetal],[9,11,F.orPetalLt],[10,11,F.orPetalDk],[7,10,F.orPetalDk],[8,10,F.orPetalLt],[9,10,F.orPetal],[10,10,F.orPetalDk],[8,9,F.orLip],[9,9,F.orLipDk],[10,9,F.orLip],[9,8,F.orCenter],[12,13,F.orPetal],[13,13,F.orPetalLt],[14,13,F.orPetalDk],[11,12,F.orPetalDk],[12,12,F.orPetalLt],[13,12,F.orPetal],[14,12,F.orPetalDk],[12,11,F.orLipDk],[13,11,F.orLip],[14,11,F.orLipDk],[13,10,F.orCenter]] },
+            { name: 'Full Cascade', pixels: [...potPixels(),[9,20,F.orStem],[10,20,F.orStem],[9,19,F.orStem],[10,19,F.orStem],[5,18,F.orLeafLt],[6,18,F.orLeaf],[7,18,F.orLeafLt],[9,18,F.orStem],[10,18,F.orStem],[12,18,F.orLeafLt],[13,18,F.orLeaf],[14,18,F.orLeafLt],[5,17,F.orLeaf],[14,17,F.orLeaf],[11,16,F.orStem],[12,15,F.orStem],[13,14,F.orStem],[13,13,F.orStem],[12,12,F.orStem],[12,11,F.orStem],[11,10,F.orStem],[8,11,F.orPetal],[9,11,F.orPetalLt],[10,11,F.orPetalDk],[7,10,F.orPetalDk],[8,10,F.orPetalLt],[9,10,F.orPetal],[10,10,F.orPetalDk],[8,9,F.orLip],[9,9,F.orLipDk],[10,9,F.orLip],[9,8,F.orCenter],[12,13,F.orPetal],[13,13,F.orPetalLt],[14,13,F.orPetalDk],[11,12,F.orPetalDk],[12,12,F.orPetalLt],[13,12,F.orPetal],[14,12,F.orPetalDk],[12,11,F.orLipDk],[13,11,F.orLip],[14,11,F.orLipDk],[13,10,F.orCenter],[10,14,F.orPetalDk],[11,14,F.orPetal],[12,14,F.orPetalLt],[9,13,F.orPetalDk],[10,13,F.orPetalLt],[11,13,F.orPetalLt],[12,13,F.orPetalDk],[10,12,F.orLip],[11,12,F.orLipDk],[10,11,F.orCenter]] },
+        ];
+
+        const FLOWER_CATALOGUE = [
+            { key: 'sunflower', name: 'Sunflower',  cost: 3,  sessionsToGrow: 28, stages: SUNFLOWER_STAGES  },
+            { key: 'roseRed',   name: 'Red Rose',   cost: 5,  sessionsToGrow: 28, stages: ROSE_RED_STAGES   },
+            { key: 'rosePink',  name: 'Pink Rose',  cost: 5,  sessionsToGrow: 28, stages: ROSE_PINK_STAGES  },
+            { key: 'roseWhite', name: 'White Rose', cost: 5,  sessionsToGrow: 28, stages: ROSE_WHITE_STAGES },
+            { key: 'orchid',    name: 'Orchid',     cost: 10, sessionsToGrow: 28, stages: ORCHID_STAGES     },
+        ];
+
+        const BONSAI_PIXELS = [
+            ...[3,4,5,6,7,8,9,10,11,12,13,14,15,16].map(x=>[x,17,F.bkSandDk]),
+            ...[3,4,5,6,7,8,9,10,11,12,13,14,15,16].map(x=>[x,16,F.bkSand]),
+            ...[3,4,5,6,7,8,9,10,11,12,13,14,15,16].map(x=>[x,15,F.bkSandLt]),
+            [5,16,F.bkSandDk],[9,16,F.bkSandDk],[13,16,F.bkSandDk],
+            ...[5,6,7,8,9,10,11,12,13,14].map(x=>[x,14,F.bkTrayLt]),
+            ...[5,6,7,8,9,10,11,12,13,14].map(x=>[x,13,F.bkTray]),
+            [5,14,F.bkStandDk],[14,14,F.bkStandDk],[5,13,F.bkStandDk],[14,13,F.bkStandDk],
+            ...[7,8,9,10,11,12].map(x=>[x,12,F.dirt]),
+            [9,12,F.bkTrunk],[10,12,F.bkTrunk],[9,11,F.bkTrunk],[10,11,F.bkTrunk],
+            [8,10,F.bkTrunk],[9,10,F.bkTrunk],[8,9,F.bkBranch],[9,9,F.bkTrunk],[8,8,F.bkBranch],
+            [10,10,F.bkBranch],[11,10,F.bkBranchLt],[11,9,F.bkBranchLt],[12,9,F.bkBranchLt],
+            [7,9,F.bkBranch],[6,8,F.bkBranch],[6,7,F.bkBranchLt],[5,7,F.bkBranchLt],
+            [4,6,F.bkFoliageDk],[5,6,F.bkFoliage],[6,6,F.bkFoliageLt],[7,6,F.bkFoliage],[8,6,F.bkFoliageDk],
+            [4,5,F.bkFoliageDk],[5,5,F.bkFoliageLt],[6,5,F.bkFoliage],[7,5,F.bkFoliageLt],[8,5,F.bkFoliageDk],
+            [5,4,F.bkFoliageDk],[6,4,F.bkFoliage],[7,4,F.bkFoliageDk],
+            [8,7,F.bkFoliage],[9,7,F.bkFoliageLt],[10,7,F.bkFoliage],
+            [7,6,F.bkFoliage],[8,6,F.bkFoliageLt],[9,6,F.bkFoliageLt],[10,6,F.bkFoliageDk],
+            [10,8,F.bkFoliageDk],[11,8,F.bkFoliage],[12,8,F.bkFoliageLt],[13,8,F.bkFoliageDk],
+            [10,7,F.bkFoliageDk],[11,7,F.bkFoliageLt],[12,7,F.bkFoliage],[13,7,F.bkFoliageDk],
+            [11,6,F.bkFoliageDk],[12,6,F.bkFoliageLt],[13,6,F.bkFoliageDk],
+            [8,12,F.bkMoss],[11,12,F.bkMoss],
+            [15,15,F.bkRockDk],[16,15,F.bkRock],[15,14,F.bkRock],[16,14,F.bkRockLt],
+        ];
+
+        // ============================================
+        // GREENHOUSE LOGIC
+        // ============================================
+        const GREENHOUSE_UNLOCK_COST = 20;
+
+        function getFlowerStageIndex(flower) {
+            return Math.min(7, Math.floor(flower.sessionsInvested / 4));
+        }
+
+        function isFlowerComplete(flower) {
+            return flower.planted && flower.sessionsInvested >= 28;
+        }
+
+        function allFlowersComplete() {
+            return FLOWER_CATALOGUE.every(f => isFlowerComplete(state.greenhouse.flowers[f.key]));
+        }
+
+        function renderPixelCanvas(canvas, pixels, gridW, gridH) {
+            canvas.textContent = '';
+            const pixelSize = Math.max(2, Math.floor(canvas.offsetWidth / gridW));
+            canvas.style.height = (pixelSize * gridH) + 'px';
+            pixels.forEach(([x, y, color]) => {
+                if (color === 'transparent' || !color) return;
+                const el = document.createElement('div');
+                el.className = 'pixel-art';
+                el.style.left = (x * pixelSize) + 'px';
+                el.style.top = (y * pixelSize) + 'px';
+                el.style.width = pixelSize + 'px';
+                el.style.height = pixelSize + 'px';
+                el.style.backgroundColor = color;
+                canvas.appendChild(el);
+            });
+        }
+
+        function renderFlowerSlot(slotEl, flower, catalogue) {
+            const canvas = slotEl.querySelector('.flower-slot-canvas');
+            const nameEl = slotEl.querySelector('.flower-slot-name');
+            const progEl = slotEl.querySelector('.flower-slot-progress');
+
+            nameEl.textContent = catalogue.name;
+
+            if (!flower.planted) {
+                canvas.textContent = '';
+                progEl.textContent = catalogue.cost + ' sticks';
+                slotEl.classList.add('empty');
+                slotEl.classList.remove('complete');
+                return;
+            }
+
+            slotEl.classList.remove('empty');
+            const stageIdx = getFlowerStageIndex(flower);
+            const stage = catalogue.stages[stageIdx];
+            if (stage) {
+                const scale = canvas.offsetWidth / 20;
+                canvas.style.height = Math.floor(scale * 28) + 'px';
+                canvas.textContent = '';
+                stage.pixels.forEach(([x, y, color]) => {
+                    if (color === 'transparent' || !color) return;
+                    const el = document.createElement('div');
+                    el.className = 'pixel-art';
+                    el.style.left = (x * scale) + 'px';
+                    el.style.top = (y * scale) + 'px';
+                    el.style.width = Math.ceil(scale) + 'px';
+                    el.style.height = Math.ceil(scale) + 'px';
+                    el.style.backgroundColor = color;
+                    canvas.appendChild(el);
+                });
+            }
+
+            if (isFlowerComplete(flower)) {
+                progEl.textContent = '✓ Grown';
+                slotEl.classList.add('complete');
+            } else {
+                progEl.textContent = flower.sessionsInvested + '/28 sessions';
+                slotEl.classList.remove('complete');
+            }
+        }
+
+        function buildFlowerShelf() {
+            const shelf = document.getElementById('flowerShelf');
+            shelf.textContent = '';
+            FLOWER_CATALOGUE.forEach(catalogue => {
+                const slot = document.createElement('div');
+                slot.className = 'flower-slot';
+                slot.dataset.key = catalogue.key;
+
+                const canvas = document.createElement('div');
+                canvas.className = 'flower-slot-canvas';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'flower-slot-name';
+                nameEl.textContent = catalogue.name;
+
+                const progEl = document.createElement('div');
+                progEl.className = 'flower-slot-progress';
+
+                slot.appendChild(canvas);
+                slot.appendChild(nameEl);
+                slot.appendChild(progEl);
+                shelf.appendChild(slot);
+                renderFlowerSlot(slot, state.greenhouse.flowers[catalogue.key], catalogue);
+            });
+        }
+
+        function buildSeedShop() {
+            const grid = document.getElementById('seedShopGrid');
+            grid.textContent = '';
+            FLOWER_CATALOGUE.forEach(catalogue => {
+                const flower = state.greenhouse.flowers[catalogue.key];
+                if (flower.planted) return;
+                const row = document.createElement('div');
+                row.className = 'seed-item';
+
+                const nameEl = document.createElement('span');
+                nameEl.className = 'seed-item-name';
+                nameEl.textContent = catalogue.name;
+
+                const costEl = document.createElement('span');
+                costEl.className = 'seed-item-cost';
+                costEl.textContent = catalogue.cost + ' \uD83E\uDEB5';
+
+                const btn = document.createElement('button');
+                btn.className = 'btn seed-buy-btn';
+                btn.textContent = 'BUY';
+                btn.dataset.key = catalogue.key;
+                btn.disabled = state.collectibles.sticks < catalogue.cost;
+                btn.addEventListener('click', () => buySeed(catalogue.key));
+
+                row.appendChild(nameEl);
+                row.appendChild(costEl);
+                row.appendChild(btn);
+                grid.appendChild(row);
+            });
+
+            if (grid.children.length === 0) {
+                const msg = document.createElement('span');
+                msg.style.cssText = 'font-family:var(--font-ui);font-size:0.6em;color:var(--text-secondary)';
+                msg.textContent = 'All seeds planted!';
+                grid.appendChild(msg);
+            }
+        }
+
+        function buySeed(key) {
+            const catalogue = FLOWER_CATALOGUE.find(f => f.key === key);
+            if (!catalogue || state.collectibles.sticks < catalogue.cost) return;
+            state.collectibles.sticks -= catalogue.cost;
+            state.greenhouse.flowers[key].planted = true;
+            saveState();
+            updateDisplay();
+            updateGreenhouseView();
+        }
+
+        function buildGreenhouse() {
+            if (state.collectibles.sticks < GREENHOUSE_UNLOCK_COST) return;
+            state.collectibles.sticks -= GREENHOUSE_UNLOCK_COST;
+            state.greenhouse.unlocked = true;
+            saveState();
+            updateDisplay();
+            updateGreenhouseView();
+            elements.successTitle.textContent = '\uD83C\uDFE1 GREENHOUSE BUILT!';
+            elements.successMessage.textContent = 'Your greenhouse is ready. Visit the seed shop to plant your first flower — they\'ll grow and persist forever.';
+            elements.successOkBtn.textContent = 'LET\'S GROW';
+            elements.successModal.classList.add('visible');
+        }
+
+        function craftBonsai() {
+            if (!allFlowersComplete()) return;
+            state.greenhouse.bonsaiCrafted = true;
+            saveState();
+            updateGreenhouseView();
+            elements.successTitle.textContent = '\uD83C\uDF3F BONSAI CRAFTED!';
+            elements.successMessage.textContent = 'You\'ve grown every flower and crafted the ultimate garden. The bonsai is yours.';
+            elements.successOkBtn.textContent = 'MAGNIFICENT';
+            elements.successModal.classList.add('visible');
+        }
+
+        function updateGreenhouseView() {
+            const gh = state.greenhouse;
+            const locked = document.getElementById('greenhouseLocked');
+            const unlocked = document.getElementById('greenhouseUnlocked');
+            const lockProgress = document.getElementById('greenhouseLockProgress');
+            const buildBtn = document.getElementById('buildGreenhouseBtn');
+            const bonsaiDisplay = document.getElementById('bonsaiDisplay');
+            const bonsaiCraft = document.getElementById('bonsaiCraft');
+            const seedShop = document.getElementById('seedShop');
+
+            if (!gh.unlocked) {
+                locked.style.display = 'block';
+                unlocked.style.display = 'none';
+                const remaining = GREENHOUSE_UNLOCK_COST - state.collectibles.sticks;
+                lockProgress.textContent = remaining <= 0 ? 'Ready to build!' : 'Need ' + remaining + ' more sticks';
+                buildBtn.disabled = remaining > 0;
+                return;
+            }
+
+            locked.style.display = 'none';
+            unlocked.style.display = 'flex';
+
+            if (gh.bonsaiCrafted) {
+                bonsaiDisplay.style.display = 'flex';
+                const bonsaiCanvas = document.getElementById('bonsaiCanvas');
+                setTimeout(() => renderPixelCanvas(bonsaiCanvas, BONSAI_PIXELS, 20, 18), 10);
+            }
+
+            buildFlowerShelf();
+            buildSeedShop();
+
+            bonsaiCraft.style.display = (!gh.bonsaiCrafted && allFlowersComplete()) ? 'flex' : 'none';
+
+            const allPlanted = FLOWER_CATALOGUE.every(f => state.greenhouse.flowers[f.key].planted);
+            seedShop.style.display = allPlanted ? 'none' : 'block';
+        }
+
+        function advanceGreenhouseFlowers() {
+            if (!state.greenhouse.unlocked) return;
+            let changed = false;
+            FLOWER_CATALOGUE.forEach(f => {
+                const flower = state.greenhouse.flowers[f.key];
+                if (flower.planted && flower.sessionsInvested < 28) {
+                    flower.sessionsInvested++;
+                    changed = true;
+                }
+            });
+            if (changed) saveState();
+        }
+
+        function updateTimerMirror() {
+            const mirror = document.getElementById('plantTimerMirror');
+            const mirrorTime = document.getElementById('mirrorTime');
+            const mirrorLabel = document.getElementById('mirrorLabel');
+            if (!mirror) return;
+            if (!isRunning && !sessionFailed) {
+                mirror.classList.add('idle');
+                mirrorTime.textContent = '--:--';
+                mirrorLabel.textContent = currentMode.toUpperCase();
+                return;
+            }
+            mirror.classList.remove('idle');
+            mirrorTime.textContent = formatTime(timeRemaining);
+            mirrorLabel.textContent = currentMode.toUpperCase();
+        }
+
         function renderPlant(stageIndex) {
             const canvas = plantElements.canvas;
             canvas.innerHTML = '';
@@ -2686,9 +3393,28 @@
 
         document.getElementById('gardenPanelBtn').addEventListener('click', () => {
             plantElements.container.classList.toggle('open');
-            // Re-render after panel opens so pixel size is calculated correctly
+            setTimeout(() => { updatePlant(); updateGreenhouseView(); }, 50);
+        });
+
+        // Garden view toggle
+        document.getElementById('todayViewBtn').addEventListener('click', () => {
+            document.getElementById('todayView').classList.remove('hidden');
+            document.getElementById('greenhouseView').classList.remove('active');
+            document.getElementById('todayViewBtn').classList.add('active');
+            document.getElementById('greenhouseViewBtn').classList.remove('active');
             setTimeout(updatePlant, 50);
         });
+
+        document.getElementById('greenhouseViewBtn').addEventListener('click', () => {
+            document.getElementById('todayView').classList.add('hidden');
+            document.getElementById('greenhouseView').classList.add('active');
+            document.getElementById('greenhouseViewBtn').classList.add('active');
+            document.getElementById('todayViewBtn').classList.remove('active');
+            updateGreenhouseView();
+        });
+
+        document.getElementById('buildGreenhouseBtn').addEventListener('click', buildGreenhouse);
+        document.getElementById('craftBonsaiBtn').addEventListener('click', craftBonsai);
 
         window.addEventListener('resize', updatePlant);
 
@@ -2730,6 +3456,7 @@
             }
             updatePlant();
             updateDisplay();
+            updateGreenhouseView();
             // Show gifted pot on first ever launch
             if (!state.garden.potGifted) {
                 setTimeout(showGiftedPot, 600);
