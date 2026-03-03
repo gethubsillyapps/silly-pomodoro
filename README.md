@@ -2,7 +2,7 @@
 
 ## What It Is
 
-Silly Pomodoro is a Pomodoro-style focus timer with a simple belief: the best reward for focusing is watching something grow. Complete focus sessions, earn collectibles, and tend to a pixel-art garden that resets fresh each day.
+Silly Pomodoro is a Pomodoro-style focus timer with a simple belief: the best reward for focusing is watching something grow. Complete focus sessions, earn collectibles, and tend to a pixel-art garden that resets fresh each day — or build a greenhouse and grow something that lasts forever.
 
 The timer mechanics are intentionally strict. One pause per session. Pause twice and the session fails. This keeps the reward meaningful.
 
@@ -13,23 +13,33 @@ The timer mechanics are intentionally strict. One pause per session. Pause twice
 - **Strict pause rules**: One pause allowed per session — second pause fails the session
 - **Compounding rest**: Skip rest periods to bank them; take them all at once later as a longer break
 - **Quick Timer widget**: A side stopwatch/countdown for tracking anything outside the main session
+- **Timer mirror**: The garden panel shows a live mirror of the current timer at a glance
 
 ### Collectibles
 Earned by completing sessions. Each has a use in the garden crafting system.
 
 | Collectible | Earned by | Garden use |
 |---|---|---|
-| Sticks | Completing a focus session | Craft a raised garden bed |
+| Sticks | Completing a focus session | Craft a raised garden bed; unlock the greenhouse; buy flower seeds |
 | Carrots | Completing a rest session | Plant a carrot in your garden |
 | Golden Tomatoes | Completing a full cycle (4 focus + 4 rest) | Plant a tomato; clear failed sessions |
 
 ### Garden
-A pixel-art plant grows in the left panel as you focus. It passes through 8 stages — from an empty pot to a harvest-ready plant — driven by your focus sessions. The garden resets each morning, fresh for the day.
+A pixel-art plant grows in the garden panel as you focus. It passes through 8 stages — from an empty pot to a harvest-ready plant — driven by your focus sessions. The garden resets each morning, fresh for the day.
 
 - **Gifted starter pot**: No barrier on day one — the pot is yours from the start
 - **Plant choice**: Spend a Carrot to grow a carrot, or a Golden Tomato to grow a tomato
-- **Today's harvest**: Completed cycles drop into a visible basket
-- **Total plants grown**: An all-time counter across every day
+- **Raised garden bed**: Craft with 8 Sticks for a wider wooden planter
+- **Today's harvest**: Completed cycles tracked separately by plant type (🥕 and 🍅)
+- **Failed sessions**: Grey tomatoes mark failures — spend 1 Golden Tomato to clear them
+
+### Greenhouse
+Unlock a permanent greenhouse with 20 Sticks. Unlike the daily garden, greenhouse flowers **never reset** — they grow across sessions and days until fully bloomed.
+
+- **5 flowers to grow**: Sunflower, Red Rose, Pink Rose, White Rose, Orchid
+- **28 focus sessions** per flower to reach full bloom
+- **Seed shop**: Buy seeds with Sticks (costs vary by flower)
+- **Bonsai**: Grow all 5 flowers to unlock the ultimate garden — a crafted bonsai that becomes the greenhouse centrepiece
 
 ### Themes
 - **Zen**: Warm gradient background, glassmorphism cards, serif headings, pixel-art collectible icons
@@ -66,7 +76,7 @@ The garden crafting system is being built in phases:
 - **Phase 1** ✓: Planting choice (carrot or tomato), gifted pot onboarding, today's harvest basket, total plants counter
 - **Phase 2** ✓: Raised garden bed upgrade (craft with Sticks), carrot vs tomato plant pixel art
 - **Phase 3** ✓: Grey tomato removal — spend a Golden Tomato to clear failed sessions
-- **Phase 4**: Greenhouse upgrade — plants survive the daily reset
+- **Phase 4** ✓: Greenhouse — persistent flowers, seed shop, bonsai endgame
 - **Future**: Inventory persistence with accounts, multiplayer garden visits
 
 ## Quick Start
