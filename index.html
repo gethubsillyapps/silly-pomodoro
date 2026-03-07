@@ -85,7 +85,6 @@
         [data-theme="zen"] .text-secondary,
         [data-theme="zen"] .collectibles-section h2,
         [data-theme="zen"] .calendar-section h2,
-        [data-theme="zen"] .settings-section h2,
         [data-theme="zen"] .cycle-progress,
         [data-theme="zen"] .collectible-label,
         [data-theme="zen"] .setting-item label,
@@ -478,7 +477,7 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 4px;
+            gap: 2px;
         }
 
         .calendar-day {
@@ -532,14 +531,6 @@
         /* ============================================
            SETTINGS
            ============================================ */
-        .settings-section h2 {
-            font-family: var(--font-ui);
-            letter-spacing: 0.1em;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            color: var(--text-secondary);
-        }
-
         .settings-grid {
             display: flex;
             gap: 20px;
@@ -585,6 +576,81 @@
 
         .panels-section .btn {
             flex: 1;
+        }
+
+        /* ============================================
+           FLOATING SETTINGS
+           ============================================ */
+        .settings-float-btn {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-right: none;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            width: 36px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: background 0.2s;
+        }
+
+        .settings-float-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .settings-float-panel {
+            position: fixed;
+            right: -220px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 199;
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-right: none;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            padding: 18px 16px 18px 20px;
+            width: 200px;
+            backdrop-filter: blur(20px);
+            transition: right 0.3s ease;
+        }
+
+        .settings-float-panel.open {
+            right: 36px;
+        }
+
+        .settings-float-header {
+            font-family: var(--font-ui);
+            font-size: 0.75em;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+
+        [data-theme="zen"] .settings-float-header,
+        [data-theme="zen"] .setting-item label {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        [data-theme="zen"] .settings-float-btn,
+        [data-theme="zen"] .settings-float-panel {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(20px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="zen"] .settings-float-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            color: #fff;
         }
 
         /* ============================================
@@ -1492,6 +1558,12 @@
             </div>
         </section>
 
+        <!-- Panel buttons -->
+        <section class="card panels-section">
+            <button class="btn" id="gardenPanelBtn">🌱 GARDEN</button>
+            <button class="btn" id="timerPanelBtn">⏱ TIMER</button>
+        </section>
+
         <!-- Calendar Section -->
         <section class="card calendar-section">
             <h2>ACTIVITY (Last 30 Days)</h2>
@@ -1506,28 +1578,25 @@
                 <span>More</span>
             </div>
         </section>
-
-        <!-- Settings Section -->
-        <section class="card settings-section">
-            <h2>SETTINGS</h2>
-            <div class="settings-grid">
-                <div class="setting-item">
-                    <label for="focusDuration">Focus (min)</label>
-                    <input type="number" id="focusDuration" min="1" max="120" value="31">
-                </div>
-                <div class="setting-item">
-                    <label for="restDuration">Rest (min)</label>
-                    <input type="number" id="restDuration" min="1" max="60" value="5">
-                </div>
-            </div>
-        </section>
-
-        <!-- Panel buttons -->
-        <section class="card panels-section">
-            <button class="btn" id="gardenPanelBtn">🌱 GARDEN</button>
-            <button class="btn" id="timerPanelBtn">⏱ TIMER</button>
-        </section>
     </main>
+
+    <!-- Floating Settings Button -->
+    <button class="settings-float-btn" id="settingsFloatBtn">⚙</button>
+
+    <!-- Floating Settings Panel -->
+    <div class="settings-float-panel" id="settingsFloatPanel">
+        <div class="settings-float-header">SETTINGS</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <label for="focusDuration">Focus (min)</label>
+                <input type="number" id="focusDuration" min="1" max="120" value="31">
+            </div>
+            <div class="setting-item">
+                <label for="restDuration">Rest (min)</label>
+                <input type="number" id="restDuration" min="1" max="60" value="5">
+            </div>
+        </div>
+    </div>
 
     <!-- Theme Transition Overlay -->
     <div id="theme-overlay"></div>
@@ -1807,6 +1876,8 @@
             carrotsCollectible: document.getElementById('carrotsCollectible'),
             tomatoesCollectible: document.getElementById('tomatoesCollectible'),
             calendarGrid: document.getElementById('calendarGrid'),
+            settingsFloatBtn: document.getElementById('settingsFloatBtn'),
+            settingsFloatPanel: document.getElementById('settingsFloatPanel'),
             focusDuration: document.getElementById('focusDuration'),
             restDuration: document.getElementById('restDuration'),
             warningModal: document.getElementById('warningModal'),
@@ -3394,6 +3465,16 @@
         document.getElementById('gardenPanelBtn').addEventListener('click', () => {
             plantElements.container.classList.toggle('open');
             setTimeout(() => { updatePlant(); updateGreenhouseView(); }, 50);
+        });
+
+        elements.settingsFloatBtn.addEventListener('click', () => {
+            elements.settingsFloatPanel.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!elements.settingsFloatPanel.contains(e.target) && e.target !== elements.settingsFloatBtn) {
+                elements.settingsFloatPanel.classList.remove('open');
+            }
         });
 
         // Garden view toggle
