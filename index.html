@@ -24,7 +24,10 @@
             --border-radius: 16px;
             --font-main: 'Playfair Display', serif;
             --font-ui: 'DM Sans', sans-serif;
-            --font-size-base: 14px;
+            --font-size-base: 16px;
+            --text-xs: 0.75em;
+            --text-sm: 0.85em;
+            --text-md: 0.95em;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
             --gradient-main: linear-gradient(135deg, #b8860b 0%, #daa520 20%, #e8a020 40%, #e87830 60%, #d4543a 80%, #c0392b 100%);
         }
@@ -43,7 +46,7 @@
             --border-radius: 0;
             --font-main: 'IBM Plex Mono', monospace;
             --font-ui: 'IBM Plex Mono', monospace;
-            --font-size-base: 12px;
+            --font-size-base: 14px;
             --shadow: none;
         }
 
@@ -144,7 +147,7 @@
             color: var(--text-primary);
             padding: 8px 12px;
             font-family: var(--font-ui);
-            font-size: 0.75em;
+            font-size: var(--text-sm);
             letter-spacing: 0.05em;
             cursor: pointer;
             border-radius: var(--border-radius);
@@ -191,7 +194,7 @@
 
         .timer-mode {
             font-family: var(--font-ui);
-            font-size: 0.85em;
+            font-size: var(--text-md);
             letter-spacing: 0.15em;
             margin-bottom: 15px;
             color: var(--text-secondary);
@@ -223,7 +226,7 @@
         }
 
         .cycle-progress {
-            font-size: 0.8em;
+            font-size: var(--text-md);
             color: var(--text-secondary);
             margin-bottom: 15px;
         }
@@ -241,7 +244,7 @@
 
         .btn {
             font-family: var(--font-ui);
-            font-size: 0.85em;
+            font-size: var(--text-md);
             font-weight: 500;
             letter-spacing: 0.05em;
             padding: 12px 20px;
@@ -330,7 +333,7 @@
         }
 
         .rest-choice p {
-            font-size: 0.8em;
+            font-size: var(--text-md);
             margin-bottom: 5px;
         }
 
@@ -341,7 +344,7 @@
         }
 
         .banked-rest {
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             color: var(--warning);
             margin-top: 10px;
         }
@@ -352,7 +355,7 @@
         .collectibles-section h2 {
             font-family: var(--font-ui);
             letter-spacing: 0.1em;
-            font-size: 0.9em;
+            font-size: var(--text-md);
             margin-bottom: 15px;
             color: var(--text-secondary);
         }
@@ -382,7 +385,7 @@
 
         .collectible-label {
             font-family: var(--font-ui);
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             letter-spacing: 0.1em;
             color: var(--text-secondary);
             margin-top: 5px;
@@ -469,7 +472,7 @@
         .calendar-section h2 {
             font-family: var(--font-ui);
             letter-spacing: 0.1em;
-            font-size: 0.9em;
+            font-size: var(--text-md);
             margin-bottom: 15px;
             color: var(--text-secondary);
         }
@@ -508,7 +511,7 @@
             justify-content: flex-end;
             gap: 5px;
             margin-top: 10px;
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             color: var(--text-secondary);
         }
 
@@ -544,7 +547,7 @@
         }
 
         .setting-item label {
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             color: var(--text-secondary);
         }
 
@@ -592,7 +595,7 @@
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             color: var(--text-primary);
             font-family: var(--font-ui);
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             letter-spacing: 0.08em;
             padding: 12px 6px;
             cursor: pointer;
@@ -628,7 +631,7 @@
 
         .settings-float-header {
             font-family: var(--font-ui);
-            font-size: 0.75em;
+            font-size: var(--text-sm);
             letter-spacing: 0.1em;
             color: var(--text-secondary);
             margin-bottom: 14px;
@@ -723,7 +726,7 @@
             color: var(--accent);
             padding: 12px 6px;
             font-family: var(--font-main);
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             cursor: pointer;
             border-radius: 8px 0 0 8px;
             writing-mode: vertical-rl;
@@ -754,7 +757,7 @@
         }
 
         .side-timer-panel h3 {
-            font-size: 0.9em;
+            font-size: var(--text-md);
             color: var(--text-secondary);
         }
 
@@ -766,7 +769,7 @@
         .side-timer-mode-switch .btn {
             flex: 1;
             padding: 8px 6px;
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             min-width: auto;
         }
 
@@ -791,7 +794,7 @@
             width: 50px;
             padding: 6px;
             font-family: var(--font-main);
-            font-size: 0.8em;
+            font-size: var(--text-md);
             background: var(--bg-secondary);
             border: 2px solid var(--accent);
             border-radius: var(--border-radius);
@@ -800,7 +803,7 @@
         }
 
         .side-timer-input label {
-            font-size: 0.5em;
+            font-size: var(--text-xs);
             color: var(--text-secondary);
         }
 
@@ -812,7 +815,7 @@
         .side-timer-controls .btn {
             flex: 1;
             padding: 10px 6px;
-            font-size: 0.75em;
+            font-size: var(--text-sm);
             min-width: auto;
         }
 
@@ -848,7 +851,7 @@
             color: var(--accent);
             padding: 12px 6px;
             font-family: var(--font-main);
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             cursor: pointer;
             border-radius: 0 8px 8px 0;
             writing-mode: vertical-rl;
@@ -890,7 +893,7 @@
         }
 
         .plant-container h3 {
-            font-size: 0.85em;
+            font-size: var(--text-md);
             color: var(--text-secondary);
             font-family: var(--font-ui);
         }
@@ -914,7 +917,7 @@
             border-radius: 50%;
             width: 16px;
             height: 16px;
-            font-size: 0.55em;
+            font-size: var(--text-xs);
             font-family: var(--font-ui);
             cursor: pointer;
             line-height: 1;
@@ -949,7 +952,7 @@
             border-radius: 50%;
             width: 16px;
             height: 16px;
-            font-size: 0.55em;
+            font-size: var(--text-xs);
             font-family: var(--font-ui);
             cursor: pointer;
             line-height: 1;
@@ -979,7 +982,7 @@
         }
 
         .plant-stage-label {
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             color: var(--text-secondary);
             font-family: var(--font-ui);
         }
@@ -997,7 +1000,7 @@
         }
 
         .plant-prompt-text {
-            font-size: 0.75em;
+            font-size: var(--text-sm);
             color: var(--text-secondary);
             font-family: var(--font-ui);
         }
@@ -1014,14 +1017,14 @@
 
         .plant-options .btn {
             flex: 1;
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             padding: 8px 6px;
             min-width: auto;
             line-height: 1.6;
         }
 
         .plant-prompt-hint {
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             color: var(--text-secondary);
             font-family: var(--font-ui);
             min-height: 1em;
@@ -1032,7 +1035,7 @@
         }
 
         .plant-type-label {
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             color: var(--text-secondary);
             font-family: var(--font-ui);
             letter-spacing: 0.08em;
@@ -1046,7 +1049,7 @@
         .harvest-display {
             display: flex;
             justify-content: space-between;
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             font-family: var(--font-ui);
             color: var(--text-secondary);
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -1064,7 +1067,7 @@
 
         /* Clear grey tomatoes button */
         .clear-grey-btn {
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             padding: 4px 8px;
             min-width: auto;
             width: 100%;
@@ -1094,7 +1097,7 @@
             align-items: center;
             gap: 5px;
             font-family: var(--font-ui);
-            font-size: 0.65em;
+            font-size: var(--text-xs);
         }
 
         .craft-label {
@@ -1150,7 +1153,7 @@
             flex: 1;
             padding: 6px 10px;
             font-family: var(--font-ui);
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             letter-spacing: 0.08em;
             background: transparent;
             border: none;
@@ -1196,7 +1199,7 @@
         }
 
         .plant-timer-mirror .mirror-label {
-            font-size: 0.55em;
+            font-size: var(--text-xs);
             letter-spacing: 0.12em;
             opacity: 0.65;
             text-transform: uppercase;
@@ -1229,7 +1232,7 @@
 
         .greenhouse-lock-text {
             font-family: var(--font-ui);
-            font-size: 0.7em;
+            font-size: var(--text-sm);
             color: var(--text-secondary);
             line-height: 1.6;
         }
@@ -1237,7 +1240,7 @@
         [data-theme="zen"] .greenhouse-lock-text { color: rgba(255,255,255,0.7); }
 
         .greenhouse-lock-progress {
-            font-size: 0.65em;
+            font-size: var(--text-xs);
             font-family: var(--font-ui);
             color: var(--accent);
             margin-top: 4px;
@@ -1287,7 +1290,7 @@
 
         .flower-slot-name {
             font-family: var(--font-ui);
-            font-size: 0.55em;
+            font-size: var(--text-xs);
             letter-spacing: 0.05em;
             color: var(--text-secondary);
             text-align: center;
@@ -1298,7 +1301,7 @@
 
         .flower-slot-progress {
             font-family: var(--font-ui);
-            font-size: 0.5em;
+            font-size: var(--text-xs);
             color: var(--accent);
             text-align: center;
         }
@@ -1329,7 +1332,7 @@
 
         .bonsai-label {
             font-family: var(--font-ui);
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             letter-spacing: 0.1em;
             color: var(--text-secondary);
         }
@@ -1346,7 +1349,7 @@
 
         .seed-shop-title {
             font-family: var(--font-ui);
-            font-size: 0.6em;
+            font-size: var(--text-xs);
             letter-spacing: 0.1em;
             color: var(--text-secondary);
             margin-bottom: 6px;
@@ -1365,7 +1368,7 @@
             align-items: center;
             gap: 5px;
             font-family: var(--font-ui);
-            font-size: 0.62em;
+            font-size: var(--text-xs);
         }
 
         .seed-item-name {
@@ -1397,7 +1400,7 @@
             border-radius: 6px;
             border: 1px solid rgba(255,215,0,0.2);
             font-family: var(--font-ui);
-            font-size: 0.62em;
+            font-size: var(--text-xs);
         }
 
         [data-theme="ascii"] .bonsai-craft { border-color: var(--accent); background: #111; }
@@ -1701,7 +1704,7 @@
                     <span class="greenhouse-lock-icon">🏡</span>
                     <div class="greenhouse-lock-text">Build a greenhouse to grow<br>persistent flowers that never reset.</div>
                     <div class="greenhouse-lock-progress" id="greenhouseLockProgress">20 sticks to unlock</div>
-                    <button class="btn" id="buildGreenhouseBtn" style="margin-top:8px; font-size:0.7em; padding:6px 12px;">BUILD — 20 sticks</button>
+                    <button class="btn" id="buildGreenhouseBtn" style="margin-top:8px; font-size:var(--text-sm); padding:6px 12px;">BUILD — 20 sticks</button>
                 </div>
 
                 <!-- Unlocked state -->
@@ -1825,7 +1828,7 @@
     <div class="modal-overlay" id="gardenHelpModal">
         <div class="modal">
             <h2>🌱 HOW YOUR GARDEN GROWS</h2>
-            <p style="text-align:left; font-size: 0.85em; line-height: 2;">
+            <p style="text-align:left; font-size: var(--text-md); line-height: 2;">
                 <strong>Focus sessions</strong> grow your plant through 8 stages — from an empty pot all the way to a harvest-ready tomato plant.<br><br>
                 <strong>Complete a full cycle</strong> (4 focus + 4 rest) to earn a golden tomato 🍅 — watch it drop into your garden.<br><br>
                 <strong>Fail a session</strong> (pause twice) and a grey tomato drops instead.<br><br>
