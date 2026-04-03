@@ -3654,15 +3654,6 @@
             plantElements.container.classList.remove('open');
         });
 
-        document.addEventListener('click', (e) => {
-            const plantPanel = document.querySelector('.plant-panel');
-            if (plantElements.container.classList.contains('open') &&
-                !plantPanel.contains(e.target) &&
-                !document.getElementById('gardenPanelBtn').contains(e.target)) {
-                plantElements.container.classList.remove('open');
-            }
-        });
-
         document.getElementById('gardenHelpOkBtn').addEventListener('click', () => {
             document.getElementById('gardenHelpModal').classList.remove('visible');
         });
@@ -3674,12 +3665,6 @@
 
         elements.settingsFloatBtn.addEventListener('click', () => {
             elements.settingsFloatPanel.classList.toggle('open');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!elements.settingsFloatPanel.contains(e.target) && e.target !== elements.settingsFloatBtn) {
-                elements.settingsFloatPanel.classList.remove('open');
-            }
         });
 
         // Garden view toggle
