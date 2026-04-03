@@ -584,35 +584,33 @@
         .settings-float-btn {
             position: fixed;
             right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 80px;
             z-index: 200;
             background: var(--card-bg);
             border: 2px solid var(--accent);
             border-right: none;
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             color: var(--text-primary);
-            font-size: 1.1em;
-            width: 36px;
-            height: 48px;
+            font-family: var(--font-ui);
+            font-size: 0.6em;
+            letter-spacing: 0.08em;
+            padding: 12px 6px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
             backdrop-filter: blur(10px);
             transition: background 0.2s;
         }
 
         .settings-float-btn:hover {
             background: var(--accent);
-            color: #fff;
+            color: var(--bg-primary);
         }
 
         .settings-float-panel {
             position: fixed;
             right: -220px;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 80px;
             z-index: 199;
             background: var(--card-bg);
             border: 2px solid var(--accent);
@@ -906,6 +904,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            width: 100%;
         }
 
         .plant-help-btn {
@@ -938,6 +937,42 @@
         }
 
         [data-theme="zen"] .plant-help-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .plant-close-btn {
+            background: none;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 0.55em;
+            font-family: var(--font-ui);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .plant-close-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        [data-theme="zen"] .plant-close-btn {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="zen"] .plant-close-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: #ffffff;
             color: #ffffff;
@@ -1581,7 +1616,7 @@
     </main>
 
     <!-- Floating Settings Button -->
-    <button class="settings-float-btn" id="settingsFloatBtn">⚙</button>
+    <button class="settings-float-btn" id="settingsFloatBtn">SETTINGS</button>
 
     <!-- Floating Settings Panel -->
     <div class="settings-float-panel" id="settingsFloatPanel">
@@ -1607,6 +1642,7 @@
             <div class="plant-header">
                 <h3>🌱 GARDEN</h3>
                 <button class="plant-help-btn" id="plantHelpBtn">?</button>
+                <button class="plant-close-btn" id="plantCloseBtn">✕</button>
             </div>
 
             <!-- Timer mirror -->
@@ -1631,6 +1667,7 @@
                 <div class="planting-prompt" id="plantingPrompt" style="display:none;">
                     <p class="plant-prompt-text">What will you grow today?</p>
                     <div class="plant-options">
+                        <button class="btn" id="plantCabbageBtn">🥬 Cabbage<br><small>free</small></button>
                         <button class="btn" id="plantCarrotBtn">🥕 Carrot<br><small>1 carrot</small></button>
                         <button class="btn" id="plantTomatoBtn">🍅 Tomato<br><small>1 golden tomato</small></button>
                     </div>
@@ -1642,8 +1679,8 @@
 
                 <!-- Harvest stats -->
                 <div class="harvest-display">
-                    <span>Today: <strong id="todayCarrotsCount">0</strong>🥕 <strong id="todayTomatoesCount">0</strong>🍅</span>
-                    <span>All: <strong id="totalCarrotsCount">0</strong>🥕 <strong id="totalTomatoesCount">0</strong>🍅</span>
+                    <span>Today: <strong id="todayCarrotsCount">0</strong>🥕 <strong id="todayCabbagesCount">0</strong>🥬 <strong id="todayTomatoesCount">0</strong>🍅</span>
+                    <span>All: <strong id="totalCarrotsCount">0</strong>🥕 <strong id="totalCabbagesCount">0</strong>🥬 <strong id="totalTomatoesCount">0</strong>🍅</span>
                 </div>
 
                 <!-- Crafting -->
@@ -1767,7 +1804,7 @@
         <div class="modal">
             <h2>🪴 HERE'S YOUR STARTER POT!</h2>
             <p>It's yours — no strings attached.<br><br>
-            Earn a <strong>Carrot</strong> to plant your first carrot, or a <strong>Golden Tomato</strong> to plant a tomato. Your plant grows with every focus session.<br><br>
+            You can grow a <strong>Cabbage</strong> for free, earn a <strong>Carrot</strong> to plant a carrot, or earn a <strong>Golden Tomato</strong> to grow a tomato. Your plant grows with every focus session.<br><br>
             The pot can be upgraded later with collected Sticks.</p>
             <button class="btn btn-primary" id="giftedPotOkBtn">LET'S GROW 🌱</button>
         </div>
@@ -1824,8 +1861,10 @@
                 potGifted: false,         // shown once on first launch
                 carrotIntroSeen: false,   // shown after first carrot earned
                 totalCarrotsGrown: 0,     // all-time carrot harvest counter
+                totalCabbagesGrown: 0,    // all-time cabbage harvest counter
                 totalTomatoesGrown: 0,    // all-time tomato harvest counter
                 todaysCarrots: 0,         // resets daily
+                todaysCabbages: 0,        // resets daily
                 todaysTomatoes: 0,        // resets daily
                 greyTomatoes: 0           // failed sessions today; clearable with 1 golden tomato
             },
@@ -2306,6 +2345,9 @@
                 if (state.garden.plantType === 'carrot') {
                     state.garden.todaysCarrots++;
                     state.garden.totalCarrotsGrown++;
+                } else if (state.garden.plantType === 'cabbage') {
+                    state.garden.todaysCabbages++;
+                    state.garden.totalCabbagesGrown++;
                 } else {
                     state.garden.todaysTomatoes++;
                     state.garden.totalTomatoesGrown++;
@@ -2573,7 +2615,14 @@
             cFlower:  '#F5F5F5',
             cOr:      '#EF6C00',
             cOrLt:    '#FF8F00',
-            cOrDk:    '#BF360C'
+            cOrDk:    '#BF360C',
+            // Cabbage colours
+            cbLeaf:   '#2E7D32',
+            cbLeafLt: '#66BB6A',
+            cbLeafMd: '#388E3C',
+            cbHead:   '#81C784',
+            cbHeadLt: '#C8E6C9',
+            cbSmile:  '#1B5E20'
         };
 
         // 20x28 pixel art stages - each is an array of [x, y, color]
@@ -2877,6 +2926,143 @@
                 [6, 17, P.cFern], [7, 17, P.cFrond], [8, 17, P.cFrondLt], [9, 17, P.cFrond], [10, 17, P.cFrondLt], [11, 17, P.cFrond], [12, 17, P.cFern],
                 [7, 16, P.cFern], [8, 16, P.cFrondLt], [9, 16, P.cFern], [10, 16, P.cFrondLt], [11, 16, P.cFern],
                 [9, 15, P.cFern], [10, 15, P.cFern],
+            ]}
+        ];
+
+        const CABBAGE_STAGES = [
+            // Stage 0: Empty pot
+            { name: 'Empty Pot', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+            ]},
+            // Stage 1: Sprout
+            { name: 'Sprout', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafLt],
+                [8, 19, P.cbLeaf], [9, 19, P.cbLeafMd], [10, 19, P.cbLeafLt], [11, 19, P.cbLeaf],
+            ]},
+            // Stage 2: Seedling
+            { name: 'Seedling', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [8, 19, P.cbLeaf], [9, 19, P.cbLeafMd], [10, 19, P.cbLeafMd], [11, 19, P.cbLeaf],
+                [7, 18, P.cbLeaf], [8, 18, P.cbLeafLt], [9, 18, P.cbLeafMd], [10, 18, P.cbLeafLt], [11, 18, P.cbLeaf], [12, 18, P.cbLeaf],
+                [9, 17, P.cbLeaf], [10, 17, P.cbLeafLt],
+            ]},
+            // Stage 3: Growing — outer leaves spreading
+            { name: 'Growing', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [8, 19, P.cbLeafMd], [9, 19, P.cbLeafMd], [10, 19, P.cbLeafMd], [11, 19, P.cbLeafMd],
+                [7, 18, P.cbLeaf], [8, 18, P.cbLeafLt], [9, 18, P.cbLeafMd], [10, 18, P.cbLeafMd], [11, 18, P.cbLeafLt], [12, 18, P.cbLeaf],
+                [6, 17, P.cbLeaf], [7, 17, P.cbLeafLt], [8, 17, P.cbLeafMd], [9, 17, P.cbLeaf], [10, 17, P.cbLeafMd], [11, 17, P.cbLeafLt], [12, 17, P.cbLeaf], [13, 17, P.cbLeaf],
+                [8, 16, P.cbLeafLt], [9, 16, P.cbHead], [10, 16, P.cbHead], [11, 16, P.cbLeafLt],
+            ]},
+            // Stage 4: Head forming
+            { name: 'Head Forming', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [8, 19, P.cbLeafMd], [9, 19, P.cbLeaf], [10, 19, P.cbLeaf], [11, 19, P.cbLeafMd],
+                [6, 18, P.cbLeaf], [7, 18, P.cbLeaf], [8, 18, P.cbLeafLt], [9, 18, P.cbLeafMd], [10, 18, P.cbLeafMd], [11, 18, P.cbLeafLt], [12, 18, P.cbLeaf], [13, 18, P.cbLeaf],
+                [6, 17, P.cbLeaf], [7, 17, P.cbLeafLt], [8, 17, P.cbLeafMd], [9, 17, P.cbLeaf], [10, 17, P.cbLeafMd], [11, 17, P.cbLeafLt], [12, 17, P.cbLeaf], [13, 17, P.cbLeaf],
+                [7, 16, P.cbLeafLt], [8, 16, P.cbHead], [9, 16, P.cbHeadLt], [10, 16, P.cbHeadLt], [11, 16, P.cbHead], [12, 16, P.cbLeafLt],
+                [8, 15, P.cbHead], [9, 15, P.cbHeadLt], [10, 15, P.cbHeadLt], [11, 15, P.cbHead],
+            ]},
+            // Stage 5: Head growing
+            { name: 'Head Growing', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [7, 19, P.cbLeaf], [8, 19, P.cbLeafMd], [9, 19, P.cbLeaf], [10, 19, P.cbLeaf], [11, 19, P.cbLeafMd], [12, 19, P.cbLeaf],
+                [5, 18, P.cbLeaf], [6, 18, P.cbLeaf], [7, 18, P.cbLeafLt], [8, 18, P.cbLeafMd], [11, 18, P.cbLeafMd], [12, 18, P.cbLeafLt], [13, 18, P.cbLeaf], [14, 18, P.cbLeaf],
+                [6, 17, P.cbLeaf], [7, 17, P.cbLeafLt], [8, 17, P.cbHead], [9, 17, P.cbHeadLt], [10, 17, P.cbHeadLt], [11, 17, P.cbHead], [12, 17, P.cbLeafLt], [13, 17, P.cbLeaf],
+                [7, 16, P.cbLeaf], [8, 16, P.cbHead], [9, 16, P.cbHeadLt], [10, 16, P.cbHeadLt], [11, 16, P.cbHead], [12, 16, P.cbLeaf],
+                [7, 15, P.cbLeafLt], [8, 15, P.cbHead], [9, 15, P.cbHeadLt], [10, 15, P.cbHeadLt], [11, 15, P.cbHead], [12, 15, P.cbLeafLt],
+                [8, 14, P.cbHead], [9, 14, P.cbHeadLt], [10, 14, P.cbHeadLt], [11, 14, P.cbHead],
+            ]},
+            // Stage 6: Nearly full
+            { name: 'Nearly Full', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [7, 19, P.cbLeaf], [8, 19, P.cbLeafMd], [9, 19, P.cbLeaf], [10, 19, P.cbLeaf], [11, 19, P.cbLeafMd], [12, 19, P.cbLeaf],
+                [5, 18, P.cbLeaf], [6, 18, P.cbLeafLt], [7, 18, P.cbLeaf], [8, 18, P.cbHead], [9, 18, P.cbHeadLt], [10, 18, P.cbHeadLt], [11, 18, P.cbHead], [12, 18, P.cbLeaf], [13, 18, P.cbLeafLt], [14, 18, P.cbLeaf],
+                [5, 17, P.cbLeaf], [6, 17, P.cbLeafLt], [7, 17, P.cbHead], [8, 17, P.cbHeadLt], [9, 17, P.cbHead], [10, 17, P.cbHead], [11, 17, P.cbHeadLt], [12, 17, P.cbHead], [13, 17, P.cbLeafLt], [14, 17, P.cbLeaf],
+                [6, 16, P.cbLeaf], [7, 16, P.cbHead], [8, 16, P.cbHeadLt], [9, 16, P.cbHead], [10, 16, P.cbHead], [11, 16, P.cbHeadLt], [12, 16, P.cbHead], [13, 16, P.cbLeaf],
+                [6, 15, P.cbLeaf], [7, 15, P.cbHead], [8, 15, P.cbHeadLt], [9, 15, P.cbHead], [10, 15, P.cbHead], [11, 15, P.cbHeadLt], [12, 15, P.cbHead], [13, 15, P.cbLeaf],
+                [7, 14, P.cbLeaf], [8, 14, P.cbHead], [9, 14, P.cbHeadLt], [10, 14, P.cbHeadLt], [11, 14, P.cbHead], [12, 14, P.cbLeaf],
+                [8, 13, P.cbHead], [9, 13, P.cbHeadLt], [10, 13, P.cbHeadLt], [11, 13, P.cbHead],
+            ]},
+            // Stage 7: Harvest Ready — full head with smiley face
+            { name: 'Harvest Ready', pixels: [
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 21, P.potLt]),
+                ...[6,7,8,9,10,11,12,13].map(x => [x, 22, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 23, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 24, P.pot]),
+                ...[7,8,9,10,11,12].map(x => [x, 25, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 26, P.potDk]),
+                ...[8,9,10,11].map(x => [x, 21, P.dirt]),
+                // Outer leaves
+                [9, 20, P.cbLeafMd], [10, 20, P.cbLeafMd],
+                [7, 19, P.cbLeaf], [8, 19, P.cbLeafMd], [9, 19, P.cbLeaf], [10, 19, P.cbLeaf], [11, 19, P.cbLeafMd], [12, 19, P.cbLeaf],
+                [5, 18, P.cbLeaf], [6, 18, P.cbLeafLt], [7, 18, P.cbLeaf], [12, 18, P.cbLeaf], [13, 18, P.cbLeafLt], [14, 18, P.cbLeaf],
+                [5, 17, P.cbLeaf], [6, 17, P.cbLeafLt], [13, 17, P.cbLeafLt], [14, 17, P.cbLeaf],
+                [5, 16, P.cbLeaf], [6, 16, P.cbLeaf], [13, 16, P.cbLeaf], [14, 16, P.cbLeaf],
+                [5, 15, P.cbLeaf], [6, 15, P.cbLeaf], [13, 15, P.cbLeaf], [14, 15, P.cbLeaf],
+                [6, 14, P.cbLeaf], [13, 14, P.cbLeaf],
+                [7, 13, P.cbLeaf], [12, 13, P.cbLeaf],
+                [8, 12, P.cbLeaf], [11, 12, P.cbLeaf],
+                // Head
+                [8, 18, P.cbHead], [9, 18, P.cbHead], [10, 18, P.cbHead], [11, 18, P.cbHead],
+                [7, 17, P.cbHead], [8, 17, P.cbHeadLt], [9, 17, P.cbHeadLt], [10, 17, P.cbHeadLt], [11, 17, P.cbHeadLt], [12, 17, P.cbHead],
+                [7, 16, P.cbHead], [8, 16, P.cbHeadLt], [9, 16, P.cbHeadLt], [10, 16, P.cbHeadLt], [11, 16, P.cbHeadLt], [12, 16, P.cbHead],
+                [7, 15, P.cbHead], [8, 15, P.cbHeadLt], [9, 15, P.cbHeadLt], [10, 15, P.cbHeadLt], [11, 15, P.cbHeadLt], [12, 15, P.cbHead],
+                [7, 14, P.cbHead], [8, 14, P.cbHeadLt], [9, 14, P.cbHeadLt], [10, 14, P.cbHeadLt], [11, 14, P.cbHeadLt], [12, 14, P.cbHead],
+                [8, 13, P.cbHead], [9, 13, P.cbHeadLt], [10, 13, P.cbHeadLt], [11, 13, P.cbHead],
+                [9, 12, P.cbHead], [10, 12, P.cbHead],
+                // Smiley face
+                [8, 14, P.cbSmile], [11, 14, P.cbSmile],   // eyes
+                [8, 16, P.cbSmile], [11, 16, P.cbSmile],   // smile corners
+                [9, 17, P.cbSmile], [10, 17, P.cbSmile],   // smile bottom
             ]}
         ];
 
@@ -3254,7 +3440,8 @@
             canvas.innerHTML = '';
 
             // Pick stage array based on plant type
-            const stages = state.garden.plantType === 'carrot' ? CARROT_STAGES : PLANT_STAGES;
+            const stages = state.garden.plantType === 'carrot' ? CARROT_STAGES :
+                           state.garden.plantType === 'cabbage' ? CABBAGE_STAGES : PLANT_STAGES;
             const stage = stages[stageIndex];
             if (!stage) return;
 
@@ -3324,8 +3511,9 @@
                 typeLabel.textContent = '';
                 document.getElementById('plantCarrotBtn').disabled = !hasCarrot;
                 document.getElementById('plantTomatoBtn').disabled = !hasTomato;
+                // Cabbage is always enabled
                 if (!hasCarrot && !hasTomato) {
-                    hint.textContent = 'Earn a Carrot or Golden Tomato to plant!';
+                    hint.textContent = 'Earn a Carrot or Golden Tomato for more plant choices!';
                 } else if (hasCarrot && !hasTomato) {
                     hint.textContent = 'Tip: earn a Golden Tomato to grow a tomato plant!';
                 } else {
@@ -3333,13 +3521,16 @@
                 }
             } else {
                 prompt.style.display = 'none';
-                typeLabel.textContent = garden.plantType === 'carrot' ? '🥕 Carrot Plant' : '🍅 Tomato Plant';
+                const typeLabels = { carrot: '🥕 Carrot Plant', cabbage: '🥬 Cabbage Plant', tomato: '🍅 Tomato Plant' };
+                typeLabel.textContent = typeLabels[garden.plantType] || '🍅 Tomato Plant';
             }
 
             // Update harvest counters
             document.getElementById('todayCarrotsCount').textContent = garden.todaysCarrots;
+            document.getElementById('todayCabbagesCount').textContent = garden.todaysCabbages || 0;
             document.getElementById('todayTomatoesCount').textContent = garden.todaysTomatoes;
             document.getElementById('totalCarrotsCount').textContent = garden.totalCarrotsGrown;
+            document.getElementById('totalCabbagesCount').textContent = garden.totalCabbagesGrown || 0;
             document.getElementById('totalTomatoesCount').textContent = garden.totalTomatoesGrown;
 
             // Show/hide grey tomato clear button
@@ -3410,7 +3601,7 @@
             if (type === 'carrot' && state.collectibles.carrots < 1) return;
             if (type === 'tomato' && state.collectibles.goldenTomatoes < 1) return;
 
-            // Spend the collectible
+            // Spend the collectible (cabbage is free)
             if (type === 'carrot') state.collectibles.carrots--;
             if (type === 'tomato') state.collectibles.goldenTomatoes--;
 
@@ -3451,11 +3642,25 @@
 
         document.getElementById('craftBedBtn').addEventListener('click', craftRaisedBed);
         document.getElementById('clearGreyBtn').addEventListener('click', clearGreyTomatoes);
+        document.getElementById('plantCabbageBtn').addEventListener('click', () => plantSeed('cabbage'));
         document.getElementById('plantCarrotBtn').addEventListener('click', () => plantSeed('carrot'));
         document.getElementById('plantTomatoBtn').addEventListener('click', () => plantSeed('tomato'));
 
         document.getElementById('plantHelpBtn').addEventListener('click', () => {
             document.getElementById('gardenHelpModal').classList.add('visible');
+        });
+
+        document.getElementById('plantCloseBtn').addEventListener('click', () => {
+            plantElements.container.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            const plantPanel = document.querySelector('.plant-panel');
+            if (plantElements.container.classList.contains('open') &&
+                !plantPanel.contains(e.target) &&
+                !document.getElementById('gardenPanelBtn').contains(e.target)) {
+                plantElements.container.classList.remove('open');
+            }
         });
 
         document.getElementById('gardenHelpOkBtn').addEventListener('click', () => {
@@ -3512,6 +3717,7 @@
                 state.bankedRestCount = 0;
                 state.garden.plantType = null;
                 state.garden.todaysCarrots = 0;
+                state.garden.todaysCabbages = 0;
                 state.garden.todaysTomatoes = 0;
                 state.garden.greyTomatoes = 0;
                 // Clear dropped tomatoes
