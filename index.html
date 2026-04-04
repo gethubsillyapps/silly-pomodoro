@@ -3484,16 +3484,16 @@
         // Calculate plant stage from focus session progress
         function getPlantStage() {
             const focus = state.currentCycle.focusCount;
-            const rest = state.currentCycle.restCount;
+            const focusing = isRunning && currentMode === 'focus';
 
-            if (focus === 0 && !isRunning) return 0;
-            if (focus === 0 && isRunning) return 1;
-            if (focus === 1 && rest === 0) return 2;
-            if (focus === 2 && rest < 2) return 3;
-            if (focus === 2) return 4;
-            if (focus === 3 && rest < 3) return 5;
-            if (focus === 3) return 6;
-            return 7;
+            if (focus === 0 && !focusing) return 0;
+            if (focus === 0) return 1;   // 1st session in progress
+            if (focus === 1 && !focusing) return 2;
+            if (focus === 1) return 3;   // 2nd session in progress
+            if (focus === 2 && !focusing) return 4;
+            if (focus === 2) return 5;   // 3rd session in progress
+            if (focus === 3 && !focusing) return 6;
+            return 7;                    // 4th session in progress or all 4 done
         }
 
         function updatePlant() {
