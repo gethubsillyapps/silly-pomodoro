@@ -362,15 +362,14 @@
         }
 
         .collectibles {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         .collectible {
             text-align: center;
             padding: 10px;
-            flex: 1;
         }
 
         .collectible-icon {
@@ -1528,10 +1527,6 @@
         @media (max-width: 500px) {
             .timer-display {
                 font-size: 3em;
-            }
-
-            .collectibles {
-                flex-wrap: wrap;
             }
 
             .calendar-grid {
