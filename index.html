@@ -1742,14 +1742,6 @@
                 <input type="number" id="restDuration" min="1" max="60" value="5">
             </div>
         </div>
-        <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.15);padding-top:8px;">
-            <div style="font-size:var(--text-xs);opacity:0.5;letter-spacing:0.08em;margin-bottom:6px;">DEV</div>
-            <div style="display:flex;flex-direction:column;gap:5px;">
-                <button class="btn" id="devRevealBlueRose" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Reveal Blue Rose</button>
-                <button class="btn" id="devGrowBlueRose" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Grow Blue Rose</button>
-                <button class="btn" id="devChampions" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Champions Theme</button>
-            </div>
-        </div>
     </div>
 
     <!-- Theme Transition Overlay -->
@@ -2082,6 +2074,12 @@
                     // Migrate old 8bit theme to zen
                     if (parsed.settings && parsed.settings.theme === '8bit') {
                         parsed.settings.theme = 'zen';
+                    }
+                    // Reset champions if blue rose not actually grown
+                    const br = parsed.greenhouse && parsed.greenhouse.flowers && parsed.greenhouse.flowers.blueRose;
+                    if (!br || br.sessionsInvested < 57) {
+                        if (parsed.greenhouse) parsed.greenhouse.championsUnlocked = false;
+                        if (parsed.settings && parsed.settings.theme === 'champions') parsed.settings.theme = 'zen';
                     }
                     // Deep merge garden + greenhouse objects so new keys aren't lost
                     const merged = { ...DEFAULT_STATE, ...parsed };
@@ -3921,31 +3919,6 @@
             elements.settingsFloatPanel.classList.toggle('open');
         });
 
-        // DEV buttons
-        document.getElementById('devRevealBlueRose').addEventListener('click', () => {
-            FLOWER_CATALOGUE.filter(f => !f.secret).forEach(f => {
-                state.greenhouse.flowers[f.key].planted = true;
-                state.greenhouse.flowers[f.key].sessionsInvested = f.sessionsToGrow;
-            });
-            state.greenhouse.unlocked = true;
-            state.greenhouse.blueRoseRevealed = false;
-            saveState();
-            updateGreenhouseView();
-            updateDisplay();
-        });
-
-        document.getElementById('devGrowBlueRose').addEventListener('click', () => {
-            state.greenhouse.flowers.blueRose.planted = true;
-            state.greenhouse.flowers.blueRose.sessionsInvested = 57;
-            saveState();
-            updateGreenhouseView();
-        });
-
-        document.getElementById('devChampions').addEventListener('click', () => {
-            state.greenhouse.championsUnlocked = true;
-            saveState();
-            applyTheme('champions');
-        });
 
         // Garden view toggle
         document.getElementById('todayViewBtn').addEventListener('click', () => {
