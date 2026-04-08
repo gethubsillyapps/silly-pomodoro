@@ -50,6 +50,72 @@
             --shadow: none;
         }
 
+        /* Champions Club Theme */
+        [data-theme="champions"] {
+            --bg-primary: #1A237E;
+            --bg-secondary: rgba(255, 215, 0, 0.07);
+            --bg-card: rgba(255, 215, 0, 0.1);
+            --text-primary: #FFD700;
+            --text-secondary: rgba(255, 215, 0, 0.75);
+            --accent: #FFD700;
+            --accent-hover: #FFE44D;
+            --success: #FFD700;
+            --warning: #FFC107;
+            --border-radius: 16px;
+            --font-main: 'Playfair Display', serif;
+            --font-ui: 'DM Sans', sans-serif;
+            --font-size-base: 16px;
+            --text-xs: 0.75em;
+            --text-sm: 0.85em;
+            --text-md: 0.95em;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            --gradient-main: linear-gradient(135deg, #0D47A1 0%, #1565C0 30%, #283593 55%, #DAA520 80%, #B8860B 100%);
+        }
+
+        /* Champions Club — gold text overrides for hardcoded white values */
+        [data-theme="champions"] .text-secondary,
+        [data-theme="champions"] .collectibles-section h2,
+        [data-theme="champions"] .calendar-section h2,
+        [data-theme="champions"] .cycle-progress,
+        [data-theme="champions"] .collectible-label,
+        [data-theme="champions"] .setting-item label,
+        [data-theme="champions"] .side-timer-panel h3,
+        [data-theme="champions"] .rest-choice p,
+        [data-theme="champions"] .calendar-legend,
+        [data-theme="champions"] .banked-rest,
+        [data-theme="champions"] .settings-float-header,
+        [data-theme="champions"] .plant-container h3,
+        [data-theme="champions"] .greenhouse-lock-progress,
+        [data-theme="champions"] .flower-slot-progress,
+        [data-theme="champions"] .flower-detail-progress { color: rgba(255, 215, 0, 0.9); }
+
+        [data-theme="champions"] .side-timer-toggle { border-color: rgba(255, 215, 0, 0.6); color: #FFD700; }
+        [data-theme="champions"] .side-timer-mode-switch .btn.active { color: #FFD700; }
+        [data-theme="champions"] .timer-mode.focus,
+        [data-theme="champions"] .timer-mode.rest { color: #FFD700; }
+        [data-theme="champions"] .settings-float-btn:hover { color: #FFD700; }
+        [data-theme="champions"] .plant-help-btn { border-color: rgba(255,215,0,0.5); color: rgba(255,215,0,0.7); }
+        [data-theme="champions"] .plant-help-btn:hover { border-color: #FFD700; color: #FFD700; }
+        [data-theme="champions"] .plant-close-btn { border-color: rgba(255,215,0,0.5); color: rgba(255,215,0,0.7); }
+        [data-theme="champions"] .plant-close-btn:hover { border-color: #FFD700; color: #FFD700; }
+        [data-theme="champions"] .plant-stage-label,
+        [data-theme="champions"] .plant-prompt-text,
+        [data-theme="champions"] .plant-type-label,
+        [data-theme="champions"] .harvest-display,
+        [data-theme="champions"] .clear-grey-btn,
+        [data-theme="champions"] .craft-label,
+        [data-theme="champions"] .craft-cost,
+        [data-theme="champions"] .garden-view-btn,
+        [data-theme="champions"] .greenhouse-lock-text,
+        [data-theme="champions"] .flower-detail-stage,
+        [data-theme="champions"] .flower-slot-name,
+        [data-theme="champions"] .bonsai-label,
+        [data-theme="champions"] .seed-shop-title,
+        [data-theme="champions"] .seed-item-name,
+        [data-theme="champions"] .bonsai-craft-label { color: rgba(255, 215, 0, 0.75); }
+
+        [data-theme="champions"] .plant-prompt-hint { color: rgba(255, 215, 0, 0.55); }
+
         /* ============================================
            BASE STYLES
            ============================================ */
@@ -62,6 +128,7 @@
         /* html background as fallback for safe area zones iOS can't reach via #app-bg */
         html { background: #b8860b; }
         html[data-theme="ascii"] { background: #0a0a0a; }
+        html[data-theme="champions"] { background: #0D47A1; }
 
         /* Full-screen background div — position:fixed ensures it bleeds into iOS safe areas */
         #app-bg {
@@ -85,31 +152,31 @@
         }
 
         /* Zen mode: all text white */
-        [data-theme="zen"] .text-secondary,
-        [data-theme="zen"] .collectibles-section h2,
-        [data-theme="zen"] .calendar-section h2,
-        [data-theme="zen"] .cycle-progress,
-        [data-theme="zen"] .collectible-label,
-        [data-theme="zen"] .setting-item label,
-        [data-theme="zen"] .side-timer-panel h3,
-        [data-theme="zen"] .rest-choice p,
-        [data-theme="zen"] .calendar-legend,
-        [data-theme="zen"] .banked-rest {
+        :is([data-theme="zen"], [data-theme="champions"]) .text-secondary,
+        :is([data-theme="zen"], [data-theme="champions"]) .collectibles-section h2,
+        :is([data-theme="zen"], [data-theme="champions"]) .calendar-section h2,
+        :is([data-theme="zen"], [data-theme="champions"]) .cycle-progress,
+        :is([data-theme="zen"], [data-theme="champions"]) .collectible-label,
+        :is([data-theme="zen"], [data-theme="champions"]) .setting-item label,
+        :is([data-theme="zen"], [data-theme="champions"]) .side-timer-panel h3,
+        :is([data-theme="zen"], [data-theme="champions"]) .rest-choice p,
+        :is([data-theme="zen"], [data-theme="champions"]) .calendar-legend,
+        :is([data-theme="zen"], [data-theme="champions"]) .banked-rest {
             color: rgba(255, 255, 255, 0.85);
         }
 
-        [data-theme="zen"] .side-timer-toggle {
+        :is([data-theme="zen"], [data-theme="champions"]) .side-timer-toggle {
             border-color: rgba(255, 255, 255, 0.6);
             color: #ffffff;
         }
 
-        [data-theme="zen"] .side-timer-panel {
+        :is([data-theme="zen"], [data-theme="champions"]) .side-timer-panel {
             border-color: rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.22);
             backdrop-filter: blur(30px);
         }
 
-        [data-theme="zen"] .side-timer-mode-switch .btn.active {
+        :is([data-theme="zen"], [data-theme="champions"]) .side-timer-mode-switch .btn.active {
             background: rgba(255, 255, 255, 0.25);
             color: #ffffff;
         }
@@ -205,8 +272,8 @@
         .timer-mode.focus { color: var(--accent); }
         .timer-mode.rest { color: var(--success); }
 
-        [data-theme="zen"] .timer-mode.focus,
-        [data-theme="zen"] .timer-mode.rest {
+        :is([data-theme="zen"], [data-theme="champions"]) .timer-mode.focus,
+        :is([data-theme="zen"], [data-theme="champions"]) .timer-mode.rest {
             color: #ffffff;
         }
 
@@ -288,32 +355,32 @@
         }
 
         /* Zen mode: all buttons white text and borders */
-        [data-theme="zen"] .btn {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn {
             border-color: rgba(255, 255, 255, 0.6);
             color: #ffffff;
         }
 
-        [data-theme="zen"] .btn-primary {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn-primary {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.6);
             color: #ffffff;
         }
 
-        [data-theme="zen"] .btn-primary:hover:not(:disabled) {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn-primary:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.35);
         }
 
-        [data-theme="zen"] .btn:hover:not(:disabled) {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.2);
             color: #ffffff;
         }
 
-        [data-theme="zen"] .btn-success {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn-success {
             border-color: rgba(255, 255, 255, 0.6);
             color: #ffffff;
         }
 
-        [data-theme="zen"] .btn-success:hover:not(:disabled) {
+        :is([data-theme="zen"], [data-theme="champions"]) .btn-success:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.2);
             color: #ffffff;
         }
@@ -400,11 +467,11 @@
             margin: 0 auto 8px;
         }
 
-        [data-theme="zen"] .collectible-pixel-wrap {
+        :is([data-theme="zen"], [data-theme="champions"]) .collectible-pixel-wrap {
             display: block;
         }
 
-        [data-theme="zen"] .collectible-emoji {
+        :is([data-theme="zen"], [data-theme="champions"]) .collectible-emoji {
             display: none;
         }
 
@@ -638,19 +705,19 @@
             margin-bottom: 14px;
         }
 
-        [data-theme="zen"] .settings-float-header,
-        [data-theme="zen"] .setting-item label {
+        :is([data-theme="zen"], [data-theme="champions"]) .settings-float-header,
+        :is([data-theme="zen"], [data-theme="champions"]) .setting-item label {
             color: rgba(255, 255, 255, 0.85);
         }
 
-        [data-theme="zen"] .settings-float-btn,
-        [data-theme="zen"] .settings-float-panel {
+        :is([data-theme="zen"], [data-theme="champions"]) .settings-float-btn,
+        :is([data-theme="zen"], [data-theme="champions"]) .settings-float-panel {
             background: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(20px);
             border-color: rgba(255, 255, 255, 0.4);
         }
 
-        [data-theme="zen"] .settings-float-btn:hover {
+        :is([data-theme="zen"], [data-theme="champions"]) .settings-float-btn:hover {
             background: rgba(255, 255, 255, 0.35);
             color: #fff;
         }
@@ -865,7 +932,7 @@
             color: var(--bg-primary);
         }
 
-        [data-theme="zen"] .plant-toggle {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-toggle {
             border-color: rgba(255, 255, 255, 0.6);
             color: #ffffff;
         }
@@ -888,7 +955,7 @@
             display: flex;
         }
 
-        [data-theme="zen"] .plant-container {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-container {
             border-color: rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.22);
             backdrop-filter: blur(30px);
@@ -900,7 +967,7 @@
             font-family: var(--font-ui);
         }
 
-        [data-theme="zen"] .plant-container h3 {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-container h3 {
             color: rgba(255, 255, 255, 0.85);
         }
 
@@ -936,12 +1003,12 @@
             color: var(--bg-primary);
         }
 
-        [data-theme="zen"] .plant-help-btn {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-help-btn {
             border-color: rgba(255, 255, 255, 0.5);
             color: rgba(255, 255, 255, 0.7);
         }
 
-        [data-theme="zen"] .plant-help-btn:hover {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-help-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: #ffffff;
             color: #ffffff;
@@ -972,12 +1039,12 @@
             color: var(--bg-primary);
         }
 
-        [data-theme="zen"] .plant-close-btn {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-close-btn {
             border-color: rgba(255, 255, 255, 0.5);
             color: rgba(255, 255, 255, 0.7);
         }
 
-        [data-theme="zen"] .plant-close-btn:hover {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-close-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: #ffffff;
             color: #ffffff;
@@ -989,7 +1056,7 @@
             font-family: var(--font-ui);
         }
 
-        [data-theme="zen"] .plant-stage-label {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-stage-label {
             color: rgba(255, 255, 255, 0.7);
         }
 
@@ -1007,7 +1074,7 @@
             font-family: var(--font-ui);
         }
 
-        [data-theme="zen"] .plant-prompt-text {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-prompt-text {
             color: rgba(255, 255, 255, 0.75);
         }
 
@@ -1032,7 +1099,7 @@
             min-height: 1em;
         }
 
-        [data-theme="zen"] .plant-prompt-hint {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-prompt-hint {
             color: rgba(255, 255, 255, 0.55);
         }
 
@@ -1043,7 +1110,7 @@
             letter-spacing: 0.08em;
         }
 
-        [data-theme="zen"] .plant-type-label {
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-type-label {
             color: rgba(255, 255, 255, 0.7);
         }
 
@@ -1063,7 +1130,7 @@
             border-color: var(--accent);
         }
 
-        [data-theme="zen"] .harvest-display {
+        :is([data-theme="zen"], [data-theme="champions"]) .harvest-display {
             color: rgba(255, 255, 255, 0.75);
         }
 
@@ -1078,7 +1145,7 @@
             opacity: 0.8;
         }
 
-        [data-theme="zen"] .clear-grey-btn {
+        :is([data-theme="zen"], [data-theme="champions"]) .clear-grey-btn {
             color: rgba(255,255,255,0.7);
             border-color: rgba(255,255,255,0.25);
         }
@@ -1119,8 +1186,8 @@
             min-width: auto;
         }
 
-        [data-theme="zen"] .craft-label,
-        [data-theme="zen"] .craft-cost {
+        :is([data-theme="zen"], [data-theme="champions"]) .craft-label,
+        :is([data-theme="zen"], [data-theme="champions"]) .craft-cost {
             color: rgba(255, 255, 255, 0.75);
         }
 
@@ -1169,8 +1236,8 @@
             color: var(--text-primary);
         }
 
-        [data-theme="zen"] .garden-view-btn { color: rgba(255,255,255,0.6); }
-        [data-theme="zen"] .garden-view-btn.active {
+        :is([data-theme="zen"], [data-theme="champions"]) .garden-view-btn { color: rgba(255,255,255,0.6); }
+        :is([data-theme="zen"], [data-theme="champions"]) .garden-view-btn.active {
             background: rgba(255,255,255,0.2);
             color: #ffffff;
         }
@@ -1209,7 +1276,7 @@
 
         .plant-timer-mirror.idle { opacity: 0.4; }
 
-        [data-theme="zen"] .plant-timer-mirror { background: rgba(255,255,255,0.1); }
+        :is([data-theme="zen"], [data-theme="champions"]) .plant-timer-mirror { background: rgba(255,255,255,0.1); }
         [data-theme="ascii"] .plant-timer-mirror { background: #111; border: 1px solid var(--accent); }
 
         /* ============================================
@@ -1239,7 +1306,7 @@
             line-height: 1.6;
         }
 
-        [data-theme="zen"] .greenhouse-lock-text { color: rgba(255,255,255,0.7); }
+        :is([data-theme="zen"], [data-theme="champions"]) .greenhouse-lock-text { color: rgba(255,255,255,0.7); }
 
         .greenhouse-lock-progress {
             font-size: var(--text-xs);
@@ -1248,7 +1315,7 @@
             margin-top: 4px;
         }
 
-        [data-theme="zen"] .greenhouse-lock-progress { color: rgba(255,255,255,0.85); }
+        :is([data-theme="zen"], [data-theme="champions"]) .greenhouse-lock-progress { color: rgba(255,255,255,0.85); }
 
         /* Unlocked greenhouse */
         .greenhouse-unlocked { display: flex; flex-direction: column; gap: 10px; }
@@ -1319,8 +1386,8 @@
             font-size: var(--text-sm);
             color: var(--accent);
         }
-        [data-theme="zen"] .flower-detail-stage { color: rgba(255,255,255,0.65); }
-        [data-theme="zen"] .flower-detail-progress { color: rgba(255,255,255,0.9); }
+        :is([data-theme="zen"], [data-theme="champions"]) .flower-detail-stage { color: rgba(255,255,255,0.65); }
+        :is([data-theme="zen"], [data-theme="champions"]) .flower-detail-progress { color: rgba(255,255,255,0.9); }
 
         [data-theme="ascii"] .flower-slot { border-color: var(--accent); }
         [data-theme="ascii"] .flower-slot.empty { border-color: rgba(0,255,0,0.2); }
@@ -1342,7 +1409,7 @@
             line-height: 1.2;
         }
 
-        [data-theme="zen"] .flower-slot-name { color: rgba(255,255,255,0.7); }
+        :is([data-theme="zen"], [data-theme="champions"]) .flower-slot-name { color: rgba(255,255,255,0.7); }
 
         .flower-slot-progress {
             font-family: var(--font-ui);
@@ -1351,7 +1418,7 @@
             text-align: center;
         }
 
-        [data-theme="zen"] .flower-slot-progress { color: rgba(255,255,255,0.85); }
+        :is([data-theme="zen"], [data-theme="champions"]) .flower-slot-progress { color: rgba(255,255,255,0.85); }
 
         /* Bonsai display — full width centrepiece */
         .bonsai-display {
@@ -1365,7 +1432,7 @@
             border: 1px solid rgba(255,215,0,0.25);
         }
 
-        [data-theme="zen"] .bonsai-display { background: rgba(255,255,255,0.07); }
+        :is([data-theme="zen"], [data-theme="champions"]) .bonsai-display { background: rgba(255,255,255,0.07); }
         [data-theme="ascii"] .bonsai-display { border-color: var(--accent); background: #111; }
 
         .bonsai-canvas {
@@ -1382,7 +1449,7 @@
             color: var(--text-secondary);
         }
 
-        [data-theme="zen"] .bonsai-label { color: rgba(255,255,255,0.7); }
+        :is([data-theme="zen"], [data-theme="champions"]) .bonsai-label { color: rgba(255,255,255,0.7); }
 
         /* Seed shop inside greenhouse */
         .seed-shop {
@@ -1400,7 +1467,7 @@
             margin-bottom: 6px;
         }
 
-        [data-theme="zen"] .seed-shop-title { color: rgba(255,255,255,0.65); }
+        :is([data-theme="zen"], [data-theme="champions"]) .seed-shop-title { color: rgba(255,255,255,0.65); }
 
         .seed-shop-grid {
             display: flex;
@@ -1421,7 +1488,7 @@
             color: var(--text-secondary);
         }
 
-        [data-theme="zen"] .seed-item-name { color: rgba(255,255,255,0.75); }
+        :is([data-theme="zen"], [data-theme="champions"]) .seed-item-name { color: rgba(255,255,255,0.75); }
 
         .seed-item-cost {
             color: var(--text-secondary);
@@ -1451,7 +1518,7 @@
         [data-theme="ascii"] .bonsai-craft { border-color: var(--accent); background: #111; }
 
         .bonsai-craft-label { flex: 1; color: var(--text-secondary); }
-        [data-theme="zen"] .bonsai-craft-label { color: rgba(255,255,255,0.75); }
+        :is([data-theme="zen"], [data-theme="champions"]) .bonsai-craft-label { color: rgba(255,255,255,0.75); }
 
         .bonsai-craft .btn {
             padding: 3px 7px;
@@ -1516,7 +1583,7 @@
                 padding: 6px 14px;
             }
 
-            [data-theme="zen"] .plant-toggle {
+            :is([data-theme="zen"], [data-theme="champions"]) .plant-toggle {
                 border-color: rgba(255, 255, 255, 0.6);
             }
 
@@ -1529,7 +1596,7 @@
                 padding: 14px;
             }
 
-            [data-theme="zen"] .plant-container {
+            :is([data-theme="zen"], [data-theme="champions"]) .plant-container {
                 border-color: rgba(255, 255, 255, 0.3);
             }
 
@@ -1551,7 +1618,7 @@
                 padding: 6px 14px;
             }
 
-            [data-theme="zen"] .side-timer-toggle {
+            :is([data-theme="zen"], [data-theme="champions"]) .side-timer-toggle {
                 border-color: rgba(255, 255, 255, 0.6);
             }
 
@@ -1564,7 +1631,7 @@
                 padding: 14px;
             }
 
-            [data-theme="zen"] .side-timer-panel {
+            :is([data-theme="zen"], [data-theme="champions"]) .side-timer-panel {
                 border-color: rgba(255, 255, 255, 0.3);
             }
         }
@@ -1673,6 +1740,14 @@
             <div class="setting-item">
                 <label for="restDuration">Rest (min)</label>
                 <input type="number" id="restDuration" min="1" max="60" value="5">
+            </div>
+        </div>
+        <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.15);padding-top:8px;">
+            <div style="font-size:var(--text-xs);opacity:0.5;letter-spacing:0.08em;margin-bottom:6px;">DEV</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+                <button class="btn" id="devRevealBlueRose" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Reveal Blue Rose</button>
+                <button class="btn" id="devGrowBlueRose" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Grow Blue Rose</button>
+                <button class="btn" id="devChampions" disabled style="font-size:var(--text-xs);padding:4px 6px;opacity:0.35;">Champions Theme</button>
             </div>
         </div>
     </div>
@@ -1925,7 +2000,9 @@
             },
             greenhouse: {
                 unlocked: false,          // true once 20 sticks spent
-                bonsaiCrafted: false,     // true once all flowers fully grown
+                bonsaiCrafted: false,     // true once all 6 regular flowers fully grown
+                blueRoseRevealed: false,  // true once encouraging message shown on reveal
+                championsUnlocked: false, // true once blue rose fully grown
                 // Each flower: { planted: bool, sessionsInvested: number }
                 flowers: {
                     sunflower:     { planted: false, sessionsInvested: 0 },
@@ -1933,7 +2010,8 @@
                     rosePink:      { planted: false, sessionsInvested: 0 },
                     chrysanthemum: { planted: false, sessionsInvested: 0 },
                     daisy:         { planted: false, sessionsInvested: 0 },
-                    orchid:        { planted: false, sessionsInvested: 0 }
+                    orchid:        { planted: false, sessionsInvested: 0 },
+                    blueRose:      { planted: false, sessionsInvested: 0 }
                 }
             }
         };
@@ -2035,12 +2113,14 @@
         // ============================================
         const THEME_BACKGROUNDS = {
             zen: 'linear-gradient(135deg, #b8860b 0%, #daa520 20%, #e8a020 40%, #e87830 60%, #d4543a 80%, #c0392b 100%)',
-            ascii: '#0a0a0a'
+            ascii: '#0a0a0a',
+            champions: 'linear-gradient(135deg, #0D47A1 0%, #1565C0 35%, #1976D2 65%, #1E88E5 100%)'
         };
 
         const THEME_COLORS = {
             zen: '#b8860b',
-            ascii: '#0a0a0a'
+            ascii: '#0a0a0a',
+            champions: '#0D47A1'
         };
 
         function applyTheme(theme) {
@@ -2053,9 +2133,12 @@
 
             // Switch app-bg, html fallback, and theme instantly underneath
             appBg.style.background = THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.zen;
-            document.documentElement.style.background = theme === 'ascii' ? '#0a0a0a' : '#b8860b';
+            document.documentElement.style.background = THEME_COLORS[theme] || THEME_COLORS.zen;
             document.documentElement.setAttribute('data-theme', theme);
-            elements.themeToggle.textContent = theme === 'zen' ? 'ASCII' : 'ZEN';
+            const championsUnlocked = state.greenhouse.championsUnlocked;
+            if (theme === 'zen') elements.themeToggle.textContent = 'ASCII';
+            else if (theme === 'ascii') elements.themeToggle.textContent = championsUnlocked ? 'CHAMPIONS' : 'ZEN';
+            else elements.themeToggle.textContent = 'ZEN';
             state.settings.theme = theme;
             saveState();
 
@@ -2072,8 +2155,13 @@
         }
 
         function toggleTheme() {
-            const newTheme = state.settings.theme === 'zen' ? 'ascii' : 'zen';
-            applyTheme(newTheme);
+            const current = state.settings.theme;
+            const championsUnlocked = state.greenhouse.championsUnlocked;
+            let next;
+            if (current === 'zen') next = 'ascii';
+            else if (current === 'ascii') next = championsUnlocked ? 'champions' : 'zen';
+            else next = 'zen';
+            applyTheme(next);
         }
 
         // ============================================
@@ -3155,6 +3243,7 @@
             rpPetal: '#C2185B', rpPetalLt: '#F06292', rpPetalDk: '#880E4F',
             chPetal: '#FFA000', chPetalLt: '#FFE082', chPetalDk: '#FF6F00', chCenter: '#3E2723',
             dyPetal: '#FFFFFF', dyPetalLt: '#F5F5F5', dyPetalDk: '#E0E0E0', dyCenter: '#FDD835', dyCenterDk: '#F9A825',
+            brPetal: '#1976D2', brPetalLt: '#64B5F6', brPetalDk: '#0D47A1',
             orStem: '#388E3C', orLeaf: '#2E7D32', orLeafLt: '#66BB6A',
             orPetal: '#7B1FA2', orPetalLt: '#CE93D8', orPetalDk: '#4A148C',
             orLip: '#F8BBD9', orLipDk: '#F48FB1', orCenter: '#FFD700',
@@ -3202,8 +3291,9 @@
             ];
         }
 
-        const ROSE_RED_STAGES   = roseStages({ lt: F.rrPetalLt, mid: F.rrPetal, dk: F.rrPetalDk });
-        const ROSE_PINK_STAGES  = roseStages({ lt: F.rpPetalLt, mid: F.rpPetal, dk: F.rpPetalDk });
+        const ROSE_RED_STAGES   = roseStages({ lt: F.rrPetalLt, mid: F.rrPetal,   dk: F.rrPetalDk  });
+        const ROSE_PINK_STAGES  = roseStages({ lt: F.rpPetalLt, mid: F.rpPetal,   dk: F.rpPetalDk  });
+        const ROSE_BLUE_STAGES  = roseStages({ lt: F.brPetalLt, mid: F.brPetal,   dk: F.brPetalDk  });
         const CHRYSANTHEMUM_STAGES = [
             { name: 'Empty Pot', pixels: potPixels() },
             { name: 'Sprout', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.leaf],[10,19,F.leafLt]] },
@@ -3238,12 +3328,13 @@
         ];
 
         const FLOWER_CATALOGUE = [
-            { key: 'sunflower',      name: 'Sunflower',      cost: 3,  sessionsToGrow: 8,  stages: SUNFLOWER_STAGES      },
-            { key: 'roseRed',        name: 'Red Rose',        cost: 5,  sessionsToGrow: 14, stages: ROSE_RED_STAGES        },
-            { key: 'rosePink',       name: 'Pink Rose',       cost: 5,  sessionsToGrow: 20, stages: ROSE_PINK_STAGES       },
-            { key: 'chrysanthemum',  name: 'Chrysanthemum',   cost: 5,  sessionsToGrow: 28, stages: CHRYSANTHEMUM_STAGES   },
-            { key: 'daisy',          name: 'Daisy',           cost: 7,  sessionsToGrow: 36, stages: DAISY_STAGES           },
-            { key: 'orchid',         name: 'Orchid',          cost: 10, sessionsToGrow: 48, stages: ORCHID_STAGES          },
+            { key: 'sunflower',      name: 'Sunflower',      cost: 3,  sessionsToGrow: 8,  stages: SUNFLOWER_STAGES,     secret: false },
+            { key: 'roseRed',        name: 'Red Rose',        cost: 5,  sessionsToGrow: 14, stages: ROSE_RED_STAGES,       secret: false },
+            { key: 'rosePink',       name: 'Pink Rose',       cost: 5,  sessionsToGrow: 20, stages: ROSE_PINK_STAGES,      secret: false },
+            { key: 'chrysanthemum',  name: 'Chrysanthemum',   cost: 5,  sessionsToGrow: 28, stages: CHRYSANTHEMUM_STAGES,  secret: false },
+            { key: 'daisy',          name: 'Daisy',           cost: 7,  sessionsToGrow: 36, stages: DAISY_STAGES,          secret: false },
+            { key: 'orchid',         name: 'Orchid',          cost: 10, sessionsToGrow: 48, stages: ORCHID_STAGES,         secret: false },
+            { key: 'blueRose',       name: 'Blue Rose',       cost: 0,  sessionsToGrow: 57, stages: ROSE_BLUE_STAGES,      secret: true  },
         ];
 
         const BONSAI_PIXELS = [
@@ -3284,8 +3375,12 @@
             return flower.planted && flower.sessionsInvested >= sessionsToGrow;
         }
 
+        function allRegularFlowersComplete() {
+            return FLOWER_CATALOGUE.filter(f => !f.secret).every(f => isFlowerComplete(state.greenhouse.flowers[f.key], f.sessionsToGrow));
+        }
+
         function allFlowersComplete() {
-            return FLOWER_CATALOGUE.every(f => isFlowerComplete(state.greenhouse.flowers[f.key], f.sessionsToGrow));
+            return allRegularFlowersComplete();
         }
 
         function renderPixelCanvas(canvas, pixels, gridW, gridH) {
@@ -3352,7 +3447,9 @@
         function buildFlowerShelf() {
             const shelf = document.getElementById('flowerShelf');
             shelf.textContent = '';
+            const regularDone = allRegularFlowersComplete();
             FLOWER_CATALOGUE.forEach(catalogue => {
+                if (catalogue.secret && !regularDone) return;
                 const slot = document.createElement('div');
                 slot.className = 'flower-slot';
                 slot.dataset.key = catalogue.key;
@@ -3428,9 +3525,11 @@
         function buildSeedShop() {
             const grid = document.getElementById('seedShopGrid');
             grid.textContent = '';
+            const regularDone = allRegularFlowersComplete();
             FLOWER_CATALOGUE.forEach(catalogue => {
                 const flower = state.greenhouse.flowers[catalogue.key];
                 if (flower.planted) return;
+                if (catalogue.secret && !regularDone) return;
                 const row = document.createElement('div');
                 row.className = 'seed-item';
 
@@ -3440,11 +3539,11 @@
 
                 const costEl = document.createElement('span');
                 costEl.className = 'seed-item-cost';
-                costEl.textContent = catalogue.cost + ' \uD83E\uDEB5';
+                costEl.textContent = catalogue.cost === 0 ? 'Free' : catalogue.cost + ' \uD83E\uDEB5';
 
                 const btn = document.createElement('button');
                 btn.className = 'btn seed-buy-btn';
-                btn.textContent = 'BUY';
+                btn.textContent = catalogue.secret ? 'PLANT' : 'BUY';
                 btn.dataset.key = catalogue.key;
                 btn.disabled = state.collectibles.sticks < catalogue.cost;
                 btn.addEventListener('click', () => buySeed(catalogue.key));
@@ -3530,7 +3629,8 @@
 
             bonsaiCraft.style.display = (!gh.bonsaiCrafted && allFlowersComplete()) ? 'flex' : 'none';
 
-            const allPlanted = FLOWER_CATALOGUE.every(f => state.greenhouse.flowers[f.key].planted);
+            const visibleCatalogue = FLOWER_CATALOGUE.filter(f => !f.secret || allRegularFlowersComplete());
+            const allPlanted = visibleCatalogue.every(f => state.greenhouse.flowers[f.key].planted);
             seedShop.style.display = allPlanted ? 'none' : 'block';
         }
 
@@ -3542,8 +3642,34 @@
                 if (flower.planted && flower.sessionsInvested < f.sessionsToGrow) {
                     flower.sessionsInvested++;
                     changed = true;
+
+                    // Blue rose fully grown — unlock Champions Club
+                    if (f.key === 'blueRose' && flower.sessionsInvested >= f.sessionsToGrow) {
+                        state.greenhouse.championsUnlocked = true;
+                        saveState();
+                        applyTheme('champions');
+                        setTimeout(() => {
+                            elements.successTitle.textContent = '\uD83C\uDF39 THE BLUE ROSE';
+                            elements.successMessage.textContent = 'Fifty-seven sessions. Every one of them counted. That focus and effort - I hope it\'s translating into something that brings you joy. The Champions Club is open. Welcome.';
+                            elements.successOkBtn.textContent = 'THANK YOU';
+                            elements.successModal.classList.add('visible');
+                        }, 800);
+                    }
                 }
             });
+
+            // All 6 regular flowers complete for the first time — reveal blue rose
+            if (!state.greenhouse.blueRoseRevealed && allRegularFlowersComplete()) {
+                state.greenhouse.blueRoseRevealed = true;
+                saveState();
+                setTimeout(() => {
+                    elements.successTitle.textContent = '\uD83C\uDF39 YOU GREW EVERY FLOWER';
+                    elements.successMessage.textContent = 'Every single one - sunflower to orchid. That\'s not luck, that\'s dozens of days choosing to sit down and do the work. I genuinely hope whatever you\'ve been building toward all those sessions is coming together. You\'ve earned something rare. Check your seed shop.';
+                    elements.successOkBtn.textContent = 'LET\'S SEE IT';
+                    elements.successModal.classList.add('visible');
+                }, 600);
+            }
+
             if (changed) saveState();
         }
 
@@ -3793,6 +3919,32 @@
 
         elements.settingsFloatBtn.addEventListener('click', () => {
             elements.settingsFloatPanel.classList.toggle('open');
+        });
+
+        // DEV buttons
+        document.getElementById('devRevealBlueRose').addEventListener('click', () => {
+            FLOWER_CATALOGUE.filter(f => !f.secret).forEach(f => {
+                state.greenhouse.flowers[f.key].planted = true;
+                state.greenhouse.flowers[f.key].sessionsInvested = f.sessionsToGrow;
+            });
+            state.greenhouse.unlocked = true;
+            state.greenhouse.blueRoseRevealed = false;
+            saveState();
+            updateGreenhouseView();
+            updateDisplay();
+        });
+
+        document.getElementById('devGrowBlueRose').addEventListener('click', () => {
+            state.greenhouse.flowers.blueRose.planted = true;
+            state.greenhouse.flowers.blueRose.sessionsInvested = 57;
+            saveState();
+            updateGreenhouseView();
+        });
+
+        document.getElementById('devChampions').addEventListener('click', () => {
+            state.greenhouse.championsUnlocked = true;
+            saveState();
+            applyTheme('champions');
         });
 
         // Garden view toggle
