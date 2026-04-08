@@ -1257,6 +1257,7 @@
         .flower-shelf {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 130px;
             gap: 6px;
         }
 
@@ -1264,6 +1265,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 3px;
             padding: 6px 4px;
             background: rgba(255,255,255,0.05);
@@ -1271,13 +1273,54 @@
             border: 1px solid rgba(255,255,255,0.08);
             cursor: pointer;
             transition: background 0.2s;
-            position: relative;
+            overflow: hidden;
         }
 
         .flower-slot:hover { background: rgba(255,255,255,0.1); }
         .flower-slot.empty { cursor: default; opacity: 0.5; }
         .flower-slot.empty:hover { background: rgba(255,255,255,0.05); }
         .flower-slot.complete { border-color: rgba(255,215,0,0.4); }
+
+        /* Flower detail expanded view */
+        .flower-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .flower-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .flower-detail-name {
+            font-size: var(--text-md);
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+        .flower-detail-canvas {
+            width: 130px;
+            height: 160px;
+            position: relative;
+            image-rendering: pixelated;
+            flex-shrink: 0;
+        }
+        .flower-detail-stage {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+        .flower-detail-progress {
+            font-size: var(--text-sm);
+            color: var(--accent);
+        }
+        [data-theme="zen"] .flower-detail-stage { color: rgba(255,255,255,0.65); }
+        [data-theme="zen"] .flower-detail-progress { color: rgba(255,255,255,0.9); }
 
         [data-theme="ascii"] .flower-slot { border-color: var(--accent); }
         [data-theme="ascii"] .flower-slot.empty { border-color: rgba(0,255,0,0.2); }
@@ -1716,7 +1759,18 @@
 
                     <!-- Flower shelf -->
                     <div class="flower-shelf" id="flowerShelf">
-                        <!-- 5 slots rendered by JS -->
+                        <!-- slots rendered by JS -->
+                    </div>
+
+                    <!-- Flower detail (expanded view) -->
+                    <div class="flower-detail" id="flowerDetail" style="display:none;">
+                        <div class="flower-detail-header">
+                            <span class="flower-detail-name" id="flowerDetailName"></span>
+                            <button class="plant-close-btn" id="flowerDetailClose">✕</button>
+                        </div>
+                        <div class="flower-detail-canvas" id="flowerDetailCanvas"></div>
+                        <div class="flower-detail-stage" id="flowerDetailStage"></div>
+                        <div class="flower-detail-progress" id="flowerDetailProgress"></div>
                     </div>
 
                     <!-- Bonsai craft (shown when all flowers complete) -->
@@ -1874,11 +1928,12 @@
                 bonsaiCrafted: false,     // true once all flowers fully grown
                 // Each flower: { planted: bool, sessionsInvested: number }
                 flowers: {
-                    sunflower:  { planted: false, sessionsInvested: 0 },
-                    roseRed:    { planted: false, sessionsInvested: 0 },
-                    rosePink:   { planted: false, sessionsInvested: 0 },
-                    roseWhite:  { planted: false, sessionsInvested: 0 },
-                    orchid:     { planted: false, sessionsInvested: 0 }
+                    sunflower:     { planted: false, sessionsInvested: 0 },
+                    roseRed:       { planted: false, sessionsInvested: 0 },
+                    rosePink:      { planted: false, sessionsInvested: 0 },
+                    chrysanthemum: { planted: false, sessionsInvested: 0 },
+                    daisy:         { planted: false, sessionsInvested: 0 },
+                    orchid:        { planted: false, sessionsInvested: 0 }
                 }
             }
         };
@@ -3098,7 +3153,8 @@
             roseLeaf: '#2E7D32', roseLeafLt: '#43A047', roseStem: '#388E3C', roseThorn: '#1B5E20',
             rrPetal: '#C62828', rrPetalLt: '#EF5350', rrPetalDk: '#B71C1C',
             rpPetal: '#C2185B', rpPetalLt: '#F06292', rpPetalDk: '#880E4F',
-            rwPetal: '#ECEFF1', rwPetalLt: '#FFFFFF', rwPetalDk: '#B0BEC5', rwPetalMid: '#CFD8DC',
+            chPetal: '#FFA000', chPetalLt: '#FFE082', chPetalDk: '#FF6F00', chCenter: '#3E2723',
+            dyPetal: '#FFFFFF', dyPetalLt: '#F5F5F5', dyPetalDk: '#E0E0E0', dyCenter: '#FDD835', dyCenterDk: '#F9A825',
             orStem: '#388E3C', orLeaf: '#2E7D32', orLeafLt: '#66BB6A',
             orPetal: '#7B1FA2', orPetalLt: '#CE93D8', orPetalDk: '#4A148C',
             orLip: '#F8BBD9', orLipDk: '#F48FB1', orCenter: '#FFD700',
@@ -3148,7 +3204,27 @@
 
         const ROSE_RED_STAGES   = roseStages({ lt: F.rrPetalLt, mid: F.rrPetal, dk: F.rrPetalDk });
         const ROSE_PINK_STAGES  = roseStages({ lt: F.rpPetalLt, mid: F.rpPetal, dk: F.rpPetalDk });
-        const ROSE_WHITE_STAGES = roseStages({ lt: F.rwPetalLt, mid: F.rwPetalMid, dk: F.rwPetalDk });
+        const CHRYSANTHEMUM_STAGES = [
+            { name: 'Empty Pot', pixels: potPixels() },
+            { name: 'Sprout', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.leaf],[10,19,F.leafLt]] },
+            { name: 'Seedling', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.stem],[10,19,F.stem],[9,18,F.stem],[10,18,F.stem],[7,19,F.leaf],[8,19,F.leafLt],[11,18,F.leaf],[12,18,F.leafLt]] },
+            { name: 'Growing', pixels: [...potPixels(),...[17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[9,16,F.stem],[10,16,F.stem],[7,18,F.leaf],[8,18,F.leafLt],[6,18,F.leafDk],[11,17,F.leaf],[12,17,F.leafLt],[13,17,F.leafDk],[8,15,F.leaf],[9,15,F.leafLt],[10,15,F.leaf],[11,15,F.leafLt]] },
+            { name: 'Tight Bud', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[8,17,F.leafLt],[11,16,F.leaf],[12,16,F.leafLt],[9,13,F.chPetalDk],[10,13,F.chPetalDk],[9,12,F.chPetalDk],[10,12,F.chCenter],[11,12,F.chPetalDk],[9,11,F.chPetalDk],[10,11,F.chPetalDk]] },
+            { name: 'Opening', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[12,16,F.leaf],[8,13,F.chPetalDk],[9,13,F.chPetal],[10,13,F.chPetalLt],[11,13,F.chPetalDk],[7,12,F.chPetalDk],[8,12,F.chPetal],[9,12,F.chCenter],[10,12,F.chCenter],[11,12,F.chPetal],[12,12,F.chPetalDk],[8,11,F.chPetalDk],[9,11,F.chPetal],[10,11,F.chPetalLt],[11,11,F.chPetalDk],[9,10,F.chPetalDk],[10,10,F.chPetalDk]] },
+            { name: 'Blooming', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[12,16,F.leaf],[8,13,F.chPetal],[9,13,F.chPetalLt],[10,13,F.chPetalLt],[11,13,F.chPetal],[7,12,F.chPetalDk],[8,12,F.chPetalLt],[9,12,F.chCenter],[10,12,F.chCenter],[11,12,F.chPetalLt],[12,12,F.chPetalDk],[7,11,F.chPetalDk],[8,11,F.chPetal],[9,11,F.chPetalLt],[10,11,F.chPetalLt],[11,11,F.chPetal],[12,11,F.chPetalDk],[8,10,F.chPetal],[9,10,F.chPetalLt],[10,10,F.chPetalLt],[11,10,F.chPetal],[9,9,F.chPetalDk],[10,9,F.chPetalDk]] },
+            { name: 'Full Bloom', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[6,17,F.leafDk],[7,17,F.leaf],[8,17,F.leafLt],[11,16,F.leaf],[12,16,F.leafLt],[13,16,F.leafDk],[9,14,F.chPetalDk],[10,14,F.chPetalDk],[8,13,F.chPetal],[9,13,F.chPetalLt],[10,13,F.chPetalLt],[11,13,F.chPetal],[7,12,F.chPetalDk],[8,12,F.chPetalLt],[9,12,F.chCenter],[10,12,F.chCenter],[11,12,F.chPetalLt],[12,12,F.chPetalDk],[6,11,F.chPetalDk],[7,11,F.chPetal],[8,11,F.chPetalLt],[9,11,F.chCenter],[10,11,F.chCenter],[11,11,F.chPetalLt],[12,11,F.chPetal],[13,11,F.chPetalDk],[6,10,F.chPetalDk],[7,10,F.chPetal],[8,10,F.chPetalLt],[9,10,F.chPetalLt],[10,10,F.chPetalLt],[11,10,F.chPetalLt],[12,10,F.chPetal],[13,10,F.chPetalDk],[7,9,F.chPetalDk],[8,9,F.chPetal],[9,9,F.chPetalLt],[10,9,F.chPetalLt],[11,9,F.chPetal],[12,9,F.chPetalDk],[8,8,F.chPetalDk],[9,8,F.chPetal],[10,8,F.chPetalLt],[11,8,F.chPetalDk],[9,7,F.chPetalDk],[10,7,F.chPetalDk]] },
+        ];
+
+        const DAISY_STAGES = [
+            { name: 'Empty Pot', pixels: potPixels() },
+            { name: 'Sprout', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.leaf],[10,19,F.leafLt]] },
+            { name: 'Seedling', pixels: [...potPixels(),[9,20,F.stem],[10,20,F.stem],[9,19,F.stem],[10,19,F.stem],[9,18,F.stem],[10,18,F.stem],[8,19,F.leaf],[7,19,F.leafLt],[11,18,F.leaf],[12,18,F.leafLt]] },
+            { name: 'Growing', pixels: [...potPixels(),...[17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[9,16,F.stem],[10,16,F.stem],[7,18,F.leaf],[8,18,F.leafLt],[11,17,F.leaf],[12,17,F.leafLt],[8,15,F.leaf],[11,15,F.leaf]] },
+            { name: 'Tight Bud', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[12,16,F.leaf],[8,13,F.leafLt],[9,13,F.dyPetalDk],[10,13,F.dyPetalDk],[11,13,F.leafLt],[9,12,F.dyPetalDk],[10,12,F.dyCenter],[11,12,F.dyPetalDk],[9,11,F.dyPetalDk],[10,11,F.dyPetalDk]] },
+            { name: 'Opening', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[12,16,F.leaf],[7,12,F.dyPetalDk],[8,12,F.dyPetal],[9,12,F.dyCenter],[10,12,F.dyCenter],[11,12,F.dyPetal],[12,12,F.dyPetalDk],[8,11,F.dyPetalDk],[9,11,F.dyPetal],[10,11,F.dyCenterDk],[11,11,F.dyPetalDk],[9,10,F.dyPetalDk],[10,10,F.dyPetalDk]] },
+            { name: 'Blooming', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[7,17,F.leaf],[12,16,F.leaf],[8,13,F.dyPetal],[9,13,F.dyPetal],[10,13,F.dyPetal],[11,13,F.dyPetal],[7,12,F.dyPetal],[8,12,F.dyPetal],[9,12,F.dyCenter],[10,12,F.dyCenter],[11,12,F.dyPetal],[12,12,F.dyPetal],[7,11,F.dyPetalDk],[8,11,F.dyPetal],[9,11,F.dyCenterDk],[10,11,F.dyCenterDk],[11,11,F.dyPetal],[12,11,F.dyPetalDk],[8,10,F.dyPetal],[9,10,F.dyPetal],[10,10,F.dyPetal],[11,10,F.dyPetal],[9,9,F.dyPetalDk],[10,9,F.dyPetalDk]] },
+            { name: 'Full Bloom', pixels: [...potPixels(),...[14,15,16,17,18,19,20].map(y=>[[9,y,F.stem],[10,y,F.stem]]).flat(),[6,17,F.leafDk],[7,17,F.leaf],[12,16,F.leaf],[13,16,F.leafDk],[8,15,F.leaf],[11,15,F.leaf],[9,14,F.dyPetal],[10,14,F.dyPetalLt],[9,13,F.dyPetalLt],[10,13,F.dyPetalLt],[11,13,F.dyPetal],[8,13,F.dyPetal],[7,12,F.dyPetal],[8,12,F.dyPetalLt],[9,12,F.dyCenter],[10,12,F.dyCenter],[11,12,F.dyPetalLt],[12,12,F.dyPetal],[13,12,F.dyPetal],[6,11,F.dyPetalDk],[7,11,F.dyPetal],[8,11,F.dyPetalLt],[9,11,F.dyCenterDk],[10,11,F.dyCenterDk],[11,11,F.dyPetalLt],[12,11,F.dyPetal],[13,11,F.dyPetalDk],[7,10,F.dyPetal],[8,10,F.dyPetalLt],[9,10,F.dyPetal],[10,10,F.dyPetal],[11,10,F.dyPetalLt],[12,10,F.dyPetal],[7,9,F.dyPetalDk],[8,9,F.dyPetal],[9,9,F.dyPetalLt],[10,9,F.dyPetalLt],[11,9,F.dyPetal],[12,9,F.dyPetalDk],[8,8,F.dyPetalDk],[9,8,F.dyPetal],[10,8,F.dyPetalLt],[11,8,F.dyPetalDk]] },
+        ];
 
         const ORCHID_STAGES = [
             { name: 'Empty Pot', pixels: potPixels() },
@@ -3162,11 +3238,12 @@
         ];
 
         const FLOWER_CATALOGUE = [
-            { key: 'sunflower', name: 'Sunflower',  cost: 3,  sessionsToGrow: 28, stages: SUNFLOWER_STAGES  },
-            { key: 'roseRed',   name: 'Red Rose',   cost: 5,  sessionsToGrow: 28, stages: ROSE_RED_STAGES   },
-            { key: 'rosePink',  name: 'Pink Rose',  cost: 5,  sessionsToGrow: 28, stages: ROSE_PINK_STAGES  },
-            { key: 'roseWhite', name: 'White Rose', cost: 5,  sessionsToGrow: 28, stages: ROSE_WHITE_STAGES },
-            { key: 'orchid',    name: 'Orchid',     cost: 10, sessionsToGrow: 28, stages: ORCHID_STAGES     },
+            { key: 'sunflower',      name: 'Sunflower',      cost: 3,  sessionsToGrow: 8,  stages: SUNFLOWER_STAGES      },
+            { key: 'roseRed',        name: 'Red Rose',        cost: 5,  sessionsToGrow: 14, stages: ROSE_RED_STAGES        },
+            { key: 'rosePink',       name: 'Pink Rose',       cost: 5,  sessionsToGrow: 20, stages: ROSE_PINK_STAGES       },
+            { key: 'chrysanthemum',  name: 'Chrysanthemum',   cost: 5,  sessionsToGrow: 28, stages: CHRYSANTHEMUM_STAGES   },
+            { key: 'daisy',          name: 'Daisy',           cost: 7,  sessionsToGrow: 36, stages: DAISY_STAGES           },
+            { key: 'orchid',         name: 'Orchid',          cost: 10, sessionsToGrow: 48, stages: ORCHID_STAGES          },
         ];
 
         const BONSAI_PIXELS = [
@@ -3199,16 +3276,16 @@
         // ============================================
         const GREENHOUSE_UNLOCK_COST = 20;
 
-        function getFlowerStageIndex(flower) {
-            return Math.min(7, Math.floor(flower.sessionsInvested / 4));
+        function getFlowerStageIndex(flower, sessionsToGrow) {
+            return Math.min(7, Math.floor(flower.sessionsInvested * 7 / sessionsToGrow));
         }
 
-        function isFlowerComplete(flower) {
-            return flower.planted && flower.sessionsInvested >= 28;
+        function isFlowerComplete(flower, sessionsToGrow) {
+            return flower.planted && flower.sessionsInvested >= sessionsToGrow;
         }
 
         function allFlowersComplete() {
-            return FLOWER_CATALOGUE.every(f => isFlowerComplete(state.greenhouse.flowers[f.key]));
+            return FLOWER_CATALOGUE.every(f => isFlowerComplete(state.greenhouse.flowers[f.key], f.sessionsToGrow));
         }
 
         function renderPixelCanvas(canvas, pixels, gridW, gridH) {
@@ -3244,7 +3321,7 @@
             }
 
             slotEl.classList.remove('empty');
-            const stageIdx = getFlowerStageIndex(flower);
+            const stageIdx = getFlowerStageIndex(flower, catalogue.sessionsToGrow);
             const stage = catalogue.stages[stageIdx];
             if (stage) {
                 const scale = canvas.offsetWidth / 20;
@@ -3263,11 +3340,11 @@
                 });
             }
 
-            if (isFlowerComplete(flower)) {
+            if (isFlowerComplete(flower, catalogue.sessionsToGrow)) {
                 progEl.textContent = '✓ Grown';
                 slotEl.classList.add('complete');
             } else {
-                progEl.textContent = flower.sessionsInvested + '/28 sessions';
+                progEl.textContent = flower.sessionsInvested + '/' + catalogue.sessionsToGrow + ' sessions';
                 slotEl.classList.remove('complete');
             }
         }
@@ -3295,7 +3372,57 @@
                 slot.appendChild(progEl);
                 shelf.appendChild(slot);
                 renderFlowerSlot(slot, state.greenhouse.flowers[catalogue.key], catalogue);
+                if (state.greenhouse.flowers[catalogue.key].planted) {
+                    slot.addEventListener('click', () => showFlowerDetail(catalogue.key));
+                }
             });
+        }
+
+        function showFlowerDetail(key) {
+            const catalogue = FLOWER_CATALOGUE.find(f => f.key === key);
+            const flower = state.greenhouse.flowers[key];
+            if (!catalogue || !flower.planted) return;
+
+            const stageIdx = getFlowerStageIndex(flower, catalogue.sessionsToGrow);
+            const stage = catalogue.stages[stageIdx];
+
+            document.getElementById('flowerDetailName').textContent = catalogue.name;
+            document.getElementById('flowerDetailStage').textContent = stage ? stage.name : '';
+            document.getElementById('flowerDetailProgress').textContent =
+                isFlowerComplete(flower, catalogue.sessionsToGrow)
+                    ? '✓ Grown'
+                    : flower.sessionsInvested + '/' + catalogue.sessionsToGrow + ' sessions';
+
+            const canvas = document.getElementById('flowerDetailCanvas');
+            canvas.textContent = '';
+            if (stage) {
+                setTimeout(() => {
+                    const scale = canvas.offsetWidth / 20;
+                    canvas.style.height = Math.floor(scale * 28) + 'px';
+                    stage.pixels.forEach(([x, y, color]) => {
+                        if (color === 'transparent' || !color) return;
+                        const el = document.createElement('div');
+                        el.className = 'pixel-art';
+                        el.style.left = (x * scale) + 'px';
+                        el.style.top = (y * scale) + 'px';
+                        el.style.width = Math.ceil(scale) + 'px';
+                        el.style.height = Math.ceil(scale) + 'px';
+                        el.style.backgroundColor = color;
+                        canvas.appendChild(el);
+                    });
+                }, 10);
+            }
+
+            document.getElementById('flowerShelf').style.display = 'none';
+            document.getElementById('seedShop').style.display = 'none';
+            document.getElementById('bonsaiCraft').style.display = 'none';
+            document.getElementById('flowerDetail').style.display = 'flex';
+        }
+
+        function closeFlowerDetail() {
+            document.getElementById('flowerDetail').style.display = 'none';
+            document.getElementById('flowerShelf').style.display = 'grid';
+            updateGreenhouseView();
         }
 
         function buildSeedShop() {
@@ -3412,7 +3539,7 @@
             let changed = false;
             FLOWER_CATALOGUE.forEach(f => {
                 const flower = state.greenhouse.flowers[f.key];
-                if (flower.planted && flower.sessionsInvested < 28) {
+                if (flower.planted && flower.sessionsInvested < f.sessionsToGrow) {
                     flower.sessionsInvested++;
                     changed = true;
                 }
@@ -3687,6 +3814,7 @@
 
         document.getElementById('buildGreenhouseBtn').addEventListener('click', buildGreenhouse);
         document.getElementById('craftBonsaiBtn').addEventListener('click', craftBonsai);
+        document.getElementById('flowerDetailClose').addEventListener('click', closeFlowerDetail);
 
         window.addEventListener('resize', updatePlant);
 
